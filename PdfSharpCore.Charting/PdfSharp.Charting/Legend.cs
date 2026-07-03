@@ -29,15 +29,14 @@
 
 using System;
 using System.ComponentModel;
-using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Represents a legend of a chart.
+/// </summary>
+public class Legend : ChartObject
 {
-  /// <summary>
-  /// Represents a legend of a chart.
-  /// </summary>
-  public class Legend : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the Legend class.
     /// </summary>
@@ -56,7 +55,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new Legend Clone()
     {
-      return (Legend)DeepCopy();
+        return (Legend)DeepCopy();
     }
 
     /// <summary>
@@ -64,18 +63,18 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      Legend legend = (Legend)base.DeepCopy();
-      if (legend.lineFormat != null)
-      {
-        legend.lineFormat = legend.lineFormat.Clone();
-        legend.lineFormat.parent = legend;
-      }
-      if (legend.font != null)
-      {
-        legend.font = legend.font.Clone();
-        legend.font.parent = legend;
-      }
-      return legend;
+        var legend = (Legend)base.DeepCopy();
+        if (legend.lineFormat != null)
+        {
+            legend.lineFormat = legend.lineFormat.Clone();
+            legend.lineFormat.parent = legend;
+        }
+        if (legend.font != null)
+        {
+            legend.font = legend.font.Clone();
+            legend.font.parent = legend;
+        }
+        return legend;
     }
     #endregion
 
@@ -85,13 +84,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
+            return this.lineFormat;
+        }
     }
     internal LineFormat lineFormat;
 
@@ -100,13 +99,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Font Font
     {
-      get
-      {
-        if (this.font == null)
-          this.font = new Font(this);
+        get
+        {
+            if (this.font == null)
+                this.font = new Font(this);
 
-        return this.font;
-      }
+            return this.font;
+        }
     }
     internal Font font;
 
@@ -115,16 +114,15 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public DockingType Docking
     {
-      get {return this.docking;}
-      set
-      {
-        if (!Enum.IsDefined(typeof(DockingType), value))
-          throw new InvalidEnumArgumentException("value", (int)value, typeof(DockingType));
+        get => this.docking;
+        set
+        {
+            if (!Enum.IsDefined(typeof(DockingType), value))
+                throw new InvalidEnumArgumentException("value", (int)value, typeof(DockingType));
 
-        this.docking = value;
-      }
+            this.docking = value;
+        }
     }
     internal DockingType docking;
     #endregion
-  }
 }

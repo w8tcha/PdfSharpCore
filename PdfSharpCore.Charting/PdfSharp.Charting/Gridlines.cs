@@ -27,16 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Represents the gridlines on the axes.
+/// </summary>
+public class Gridlines : ChartObject
 {
-  /// <summary>
-  /// Represents the gridlines on the axes.
-  /// </summary>
-  public class Gridlines : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the Gridlines class.
     /// </summary>
@@ -55,7 +52,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new Gridlines Clone()
     {
-      return (Gridlines)DeepCopy();
+        return (Gridlines)DeepCopy();
     }
 
     /// <summary>
@@ -63,13 +60,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      Gridlines gridlines = (Gridlines)base.DeepCopy();
-      if (gridlines.lineFormat != null)
-      {
-        gridlines.lineFormat = gridlines.lineFormat.Clone();
-        gridlines.lineFormat.parent = gridlines;
-      }
-      return gridlines;
+        var gridlines = (Gridlines)base.DeepCopy();
+        if (gridlines.lineFormat != null)
+        {
+            gridlines.lineFormat = gridlines.lineFormat.Clone();
+            gridlines.lineFormat.parent = gridlines;
+        }
+        return gridlines;
     }
     #endregion
 
@@ -79,15 +76,14 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
+            return this.lineFormat;
+        }
     }
     internal LineFormat lineFormat;
     #endregion
-  }
 }

@@ -27,15 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Used to determine the vertical alignment of the axis title.
+/// </summary>
+public enum VerticalAlignment
 {
-  /// <summary>
-  /// Used to determine the vertical alignment of the axis title.
-  /// </summary>
-  public enum VerticalAlignment
-  {
     /// <summary>
     /// Axis title will be top aligned.
     /// </summary>
@@ -50,5 +48,4 @@ namespace PdfSharpCore.Charting
     /// Axis title will be bottom aligned.
     /// </summary>
     Bottom
-  }
 }

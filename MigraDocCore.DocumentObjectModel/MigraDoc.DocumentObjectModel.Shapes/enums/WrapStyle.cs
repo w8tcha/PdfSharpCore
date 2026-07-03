@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Shapes;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes
+/// <summary>
+/// Specifies how the shape object should be placed between the other elements.
+/// </summary>
+public enum WrapStyle
 {
-  /// <summary>
-  /// Specifies how the shape object should be placed between the other elements.
-  /// </summary>
-  public enum WrapStyle
-  {
     /// <summary>
     /// The object will be placed between its predecessor and its successor.
     /// </summary>
@@ -52,6 +48,5 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// <summary>
     /// The object will be ignored when the other elements are placed.
     /// </summary>
-    Through,
-  }
+    Through
 }

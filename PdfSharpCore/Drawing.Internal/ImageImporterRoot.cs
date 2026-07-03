@@ -1,5 +1,4 @@
-﻿#region PDFsharp - A .NET library for processing PDF
-//
+﻿//
 // Authors:
 //   Thomas Hövel
 //
@@ -25,11 +24,9 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing.Internal
+namespace PdfSharpCore.Drawing.Internal;
+
+internal abstract class ImageImporterRoot
 {
-    internal abstract class ImageImporterRoot
-    {
-    }
 }

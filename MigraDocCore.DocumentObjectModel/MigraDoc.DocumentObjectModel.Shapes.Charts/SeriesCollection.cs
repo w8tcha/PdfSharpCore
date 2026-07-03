@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// The collection of data series.
+/// </summary>
+public class SeriesCollection : DocumentObjectCollection
 {
-  /// <summary>
-  /// The collection of data series.
-  /// </summary>
-  public class SeriesCollection : DocumentObjectCollection
-  {
     /// <summary>
     /// Initializes a new instance of the SeriesCollection class.
     /// </summary>
@@ -55,18 +52,14 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// <summary>
     /// Gets a series by it's index.
     /// </summary>
-    public new Series this[int index]
-    {
-      get { return base[index] as Series; }
-    }
+    public new Series this[int index] => base[index] as Series;
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new SeriesCollection Clone()
     {
-      return (SeriesCollection)DeepCopy();
+        return (SeriesCollection)DeepCopy();
     }
 
     /// <summary>
@@ -74,24 +67,22 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Series AddSeries()
     {
-      Series series = new Series();
-      Add(series);
-      return series;
+        var series = new Series();
+        Add(series);
+        return series;
     }
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts SeriesCollection into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int count = Count;
-      for (int index = 0; index < count; ++index)
-      {
-        Series series = this[index];
-        series.Serialize(serializer);
-      }
+        var count = Count;
+        for (var index = 0; index < count; ++index)
+        {
+            var series = this[index];
+            series.Serialize(serializer);
+        }
     }
 
     /// <summary>
@@ -99,14 +90,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(SeriesCollection));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(SeriesCollection));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

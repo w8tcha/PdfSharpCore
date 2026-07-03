@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes
+namespace MigraDocCore.DocumentObjectModel.Shapes;
+
+/// <summary>
+/// Define how the shape should be wrapped between the texts.
+/// </summary>
+public class WrapFormat : DocumentObject
 {
-  /// <summary>
-  /// Define how the shape should be wrapped between the texts.
-  /// </summary>
-  public class WrapFormat : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the WrapFormat class.
     /// </summary>
@@ -52,24 +49,21 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     internal WrapFormat(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new WrapFormat Clone()
     {
-      return (WrapFormat)DeepCopy();
+        return (WrapFormat)DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the wrapping style.
     /// </summary>
     public WrapStyle Style
     {
-      get { return (WrapStyle)this.style.Value; }
-      set { this.style.Value = (int)value; }
+        get => (WrapStyle)this.style.Value;
+        set => this.style.Value = (int)value;
     }
     [DV(Type = typeof(WrapStyle))]
     internal NEnum style = NEnum.NullValue(typeof(WrapStyle));
@@ -79,8 +73,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public Unit DistanceTop
     {
-      get { return this.distanceTop; }
-      set { this.distanceTop = value; }
+        get => this.distanceTop;
+        set => this.distanceTop = value;
     }
     [DV]
     protected Unit distanceTop = Unit.NullValue;
@@ -90,8 +84,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public Unit DistanceBottom
     {
-      get { return this.distanceBottom; }
-      set { this.distanceBottom = value; }
+        get => this.distanceBottom;
+        set => this.distanceBottom = value;
     }
     [DV]
     protected Unit distanceBottom = Unit.NullValue;
@@ -101,8 +95,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public Unit DistanceLeft
     {
-      get { return this.distanceLeft; }
-      set { this.distanceLeft = value; }
+        get => this.distanceLeft;
+        set => this.distanceLeft = value;
     }
     [DV]
     protected Unit distanceLeft = Unit.NullValue;
@@ -112,31 +106,29 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public Unit DistanceRight
     {
-      get { return this.distanceRight; }
-      set { this.distanceRight = value; }
+        get => this.distanceRight;
+        set => this.distanceRight = value;
     }
     [DV]
     protected Unit distanceRight = Unit.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts WrapFormat into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int pos = serializer.BeginContent("WrapFormat");
-      if (!this.style.IsNull)
-        serializer.WriteSimpleAttribute("Style", this.Style);
-      if (!this.distanceTop.IsNull)
-        serializer.WriteSimpleAttribute("DistanceTop", this.DistanceTop);
-      if (!this.distanceLeft.IsNull)
-        serializer.WriteSimpleAttribute("DistanceLeft", this.DistanceLeft);
-      if (!this.distanceRight.IsNull)
-        serializer.WriteSimpleAttribute("DistanceRight", this.DistanceRight);
-      if (!this.distanceBottom.IsNull)
-        serializer.WriteSimpleAttribute("DistanceBottom", this.DistanceBottom);
-      serializer.EndContent();
+        var pos = serializer.BeginContent("WrapFormat");
+        if (!this.style.IsNull)
+            serializer.WriteSimpleAttribute("Style", this.Style);
+        if (!this.distanceTop.IsNull)
+            serializer.WriteSimpleAttribute("DistanceTop", this.DistanceTop);
+        if (!this.distanceLeft.IsNull)
+            serializer.WriteSimpleAttribute("DistanceLeft", this.DistanceLeft);
+        if (!this.distanceRight.IsNull)
+            serializer.WriteSimpleAttribute("DistanceRight", this.DistanceRight);
+        if (!this.distanceBottom.IsNull)
+            serializer.WriteSimpleAttribute("DistanceBottom", this.DistanceBottom);
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -144,14 +136,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(WrapFormat));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(WrapFormat));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

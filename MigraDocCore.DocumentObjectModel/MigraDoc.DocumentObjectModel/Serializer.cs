@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,25 +27,23 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using MigraDocCore.DocumentObjectModel.Internals;
-using MigraDocCore.DocumentObjectModel.IO;
+
 using System.Reflection;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Object to be passed to the Serialize function of a DocumentObject to convert
+/// it into DDL.
+/// </summary>
+internal class Serializer
 {
-  /// <summary>
-  /// Object to be passed to the Serialize function of a DocumentObject to convert
-  /// it into DDL.
-  /// </summary>
-  internal class Serializer
-  {
     /// <summary>
     /// A Serializer object for converting MDDOM into DDL.
     /// </summary>
@@ -55,14 +52,14 @@ namespace MigraDocCore.DocumentObjectModel
     /// <param name="initialIndent">Initial indent to start with.</param>
     internal Serializer(TextWriter textWriter, int indent, int initialIndent)
     {
-      if (textWriter == null)
-        throw new ArgumentNullException("textWriter");
+        if (textWriter == null)
+            throw new ArgumentNullException("textWriter");
 
-      this.textWriter = textWriter;
-      this.indent = indent;
-      this.writeIndent = initialIndent;
-      if (textWriter is StreamWriter)
-        WriteStamp();
+        this.textWriter = textWriter;
+        this.indent = indent;
+        this.writeIndent = initialIndent;
+        if (textWriter is StreamWriter)
+            WriteStamp();
     }
 
     /// <summary>
@@ -82,8 +79,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal int Indent
     {
-      get { return this.indent; }
-      set { this.indent = value; }
+        get => this.indent;
+        set => this.indent = value;
     }
     protected int indent = 2;
 
@@ -92,8 +89,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal int InitialIndent
     {
-      get { return this.writeIndent; }
-      set { this.writeIndent = value; }
+        get => this.writeIndent;
+        set => this.writeIndent = value;
     }
     protected int writeIndent = 0;
 
@@ -102,7 +99,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void IncreaseIndent()
     {
-      writeIndent += indent;
+        writeIndent += indent;
     }
 
     /// <summary>
@@ -110,7 +107,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void DecreaseIndent()
     {
-      writeIndent -= indent;
+        writeIndent -= indent;
     }
 
     /// <summary>
@@ -118,11 +115,11 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void WriteStamp()
     {
-      if (this.fWriteStamp)
-      {
-        WriteComment("Created by empira MigraDoc Document Object Model");
-        WriteComment(String.Format("generated file created {0:d} at {0:t}", DateTime.Now));
-      }
+        if (this.fWriteStamp)
+        {
+            WriteComment("Created by empira MigraDoc Document Object Model");
+            WriteComment(String.Format("generated file created {0:d} at {0:t}", DateTime.Now));
+        }
     }
 
     /// <summary>
@@ -130,15 +127,15 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void Write(string str)
     {
-      string wrappedStr = DoWordWrap(str);
-      if (wrappedStr.Length < str.Length && wrappedStr != "")
-      {
-        WriteLineToStream(wrappedStr);
-        Write(str.Substring(wrappedStr.Length));
-      }
-      else
-        WriteToStream(str);
-      CommitText();
+        var wrappedStr = DoWordWrap(str);
+        if (wrappedStr.Length < str.Length && wrappedStr != "")
+        {
+            WriteLineToStream(wrappedStr);
+            Write(str.Substring(wrappedStr.Length));
+        }
+        else
+            WriteToStream(str);
+        CommitText();
     }
 
     /// <summary>
@@ -146,15 +143,15 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void WriteLine(string str)
     {
-      string wrappedStr = DoWordWrap(str);
-      if (wrappedStr.Length < str.Length)
-      {
-        WriteLineToStream(wrappedStr);
-        WriteLine(str.Substring(wrappedStr.Length));
-      }
-      else
-        WriteLineToStream(wrappedStr);
-      CommitText();
+        var wrappedStr = DoWordWrap(str);
+        if (wrappedStr.Length < str.Length)
+        {
+            WriteLineToStream(wrappedStr);
+            WriteLine(str.Substring(wrappedStr.Length));
+        }
+        else
+            WriteLineToStream(wrappedStr);
+        CommitText();
     }
 
     /// <summary>
@@ -163,20 +160,20 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     string DoWordWrap(string str)
     {
-      if (str.Length + this.writeIndent < this.lineBreakBeyond)
-        return str;
+        if (str.Length + this.writeIndent < this.lineBreakBeyond)
+            return str;
 
-      int idxCRLF = str.IndexOf("\x0D\x0A");
-      if (idxCRLF > 0 && idxCRLF + this.writeIndent <= this.lineBreakBeyond)
-        return str.Substring(0, idxCRLF + 1);
+        var idxCRLF = str.IndexOf("\x0D\x0A");
+        if (idxCRLF > 0 && idxCRLF + this.writeIndent <= this.lineBreakBeyond)
+            return str.Substring(0, idxCRLF + 1);
 
-      int splitIndexBlank = str.Substring(0, this.lineBreakBeyond - this.writeIndent).LastIndexOf(" ");
-      int splitIndexCRLF = str.Substring(0, this.lineBreakBeyond - this.writeIndent).LastIndexOf("\x0D\x0A");
-      int splitIndex = System.Math.Max(splitIndexBlank, splitIndexCRLF);
-      if (splitIndex == -1)
-        splitIndex = System.Math.Min(str.IndexOf(" ", this.lineBreakBeyond - this.writeIndent + 1),
-                                     str.IndexOf("\x0D\x0A", this.lineBreakBeyond - this.writeIndent + 1));
-      return splitIndex > 0 ? str.Substring(0, splitIndex) : str;
+        var splitIndexBlank = str.Substring(0, this.lineBreakBeyond - this.writeIndent).LastIndexOf(" ");
+        var splitIndexCRLF = str.Substring(0, this.lineBreakBeyond - this.writeIndent).LastIndexOf("\x0D\x0A");
+        var splitIndex = System.Math.Max(splitIndexBlank, splitIndexCRLF);
+        if (splitIndex == -1)
+            splitIndex = System.Math.Min(str.IndexOf(" ", this.lineBreakBeyond - this.writeIndent + 1),
+                str.IndexOf("\x0D\x0A", this.lineBreakBeyond - this.writeIndent + 1));
+        return splitIndex > 0 ? str.Substring(0, splitIndex) : str;
 
     }
 
@@ -185,7 +182,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void WriteLine()
     {
-      WriteLine(String.Empty);
+        WriteLine(String.Empty);
     }
 
     /// <summary>
@@ -193,7 +190,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void WriteLineNoCommit(string str)
     {
-      WriteLineToStream(str);
+        WriteLineToStream(str);
     }
 
     /// <summary>
@@ -201,7 +198,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void WriteLineNoCommit()
     {
-      WriteLineNoCommit(String.Empty);
+        WriteLineNoCommit(String.Empty);
     }
 
     /// <summary>
@@ -209,46 +206,46 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void WriteComment(string comment)
     {
-      if (comment == null || comment == String.Empty)
-        return;
+        if (comment == null || comment == String.Empty)
+            return;
 
-      // if string contains CR/LF, split up recursively
-      int crlf = comment.IndexOf("\x0D\x0A");
-      if (crlf != -1)
-      {
-        WriteComment(comment.Substring(0, crlf));
-        WriteComment(comment.Substring(crlf + 2));
-        return;
-      }
-      CloseUpLine();
-      int len;
-      int chopBeyond = this.lineBreakBeyond - this.indent - "// ".Length;
-      while ((len = comment.Length) > 0)
-      {
-        string wrt;
-        if (len <= chopBeyond)
+        // if string contains CR/LF, split up recursively
+        var crlf = comment.IndexOf("\x0D\x0A");
+        if (crlf != -1)
         {
-          wrt = "// " + comment;
-          comment = String.Empty;
+            WriteComment(comment.Substring(0, crlf));
+            WriteComment(comment.Substring(crlf + 2));
+            return;
         }
-        else
+        CloseUpLine();
+        int len;
+        var chopBeyond = this.lineBreakBeyond - this.indent - "// ".Length;
+        while ((len = comment.Length) > 0)
         {
-          int idxChop;
-          if ((idxChop = comment.LastIndexOf(' ', chopBeyond)) == -1 &&
-              (idxChop = comment.IndexOf(' ', chopBeyond)) == -1)
-          {
-            wrt = "// " + comment;
-            comment = String.Empty;
-          }
-          else
-          {
-            wrt = "// " + comment.Substring(0, idxChop);
-            comment = comment.Substring(idxChop + 1);
-          }
+            string wrt;
+            if (len <= chopBeyond)
+            {
+                wrt = "// " + comment;
+                comment = String.Empty;
+            }
+            else
+            {
+                int idxChop;
+                if ((idxChop = comment.LastIndexOf(' ', chopBeyond)) == -1 &&
+                    (idxChop = comment.IndexOf(' ', chopBeyond)) == -1)
+                {
+                    wrt = "// " + comment;
+                    comment = String.Empty;
+                }
+                else
+                {
+                    wrt = "// " + comment.Substring(0, idxChop);
+                    comment = comment.Substring(idxChop + 1);
+                }
+            }
+            WriteLineToStream(wrt);
+            CommitText();
         }
-        WriteLineToStream(wrt);
-        CommitText();
-      }
     }
 
     /// <summary>
@@ -257,8 +254,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void CloseUpLine()
     {
-      if (this.linePos > 0)
-        WriteLine();
+        if (this.linePos > 0)
+            WriteLine();
     }
 
     /// <summary>
@@ -268,50 +265,50 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void WriteToStream(string text, bool fLineBreak, bool fAutoIndent)
     {
-      // if string contains CR/LF, split up recursively
-      int crlf = text.IndexOf("\x0D\x0A");
-      if (crlf != -1)
-      {
-        WriteToStream(text.Substring(0, crlf), true, fAutoIndent);
-        WriteToStream(text.Substring(crlf + 2), fLineBreak, fAutoIndent);
-        return;
-      }
+        // if string contains CR/LF, split up recursively
+        var crlf = text.IndexOf("\x0D\x0A");
+        if (crlf != -1)
+        {
+            WriteToStream(text.Substring(0, crlf), true, fAutoIndent);
+            WriteToStream(text.Substring(crlf + 2), fLineBreak, fAutoIndent);
+            return;
+        }
 
-      int len = text.Length;
-      if (len > 0)
-      {
-        if (this.linePos > 0)
+        var len = text.Length;
+        if (len > 0)
         {
-          // does not work
-          // if (IsBlankRequired(this.lastChar, _text[0]))
-          //   _text = "·" + _text;
+            if (this.linePos > 0)
+            {
+                // does not work
+                // if (IsBlankRequired(this.lastChar, _text[0]))
+                //   _text = "·" + _text;
+            }
+            else
+            {
+                if (fAutoIndent)
+                {
+                    text = Indentation + text;
+                    len += this.writeIndent;
+                }
+            }
+            this.textWriter.Write(text);
+            this.linePos += len;
+            // wordwrap required?
+            if (this.linePos > this.lineBreakBeyond)
+            {
+                fLineBreak = true;
+                //this.textWriter.Write("//¶");  // for debugging only
+            }
+            else
+                this.lastChar = text[len - 1];
         }
-        else
-        {
-          if (fAutoIndent)
-          {
-            text = Indentation + text;
-            len += this.writeIndent;
-          }
-        }
-        this.textWriter.Write(text);
-        this.linePos += len;
-        // wordwrap required?
-        if (this.linePos > this.lineBreakBeyond)
-        {
-          fLineBreak = true;
-          //this.textWriter.Write("//¶");  // for debugging only
-        }
-        else
-          this.lastChar = text[len - 1];
-      }
 
-      if (fLineBreak)
-      {
-        this.textWriter.WriteLine(String.Empty);  // what a line break is may depend on encoding
-        this.linePos = 0;
-        this.lastChar = '\x0A';
-      }
+        if (fLineBreak)
+        {
+            this.textWriter.WriteLine(String.Empty);  // what a line break is may depend on encoding
+            this.linePos = 0;
+            this.lastChar = '\x0A';
+        }
     }
 
     /// <summary>
@@ -319,7 +316,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void WriteToStream(string text)
     {
-      WriteToStream(text, false, true);
+        WriteToStream(text, false, true);
     }
 
     /// <summary>
@@ -327,7 +324,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void WriteLineToStream(string text)
     {
-      WriteToStream(text, true, true);
+        WriteToStream(text, true, true);
     }
 
     /// <summary>
@@ -336,17 +333,17 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     bool IsBlankRequired(char left, char right)
     {
-      if (left == ' ' || right == ' ')
+        if (left == ' ' || right == ' ')
+            return false;
+
+        // 1st try
+        var leftLetterOrDigit = Char.IsLetterOrDigit(left);
+        var rightLetterOrDigit = Char.IsLetterOrDigit(right);
+
+        if (leftLetterOrDigit && rightLetterOrDigit)
+            return true;
+
         return false;
-
-      // 1st try
-      bool leftLetterOrDigit = Char.IsLetterOrDigit(left);
-      bool rightLetterOrDigit = Char.IsLetterOrDigit(right);
-
-      if (leftLetterOrDigit && rightLetterOrDigit)
-        return true;
-
-      return false;
     }
 
     /// <summary>
@@ -354,11 +351,11 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal int BeginAttributes()
     {
-      int pos = this.Position;
-      WriteLineNoCommit("[");
-      IncreaseIndent();
-      BeginBlock();
-      return pos;
+        var pos = this.Position;
+        WriteLineNoCommit("[");
+        IncreaseIndent();
+        BeginBlock();
+        return pos;
     }
 
     /// <summary>
@@ -366,12 +363,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal int BeginAttributes(string str)
     {
-      int pos = this.Position;
-      WriteLineNoCommit(str);
-      WriteLineNoCommit("[");
-      IncreaseIndent();
-      BeginBlock();
-      return pos;
+        var pos = this.Position;
+        WriteLineNoCommit(str);
+        WriteLineNoCommit("[");
+        IncreaseIndent();
+        BeginBlock();
+        return pos;
     }
 
     /// <summary>
@@ -379,9 +376,9 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal bool EndAttributes()
     {
-      DecreaseIndent();
-      WriteLineNoCommit("]");
-      return EndBlock();
+        DecreaseIndent();
+        WriteLineNoCommit("]");
+        return EndBlock();
     }
 
     /// <summary>
@@ -389,10 +386,10 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal bool EndAttributes(int pos)
     {
-      bool commit = EndAttributes();
-      if (!commit)
-        this.Position = pos;
-      return commit;
+        var commit = EndAttributes();
+        if (!commit)
+            this.Position = pos;
+        return commit;
     }
 
     /// <summary>
@@ -400,48 +397,48 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void WriteSimpleAttribute(string valueName, object value)
     {
-      INullableValue ival = value as INullableValue;
-      if (ival != null)
-        value = ival.GetValue();
+        var ival = value as INullableValue;
+        if (ival != null)
+            value = ival.GetValue();
 
-      Type type = value.GetType();
+        var type = value.GetType();
 
-      if (type == typeof(Unit))
-      {
-        string strUnit = value.ToString();
-        if (((Unit)value).Type == UnitType.Point)
-          WriteLine(valueName + " = " + strUnit);
+        if (type == typeof(Unit))
+        {
+            var strUnit = value.ToString();
+            if (((Unit)value).Type == UnitType.Point)
+                WriteLine(valueName + " = " + strUnit);
+            else
+                WriteLine(valueName + " = \"" + strUnit + "\"");
+        }
+        else if (type == typeof(float))
+        {
+            WriteLine(valueName + " = " + ((float)value).ToString(System.Globalization.CultureInfo.InvariantCulture));
+        }
+        else if (type == typeof(double))
+        {
+            WriteLine(valueName + " = " + ((double)value).ToString(System.Globalization.CultureInfo.InvariantCulture));
+        }
+        else if (type == typeof(bool))
+        {
+            WriteLine(valueName + " = " + value.ToString().ToLower());
+        }
+        else if (type == typeof(string))
+        {
+            var sb = new StringBuilder(value.ToString());
+            sb.Replace("\\", "\\\\");
+            sb.Replace("\"", "\\\"");
+            WriteLine(valueName + " = \"" + sb.ToString() + "\"");
+        }
+        else if (type == typeof(int) || type.GetTypeInfo().BaseType == typeof(System.Enum) || type == typeof(Color))
+        {
+            WriteLine(valueName + " = " + value.ToString());
+        }
         else
-          WriteLine(valueName + " = \"" + strUnit + "\"");
-      }
-      else if (type == typeof(float))
-      {
-        WriteLine(valueName + " = " + ((float)value).ToString(System.Globalization.CultureInfo.InvariantCulture));
-      }
-      else if (type == typeof(double))
-      {
-        WriteLine(valueName + " = " + ((double)value).ToString(System.Globalization.CultureInfo.InvariantCulture));
-      }
-      else if (type == typeof(bool))
-      {
-        WriteLine(valueName + " = " + value.ToString().ToLower());
-      }
-      else if (type == typeof(string))
-      {
-        StringBuilder sb = new StringBuilder(value.ToString());
-        sb.Replace("\\", "\\\\");
-        sb.Replace("\"", "\\\"");
-        WriteLine(valueName + " = \"" + sb.ToString() + "\"");
-      }
-      else if (type == typeof(int) || type.GetTypeInfo().BaseType == typeof(System.Enum) || type == typeof(Color))
-      {
-        WriteLine(valueName + " = " + value.ToString());
-      }
-      else
-      {
-        string message = String.Format("Type '{0}' of value '{1}' not supported", type.ToString(), valueName);
-        Debug.Assert(false, message);
-      }
+        {
+            var message = String.Format("Type '{0}' of value '{1}' not supported", type.ToString(), valueName);
+            Debug.Assert(false, message);
+        }
     }
 
     /// <summary>
@@ -449,11 +446,11 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal int BeginContent()
     {
-      int pos = this.Position;
-      WriteLineNoCommit("{");
-      IncreaseIndent();
-      BeginBlock();
-      return pos;
+        var pos = this.Position;
+        WriteLineNoCommit("{");
+        IncreaseIndent();
+        BeginBlock();
+        return pos;
     }
 
     /// <summary>
@@ -461,12 +458,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal int BeginContent(string str)
     {
-      int pos = this.Position;
-      WriteLineNoCommit(str);
-      WriteLineNoCommit("{");
-      IncreaseIndent();
-      BeginBlock();
-      return pos;
+        var pos = this.Position;
+        WriteLineNoCommit(str);
+        WriteLineNoCommit("{");
+        IncreaseIndent();
+        BeginBlock();
+        return pos;
     }
 
     /// <summary>
@@ -474,9 +471,9 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal bool EndContent()
     {
-      DecreaseIndent();
-      WriteLineNoCommit("}");
-      return EndBlock();
+        DecreaseIndent();
+        WriteLineNoCommit("}");
+        return EndBlock();
     }
 
     /// <summary>
@@ -484,10 +481,10 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal bool EndContent(int pos)
     {
-      bool commit = EndContent();
-      if (!commit)
-        this.Position = pos;
-      return commit;
+        var commit = EndContent();
+        if (!commit)
+            this.Position = pos;
+        return commit;
     }
 
     /// <summary>
@@ -495,12 +492,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal int BeginBlock()
     {
-      int pos = this.Position;
-      if (stackIdx + 1 >= commitTextStack.Length)
-        throw new ArgumentException("Block nesting level exhausted.");
-      stackIdx += 1;
-      commitTextStack[stackIdx] = false;
-      return pos;
+        var pos = this.Position;
+        if (stackIdx + 1 >= commitTextStack.Length)
+            throw new ArgumentException("Block nesting level exhausted.");
+        stackIdx += 1;
+        commitTextStack[stackIdx] = false;
+        return pos;
     }
 
     /// <summary>
@@ -508,12 +505,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal bool EndBlock()
     {
-      if (stackIdx <= 0)
-        throw new ArgumentException("Block nesting level underflow.");
-      stackIdx -= 1;
-      if (commitTextStack[stackIdx + 1])
-        commitTextStack[stackIdx] = commitTextStack[stackIdx + 1];
-      return commitTextStack[stackIdx + 1];
+        if (stackIdx <= 0)
+            throw new ArgumentException("Block nesting level underflow.");
+        stackIdx -= 1;
+        if (commitTextStack[stackIdx + 1])
+            commitTextStack[stackIdx] = commitTextStack[stackIdx + 1];
+        return commitTextStack[stackIdx + 1];
     }
 
     /// <summary>
@@ -521,10 +518,10 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal bool EndBlock(int pos)
     {
-      bool commit = EndBlock();
-      if (!commit)
-        this.Position = pos;
-      return commit;
+        var commit = EndBlock();
+        if (!commit)
+            this.Position = pos;
+        return commit;
     }
 
     /// <summary>
@@ -532,23 +529,23 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     int Position
     {
-      get
-      {
-        textWriter.Flush();
-        if (textWriter is StreamWriter)
-          return (int)((StreamWriter)textWriter).BaseStream.Position;
-        else if (textWriter is StringWriter)
-          return ((StringWriter)textWriter).GetStringBuilder().Length;
-        return 0;
-      }
-      set
-      {
-        textWriter.Flush();
-        if (textWriter is StreamWriter)
-          ((StreamWriter)textWriter).BaseStream.SetLength(value);
-        else if (textWriter is StringWriter)
-          ((StringWriter)textWriter).GetStringBuilder().Length = value;
-      }
+        get
+        {
+            textWriter.Flush();
+            if (textWriter is StreamWriter)
+                return (int)((StreamWriter)textWriter).BaseStream.Position;
+            else if (textWriter is StringWriter)
+                return ((StringWriter)textWriter).GetStringBuilder().Length;
+            return 0;
+        }
+        set
+        {
+            textWriter.Flush();
+            if (textWriter is StreamWriter)
+                ((StreamWriter)textWriter).BaseStream.SetLength(value);
+            else if (textWriter is StringWriter)
+                ((StringWriter)textWriter).GetStringBuilder().Length = value;
+        }
     }
 
     /// <summary>
@@ -556,7 +553,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void Flush()
     {
-      textWriter.Flush();
+        textWriter.Flush();
     }
 
     /// <summary>
@@ -564,16 +561,13 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     static string Ind(int indent)
     {
-      return new String(' ', indent);
+        return new String(' ', indent);
     }
 
     /// <summary>
     /// Gets an indent string of current indent.
     /// </summary>
-    string Indentation
-    {
-      get { return Ind(writeIndent); }
-    }
+    string Indentation => Ind(writeIndent);
 
     /// <summary>
     /// Marks the current block as 'committed'. That means the block contains
@@ -581,7 +575,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     private void CommitText()
     {
-      commitTextStack[stackIdx] = true;
+        commitTextStack[stackIdx] = true;
     }
     private int stackIdx = 0;
     private bool[] commitTextStack = new bool[32];
@@ -590,5 +584,4 @@ namespace MigraDocCore.DocumentObjectModel
     int lineBreakBeyond = 200;
     char lastChar;
     bool fWriteStamp = false;
-  }
 }

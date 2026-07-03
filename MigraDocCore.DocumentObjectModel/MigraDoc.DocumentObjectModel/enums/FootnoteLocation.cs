@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Determines the position of the footnote on the page.
+/// </summary>
+public enum FootnoteLocation
 {
-  /// <summary>
-  /// Determines the position of the footnote on the page.
-  /// </summary>
-  public enum FootnoteLocation
-  {
     /// <summary>
     /// Footnote will be rendered on the bottom of the page.
     /// </summary>
@@ -48,5 +44,4 @@ namespace MigraDocCore.DocumentObjectModel
     /// Footnote will be rendered immediately after the text.
     /// </summary>
     BeneathText
-  }
 }

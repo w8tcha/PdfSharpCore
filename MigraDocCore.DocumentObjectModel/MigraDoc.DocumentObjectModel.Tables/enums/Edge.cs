@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace MigraDocCore.DocumentObjectModel.Tables
+namespace MigraDocCore.DocumentObjectModel.Tables;
+
+/// <summary>
+/// Combinable flags to set Borders using the SetEdge function.
+/// </summary>
+[Flags]
+public enum Edge
 {
-  /// <summary>
-  /// Combinable flags to set Borders using the SetEdge function.
-  /// </summary>
-  [Flags]
-  public enum Edge
-  {
     Top = 0x0001,
     Left = 0x0002,
     Bottom = 0x0004,
@@ -50,6 +48,5 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     DiagonalUp = 0x0080,
     Box = Top | Left | Bottom | Right,
     Interior = Horizontal | Vertical,
-    Cross = DiagonalDown | DiagonalUp,
-  }
+    Cross = DiagonalDown | DiagonalUp
 }

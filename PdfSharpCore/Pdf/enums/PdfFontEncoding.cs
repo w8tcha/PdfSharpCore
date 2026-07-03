@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,38 +24,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace PdfSharpCore.Pdf;
 
-namespace PdfSharpCore.Pdf
+/// <summary>
+/// Specifies the encoding schema used for an XFont when converted into PDF.
+/// </summary>
+public enum PdfFontEncoding
 {
+    // TABLE
+
     /// <summary>
-    /// Specifies the encoding schema used for an XFont when converted into PDF.
+    /// Cause a font to use Windows-1252 encoding to encode text rendered with this font.
+    /// Same as Windows1252 encoding.
     /// </summary>
-    public enum PdfFontEncoding
-    {
-        // TABLE
+    WinAnsi = 0,
 
-        /// <summary>
-        /// Cause a font to use Windows-1252 encoding to encode text rendered with this font.
-        /// Same as Windows1252 encoding.
-        /// </summary>
-        WinAnsi = 0,
+    ///// <summary>
+    ///// Cause a font to use Windows-1252 (aka WinAnsi) encoding to encode text rendered with this font.
+    ///// </summary>
+    //Windows1252 = 0,
 
-        ///// <summary>
-        ///// Cause a font to use Windows-1252 (aka WinAnsi) encoding to encode text rendered with this font.
-        ///// </summary>
-        //Windows1252 = 0,
+    /// <summary>
+    /// Cause a font to use Unicode encoding to encode text rendered with this font.
+    /// </summary>
+    Unicode = 1
 
-        /// <summary>
-        /// Cause a font to use Unicode encoding to encode text rendered with this font.
-        /// </summary>
-        Unicode = 1
-
-        // Implementation note: PdfFontEncoding uses incorrect terms.
-        // WinAnsi correspond to WinAnsiEncoding, while Unicode uses glyph indices.
-        // Furthermre the term WinAnsi is an oxymoron.
-        // Reference: TABLE  D.1 Latin-text encodings / Page 996
-    }
+    // Implementation note: PdfFontEncoding uses incorrect terms.
+    // WinAnsi correspond to WinAnsiEncoding, while Unicode uses glyph indices.
+    // Furthermre the term WinAnsi is an oxymoron.
+    // Reference: TABLE  D.1 Latin-text encodings / Page 996
 }

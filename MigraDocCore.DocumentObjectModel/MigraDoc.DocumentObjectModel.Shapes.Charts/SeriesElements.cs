@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,19 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Collections;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents the collection of the values in a data series.
+/// </summary>
+public class SeriesElements : DocumentObjectCollection
 {
-  /// <summary>
-  /// Represents the collection of the values in a data series.
-  /// </summary>
-  public class SeriesElements : DocumentObjectCollection
-  {
     /// <summary>
     /// Initializes a new instance of the SeriesElements class.
     /// </summary>
@@ -53,13 +49,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal SeriesElements(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new SeriesElements Clone()
     {
-      return (SeriesElements)DeepCopy();
+        return (SeriesElements)DeepCopy();
     }
 
     /// <summary>
@@ -67,7 +62,7 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public void AddBlank()
     {
-      base.Add((DocumentObject)null);
+        base.Add((DocumentObject)null);
     }
 
     /// <summary>
@@ -75,9 +70,9 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Point Add(double value)
     {
-      Point point = new Point(value);
-      Add(point);
-      return point;
+        var point = new Point(value);
+        Add(point);
+        return point;
     }
 
     /// <summary>
@@ -85,26 +80,24 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public void Add(params double[] values)
     {
-      foreach (double val in values)
-        this.Add(val);
+        foreach (var val in values)
+            this.Add(val);
     }
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts SeriesElements into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int count = Count;
-      for (int index = 0; index < count; ++index)
-      {
-        Point point = this[index] as Point;
-        if (point == null)
-          serializer.Write("null, ");
-        else
-          point.Serialize(serializer);
-      }
+        var count = Count;
+        for (var index = 0; index < count; ++index)
+        {
+            var point = this[index] as Point;
+            if (point == null)
+                serializer.Write("null, ");
+            else
+                point.Serialize(serializer);
+        }
     }
 
     /// <summary>
@@ -112,14 +105,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(SeriesElements));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(SeriesElements));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

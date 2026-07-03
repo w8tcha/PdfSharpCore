@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,56 +25,53 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using PdfSharpCore.Drawing;
-using MigraDocCore.DocumentObjectModel;
+
 using MigraDocCore.DocumentObjectModel.Shapes;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Renders fill formats.
+/// </summary>
+internal class FillFormatRenderer
 {
-  /// <summary>
-  /// Renders fill formats.
-  /// </summary>
-  internal class FillFormatRenderer
-  {
     public FillFormatRenderer(FillFormat fillFormat, XGraphics gfx)
     {
-      this.gfx = gfx;
-      this.fillFormat = fillFormat;
+        this.gfx = gfx;
+        this.fillFormat = fillFormat;
     }
 
     internal void Render(XUnit x, XUnit y, XUnit width, XUnit height)
     {
-      XBrush brush = GetBrush();
+        var brush = GetBrush();
 
-      if (brush == null)
-        return;
+        if (brush == null)
+            return;
 
-      this.gfx.DrawRectangle(brush, x.Point, y.Point, width.Point, height.Point);
+        this.gfx.DrawRectangle(brush, x.Point, y.Point, width.Point, height.Point);
     }
 
     private bool IsVisible()
     {
-      if (!this.fillFormat.IsNull("Visible"))
-        return this.fillFormat.Visible;
-      else
-        return !this.fillFormat.IsNull("Color");
+        if (!this.fillFormat.IsNull("Visible"))
+            return this.fillFormat.Visible;
+        else
+            return !this.fillFormat.IsNull("Color");
     }
 
     private XBrush GetBrush()
     {
-      if (this.fillFormat == null || !IsVisible())
-        return null;
+        if (this.fillFormat == null || !IsVisible())
+            return null;
 
 #if noCMYK
       return new XSolidBrush(XColor.FromArgb(this.fillFormat.Color.Argb));
 #else
-      return new XSolidBrush(ColorHelper.ToXColor(this.fillFormat.Color, this.fillFormat.Document.UseCmykColor));
+        return new XSolidBrush(ColorHelper.ToXColor(this.fillFormat.Color, this.fillFormat.Document.UseCmykColor));
 #endif
     }
     private XGraphics gfx;
     private FillFormat fillFormat;
-  }
 }

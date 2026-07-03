@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// A PageBreak is used to put following elements on a new page.
+/// </summary>
+public class PageBreak : DocumentObject
 {
-  /// <summary>
-  /// A PageBreak is used to put following elements on a new page.
-  /// </summary>
-  public class PageBreak : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the PageBreak class.
     /// </summary>
@@ -60,7 +55,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public new PageBreak Clone()
     {
-      return (PageBreak)DeepCopy();
+        return (PageBreak)DeepCopy();
     }
     //#endregion
 
@@ -70,7 +65,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      serializer.WriteLine("\\pagebreak");
+        serializer.WriteLine("\\pagebreak");
     }
 
     /// <summary>
@@ -78,14 +73,13 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(PageBreak));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(PageBreak));
+            return meta;
+        }
     }
     static Meta meta;
     //#endregion
-  }
 }

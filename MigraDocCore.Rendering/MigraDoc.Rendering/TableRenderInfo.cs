@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,33 +25,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel;
 using MigraDocCore.DocumentObjectModel.Tables;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Rendering information for tables.
+/// </summary>
+internal class TableRenderInfo : RenderInfo
 {
-  /// <summary>
-  /// Rendering information for tables.
-  /// </summary>
-  internal class TableRenderInfo : RenderInfo
-  {
     internal TableRenderInfo()
     {
     }
 
-    internal override FormatInfo FormatInfo
-    {
-      get { return this.formatInfo; }
-    }
-    private TableFormatInfo formatInfo = new TableFormatInfo();
+    internal override FormatInfo FormatInfo => this.formatInfo;
+    private TableFormatInfo formatInfo = new();
 
-    public override DocumentObject DocumentObject
-    {
-      get { return this.table; }
-    }
+    public override DocumentObject DocumentObject => this.table;
     internal Table table;
-  }
 }

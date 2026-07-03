@@ -27,17 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Represents the collection of the value in an XSeries.
+/// </summary>
+public class XSeriesElements : DocumentObjectCollection
 {
-  /// <summary>
-  /// Represents the collection of the value in an XSeries.
-  /// </summary>
-  public class XSeriesElements : DocumentObjectCollection
-  {
     /// <summary>
     /// Initializes a new instance of the XSeriesElements class.
     /// </summary>
@@ -51,7 +47,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new XSeriesElements Clone()
     {
-      return (XSeriesElements)base.DeepCopy();
+        return (XSeriesElements)base.DeepCopy();
     }
 
     /// <summary>
@@ -59,7 +55,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public void AddBlank()
     {
-      base.Add((DocumentObject)null);
+        base.Add((DocumentObject)null);
     }
 
     /// <summary>
@@ -67,9 +63,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XValue Add(string value)
     {
-      XValue xValue = new XValue(value);
-      Add(xValue);
-      return xValue;
+        var xValue = new XValue(value);
+        Add(xValue);
+        return xValue;
     }
 
     /// <summary>
@@ -77,9 +73,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public void Add(params string[] values)
     {
-      foreach (string val in values)
-        this.Add(val);
+        foreach (var val in values)
+            this.Add(val);
     }
     #endregion
-  }
 }

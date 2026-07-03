@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,28 +24,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// Sets the mode for the Deflater (FlateEncoder).
+/// </summary>
+public enum PdfFlateEncodeMode
 {
     /// <summary>
-    /// Sets the mode for the Deflater (FlateEncoder).
+    /// The default mode.
     /// </summary>
-    public enum PdfFlateEncodeMode
-    {
-        /// <summary>
-        /// The default mode.
-        /// </summary>
-        Default,
+    Default,
 
-        /// <summary>
-        /// Fast encoding, but larger PDF files.
-        /// </summary>
-        BestSpeed,
+    /// <summary>
+    /// Fast encoding, but larger PDF files.
+    /// </summary>
+    BestSpeed,
 
-        /// <summary>
-        /// Best compression, but takes more time.
-        /// </summary>
-        BestCompression,
-    }
+    /// <summary>
+    /// Best compression, but takes more time.
+    /// </summary>
+    BestCompression
 }

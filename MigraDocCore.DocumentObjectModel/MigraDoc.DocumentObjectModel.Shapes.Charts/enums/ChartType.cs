@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+/// <summary>
+/// Specifies with type of chart will be drawn.
+/// </summary>
+public enum ChartType
 {
-  /// <summary>
-  /// Specifies with type of chart will be drawn.
-  /// </summary>
-  public enum ChartType
-  {
     /// <summary>
     /// A line chart.
     /// </summary>
@@ -77,6 +73,5 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// <summary>
     /// An exploded 2d pie chart.
     /// </summary>
-    PieExploded2D,
-  }
+    PieExploded2D
 }

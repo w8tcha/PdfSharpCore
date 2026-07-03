@@ -28,15 +28,14 @@
 #endregion
 
 using System;
-using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Represents the format of the label of each value on the axis.
+/// </summary>
+public class TickLabels : ChartObject
 {
-  /// <summary>
-  /// Represents the format of the label of each value on the axis.
-  /// </summary>
-  public class TickLabels : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the TickLabels class.
     /// </summary>
@@ -55,7 +54,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new TickLabels Clone()
     {
-      return (TickLabels)DeepCopy();
+        return (TickLabels)DeepCopy();
     }
 
     /// <summary>
@@ -63,13 +62,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      TickLabels tickLabels = (TickLabels)base.DeepCopy();
-      if (tickLabels.font != null)
-      {
-        tickLabels.font = tickLabels.font.Clone();
-        tickLabels.font.parent = tickLabels;
-      }
-      return tickLabels;
+        var tickLabels = (TickLabels)base.DeepCopy();
+        if (tickLabels.font != null)
+        {
+            tickLabels.font = tickLabels.font.Clone();
+            tickLabels.font.parent = tickLabels;
+        }
+        return tickLabels;
     }
     #endregion
 
@@ -79,8 +78,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public string Format
     {
-      get {return this.format;}
-      set {this.format = value;}
+        get => this.format;
+        set => this.format = value;
     }
     internal string format = String.Empty;
 
@@ -89,15 +88,14 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Font Font
     {
-      get
-      {
-        if (this.font == null)
-          this.font = new Font(this);
+        get
+        {
+            if (this.font == null)
+                this.font = new Font(this);
 
-        return this.font;
-      }
+            return this.font;
+        }
     }
     internal Font font;
     #endregion
-  }
 }

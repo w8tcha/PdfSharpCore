@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,32 +27,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using MigraDocCore.DocumentObjectModel.IO;
+
 using MigraDocCore.DocumentObjectModel.Tables;
-using MigraDocCore.DocumentObjectModel.Visitors;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Visitors
+namespace MigraDocCore.DocumentObjectModel.Visitors;
+
+/// <summary>
+/// Represents a merged list of cells of a table.
+/// </summary>
+public class MergedCellList : List<Cell>
 {
-  /// <summary>
-  /// Represents a merged list of cells of a table.
-  /// </summary>
-  public class MergedCellList : List<Cell>
-  {
     /// <summary>
     /// Enumeration of neighbor positions of cells in a table.
     /// </summary>
     private enum NeighborPosition
     {
-      Top,
-      Left,
-      Right,
-      Bottom
+        Top,
+        Left,
+        Right,
+        Bottom
     }
 
     /// <summary>
@@ -61,7 +57,7 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     /// </summary>
     public MergedCellList(Table table)
     {
-      Init(table);
+        Init(table);
     }
 
     /// <summary>
@@ -69,15 +65,15 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     /// </summary>
     private void Init(Table table)
     {
-      for (int rwIdx = 0; rwIdx < table.Rows.Count; ++rwIdx)
-      {
-        for (int clmIdx = 0; clmIdx < table.Columns.Count; ++clmIdx)
+        for (var rwIdx = 0; rwIdx < table.Rows.Count; ++rwIdx)
         {
-          Cell cell = table[rwIdx, clmIdx];
-          if (!IsAlreadyCovered(cell))
-            this.Add(cell);
+            for (var clmIdx = 0; clmIdx < table.Columns.Count; ++clmIdx)
+            {
+                var cell = table[rwIdx, clmIdx];
+                if (!IsAlreadyCovered(cell))
+                    this.Add(cell);
+            }
         }
-      }
     }
 
     /// <summary>
@@ -88,32 +84,26 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     /// </remarks>
     private bool IsAlreadyCovered(Cell cell)
     {
-      for (int index = this.Count - 1; index >= 0; --index)
-      {
-
-        Cell currentCell = this[index];
-        if (currentCell.Column.Index <= cell.Column.Index && currentCell.Column.Index + currentCell.MergeRight >= cell.Column.Index)
+        for (var index = this.Count - 1; index >= 0; --index)
         {
-          if (currentCell.Row.Index <= cell.Row.Index && currentCell.Row.Index + currentCell.MergeDown >= cell.Row.Index)
-            return true;
-          else if (currentCell.Row.Index + currentCell.MergeDown == cell.Row.Index - 1)
-            return false;
 
+            var currentCell = this[index];
+            if (currentCell.Column.Index <= cell.Column.Index && currentCell.Column.Index + currentCell.MergeRight >= cell.Column.Index)
+            {
+                if (currentCell.Row.Index <= cell.Row.Index && currentCell.Row.Index + currentCell.MergeDown >= cell.Row.Index)
+                    return true;
+                else if (currentCell.Row.Index + currentCell.MergeDown == cell.Row.Index - 1)
+                    return false;
+
+            }
         }
-      }
-      return false;
+        return false;
     }
 
     /// <summary>
     /// Gets the cell at the specified position.
     /// </summary>
-    public new Cell this[int index]
-    {
-      get
-      {
-        return base[index] as Cell;
-      }
-    }
+    public new Cell this[int index] => base[index] as Cell;
 
     /// <summary>
     /// Gets a borders object that should be used for rendering.
@@ -124,68 +114,68 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     /// </exception>
     public Borders GetEffectiveBorders(Cell cell)
     {
-      Borders borders = cell.GetValue("Borders", GV.ReadOnly) as Borders;
-      if (borders != null)
-      {
-        Document doc = borders.Document;
-        borders = borders.Clone();
-        borders.parent = cell;
-        doc = borders.Document;
-      }
-      else
-        borders = new Borders(cell.parent);
-
-      int cellIdx = this.BinarySearch(cell, new CellComparer());
-      if (!(cellIdx >= 0 && cellIdx < this.Count))
-        throw new ArgumentException("cell is not a relevant cell", "cell");
-
-      if (cell.mergeRight > 0)
-      {
-        Cell rightBorderCell = cell.Table[cell.Row.Index, cell.Column.Index + (cell.mergeRight ?? 0)];
-        if (rightBorderCell.borders != null && rightBorderCell.borders.right != null)
-          borders.Right = rightBorderCell.borders.right.Clone();
+        var borders = cell.GetValue("Borders", GV.ReadOnly) as Borders;
+        if (borders != null)
+        {
+            var doc = borders.Document;
+            borders = borders.Clone();
+            borders.parent = cell;
+            doc = borders.Document;
+        }
         else
-          borders.right = null;
-      }
+            borders = new Borders(cell.parent);
 
-      if (cell.mergeDown > 0)
-      {
-        Cell bottomBorderCell = cell.Table[cell.Row.Index + (cell.mergeDown ?? 0), cell.Column.Index];
-        if (bottomBorderCell.borders != null && bottomBorderCell.borders.bottom != null)
-          borders.Bottom = bottomBorderCell.borders.bottom.Clone();
-        else
-          borders.bottom = null;
-      }
+        var cellIdx = this.BinarySearch(cell, new CellComparer());
+        if (!(cellIdx >= 0 && cellIdx < this.Count))
+            throw new ArgumentException("cell is not a relevant cell", "cell");
 
-      Cell leftNeighbor = GetNeighbor(cellIdx, NeighborPosition.Left);
-      Cell rightNeighbor = GetNeighbor(cellIdx, NeighborPosition.Right);
-      Cell topNeighbor = GetNeighbor(cellIdx, NeighborPosition.Top);
-      Cell bottomNeighbor = GetNeighbor(cellIdx, NeighborPosition.Bottom);
-      if (leftNeighbor != null)
-      {
-        Borders nbrBrdrs = leftNeighbor.GetValue("Borders", GV.ReadWrite) as Borders;
-        if (nbrBrdrs != null && GetEffectiveBorderWidth(nbrBrdrs, BorderType.Right) >= GetEffectiveBorderWidth(borders, BorderType.Left))
-          borders.SetValue("Left", GetBorderFromBorders(nbrBrdrs, BorderType.Right));
-      }
-      if (rightNeighbor != null)
-      {
-        Borders nbrBrdrs = rightNeighbor.GetValue("Borders", GV.ReadWrite) as Borders;
-        if (nbrBrdrs != null && GetEffectiveBorderWidth(nbrBrdrs, BorderType.Left) > GetEffectiveBorderWidth(borders, BorderType.Right))
-          borders.SetValue("Right", GetBorderFromBorders(nbrBrdrs, BorderType.Left));
-      }
-      if (topNeighbor != null)
-      {
-        Borders nbrBrdrs = topNeighbor.GetValue("Borders", GV.ReadWrite) as Borders;
-        if (nbrBrdrs != null && GetEffectiveBorderWidth(nbrBrdrs, BorderType.Bottom) >= GetEffectiveBorderWidth(borders, BorderType.Top))
-          borders.SetValue("Top", GetBorderFromBorders(nbrBrdrs, BorderType.Bottom));
-      }
-      if (bottomNeighbor != null)
-      {
-        Borders nbrBrdrs = bottomNeighbor.GetValue("Borders", GV.ReadWrite) as Borders;
-        if (nbrBrdrs != null && GetEffectiveBorderWidth(nbrBrdrs, BorderType.Top) > GetEffectiveBorderWidth(borders, BorderType.Bottom))
-          borders.SetValue("Bottom", GetBorderFromBorders(nbrBrdrs, BorderType.Top));
-      }
-      return borders;
+        if (cell.mergeRight > 0)
+        {
+            var rightBorderCell = cell.Table[cell.Row.Index, cell.Column.Index + (cell.mergeRight ?? 0)];
+            if (rightBorderCell.borders != null && rightBorderCell.borders.right != null)
+                borders.Right = rightBorderCell.borders.right.Clone();
+            else
+                borders.right = null;
+        }
+
+        if (cell.mergeDown > 0)
+        {
+            var bottomBorderCell = cell.Table[cell.Row.Index + (cell.mergeDown ?? 0), cell.Column.Index];
+            if (bottomBorderCell.borders != null && bottomBorderCell.borders.bottom != null)
+                borders.Bottom = bottomBorderCell.borders.bottom.Clone();
+            else
+                borders.bottom = null;
+        }
+
+        var leftNeighbor = GetNeighbor(cellIdx, NeighborPosition.Left);
+        var rightNeighbor = GetNeighbor(cellIdx, NeighborPosition.Right);
+        var topNeighbor = GetNeighbor(cellIdx, NeighborPosition.Top);
+        var bottomNeighbor = GetNeighbor(cellIdx, NeighborPosition.Bottom);
+        if (leftNeighbor != null)
+        {
+            var nbrBrdrs = leftNeighbor.GetValue("Borders", GV.ReadWrite) as Borders;
+            if (nbrBrdrs != null && GetEffectiveBorderWidth(nbrBrdrs, BorderType.Right) >= GetEffectiveBorderWidth(borders, BorderType.Left))
+                borders.SetValue("Left", GetBorderFromBorders(nbrBrdrs, BorderType.Right));
+        }
+        if (rightNeighbor != null)
+        {
+            var nbrBrdrs = rightNeighbor.GetValue("Borders", GV.ReadWrite) as Borders;
+            if (nbrBrdrs != null && GetEffectiveBorderWidth(nbrBrdrs, BorderType.Left) > GetEffectiveBorderWidth(borders, BorderType.Right))
+                borders.SetValue("Right", GetBorderFromBorders(nbrBrdrs, BorderType.Left));
+        }
+        if (topNeighbor != null)
+        {
+            var nbrBrdrs = topNeighbor.GetValue("Borders", GV.ReadWrite) as Borders;
+            if (nbrBrdrs != null && GetEffectiveBorderWidth(nbrBrdrs, BorderType.Bottom) >= GetEffectiveBorderWidth(borders, BorderType.Top))
+                borders.SetValue("Top", GetBorderFromBorders(nbrBrdrs, BorderType.Bottom));
+        }
+        if (bottomNeighbor != null)
+        {
+            var nbrBrdrs = bottomNeighbor.GetValue("Borders", GV.ReadWrite) as Borders;
+            if (nbrBrdrs != null && GetEffectiveBorderWidth(nbrBrdrs, BorderType.Top) > GetEffectiveBorderWidth(borders, BorderType.Bottom))
+                borders.SetValue("Bottom", GetBorderFromBorders(nbrBrdrs, BorderType.Top));
+        }
+        return borders;
     }
 
     /// <summary>
@@ -193,21 +183,21 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     /// </summary>
     public Cell GetCoveringCell(Cell cell)
     {
-      int cellIdx = this.BinarySearch(cell, new CellComparer());
-      if (cellIdx >= 0 && cellIdx < this.Count)
-        return this[cellIdx];
-      else //Binary Search returns the complement of the next value, therefore, "~cellIdx - 1" is the previous cell.
-        cellIdx = ~cellIdx - 1;
-      for (int index = cellIdx; index >= 0; --index)
-      {
-        Cell currCell = this[index];
-        if (currCell.Column.Index <= cell.Column.Index &&
-          currCell.Column.Index + currCell.MergeRight >= cell.Column.Index &&
-          currCell.Row.Index <= cell.Row.Index &&
-          currCell.Row.Index + currCell.MergeDown >= cell.Row.Index)
-          return currCell;
-      }
-      return null;
+        var cellIdx = this.BinarySearch(cell, new CellComparer());
+        if (cellIdx >= 0 && cellIdx < this.Count)
+            return this[cellIdx];
+        else //Binary Search returns the complement of the next value, therefore, "~cellIdx - 1" is the previous cell.
+            cellIdx = ~cellIdx - 1;
+        for (var index = cellIdx; index >= 0; --index)
+        {
+            var currCell = this[index];
+            if (currCell.Column.Index <= cell.Column.Index &&
+                currCell.Column.Index + currCell.MergeRight >= cell.Column.Index &&
+                currCell.Row.Index <= cell.Row.Index &&
+                currCell.Row.Index + currCell.MergeDown >= cell.Row.Index)
+                return currCell;
+        }
+        return null;
     }
 
     /// <summary>
@@ -216,16 +206,16 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     /// </summary>
     private Border GetBorderFromBorders(Borders borders, BorderType type)
     {
-      Border returnBorder = borders.GetValue(type.ToString(), GV.ReadOnly) as Border;
-      if (returnBorder == null)
-      {
-        returnBorder = new Border();
-        returnBorder.style = borders.style;
-        returnBorder.width = borders.width;
-        returnBorder.color = borders.color;
-        returnBorder.visible = borders.visible;
-      }
-      return returnBorder;
+        var returnBorder = borders.GetValue(type.ToString(), GV.ReadOnly) as Border;
+        if (returnBorder == null)
+        {
+            returnBorder = new Border();
+            returnBorder.style = borders.style;
+            returnBorder.width = borders.width;
+            returnBorder.color = borders.color;
+            returnBorder.visible = borders.visible;
+        }
+        return returnBorder;
     }
 
     /// <summary>
@@ -233,30 +223,30 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     /// </summary>
     private Unit GetEffectiveBorderWidth(Borders borders, BorderType type)
     {
-      if (borders == null)
+        if (borders == null)
+            return 0;
+
+        var border = borders.GetValue(type.ToString(), GV.GetNull) as Border;
+
+        DocumentObject relevantDocObj = border;
+        if (relevantDocObj == null || relevantDocObj.IsNull("Width"))
+            relevantDocObj = borders;
+
+        var visible = relevantDocObj.GetValue("visible", GV.GetNull);
+        var style = relevantDocObj.GetValue("style", GV.GetNull);
+        var width = relevantDocObj.GetValue("width", GV.GetNull);
+        var color = relevantDocObj.GetValue("color", GV.GetNull);
+
+        if (visible != null || style != null || width != null || color != null)
+        {
+            if (visible != null && !(bool)visible)
+                return 0;
+            if (width != null)
+                return (Unit)width;
+
+            return 0.5;
+        }
         return 0;
-
-      Border border = borders.GetValue(type.ToString(), GV.GetNull) as Border;
-
-      DocumentObject relevantDocObj = border;
-      if (relevantDocObj == null || relevantDocObj.IsNull("Width"))
-        relevantDocObj = borders;
-
-      object visible = relevantDocObj.GetValue("visible", GV.GetNull);
-      object style = relevantDocObj.GetValue("style", GV.GetNull);
-      object width = relevantDocObj.GetValue("width", GV.GetNull);
-      object color = relevantDocObj.GetValue("color", GV.GetNull);
-
-      if (visible != null || style != null || width != null || color != null)
-      {
-        if (visible != null && !(bool)visible)
-          return 0;
-        if (width != null)
-          return (Unit)width;
-
-        return 0.5;
-      }
-      return 0;
     }
 
     /// <summary>
@@ -264,50 +254,50 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     /// </summary>
     private Cell GetNeighbor(int cellIdx, NeighborPosition position)
     {
-      Cell cell = this[cellIdx];
-      if (cell.Column.Index == 0 && position == NeighborPosition.Left ||
-        cell.Row.Index == 0 && position == NeighborPosition.Top ||
-        cell.Row.Index + cell.MergeDown == cell.Table.Rows.Count - 1 && position == NeighborPosition.Bottom ||
-        cell.Column.Index + cell.MergeRight == cell.Table.Columns.Count - 1 && position == NeighborPosition.Right)
+        var cell = this[cellIdx];
+        if (cell.Column.Index == 0 && position == NeighborPosition.Left ||
+            cell.Row.Index == 0 && position == NeighborPosition.Top ||
+            cell.Row.Index + cell.MergeDown == cell.Table.Rows.Count - 1 && position == NeighborPosition.Bottom ||
+            cell.Column.Index + cell.MergeRight == cell.Table.Columns.Count - 1 && position == NeighborPosition.Right)
+            return null;
+
+        switch (position)
+        {
+            case NeighborPosition.Top:
+            case NeighborPosition.Left:
+                for (var index = cellIdx - 1; index >= 0; --index)
+                {
+                    var currCell = this[index];
+                    if (IsNeighbor(cell, currCell, position))
+                        return currCell;
+                }
+                break;
+
+            case NeighborPosition.Right:
+                if (cellIdx + 1 < this.Count)
+                {
+                    var cell2 = this[cellIdx + 1];
+                    if (cell2.Row.Index == cell.Row.Index)
+                        return cell2;
+                }
+                for (var index = cellIdx - 1; index >= 0; --index)
+                {
+                    var currCell = this[index];
+                    if (IsNeighbor(cell, currCell, position))
+                        return currCell;
+                }
+                break;
+
+            case NeighborPosition.Bottom:
+                for (var index = cellIdx + 1; index < this.Count; ++index)
+                {
+                    var currCell = this[index];
+                    if (IsNeighbor(cell, currCell, position))
+                        return currCell;
+                }
+                break;
+        }
         return null;
-
-      switch (position)
-      {
-        case NeighborPosition.Top:
-        case NeighborPosition.Left:
-          for (int index = cellIdx - 1; index >= 0; --index)
-          {
-            Cell currCell = this[index];
-            if (IsNeighbor(cell, currCell, position))
-              return currCell;
-          }
-          break;
-
-        case NeighborPosition.Right:
-          if (cellIdx + 1 < this.Count)
-          {
-            Cell cell2 = this[cellIdx + 1];
-            if (cell2.Row.Index == cell.Row.Index)
-              return cell2;
-          }
-          for (int index = cellIdx - 1; index >= 0; --index)
-          {
-            Cell currCell = this[index];
-            if (IsNeighbor(cell, currCell, position))
-              return currCell;
-          }
-          break;
-
-        case NeighborPosition.Bottom:
-          for (int index = cellIdx + 1; index < this.Count; ++index)
-          {
-            Cell currCell = this[index];
-            if (IsNeighbor(cell, currCell, position))
-              return currCell;
-          }
-          break;
-      }
-      return null;
     }
 
     /// <summary>
@@ -315,38 +305,37 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     /// </summary>
     private bool IsNeighbor(Cell cell1, Cell cell2, NeighborPosition position)
     {
-      bool isNeighbor = false;
-      switch (position)
-      {
-        case NeighborPosition.Bottom:
-          int bottomRowIdx = cell1.Row.Index + cell1.MergeDown + 1;
-          isNeighbor = cell2.Row.Index == bottomRowIdx &&
-            cell2.Column.Index <= cell1.Column.Index &&
-            cell2.Column.Index + cell2.MergeRight >= cell1.Column.Index;
-          break;
+        var isNeighbor = false;
+        switch (position)
+        {
+            case NeighborPosition.Bottom:
+                var bottomRowIdx = cell1.Row.Index + cell1.MergeDown + 1;
+                isNeighbor = cell2.Row.Index == bottomRowIdx &&
+                             cell2.Column.Index <= cell1.Column.Index &&
+                             cell2.Column.Index + cell2.MergeRight >= cell1.Column.Index;
+                break;
 
-        case NeighborPosition.Left:
-          int leftClmIdx = cell1.Column.Index - 1;
-          isNeighbor = cell2.Row.Index <= cell1.Row.Index &&
-            cell2.Row.Index + cell2.MergeDown >= cell1.Row.Index &&
-            cell2.Column.Index + cell2.MergeRight == leftClmIdx;
-          break;
+            case NeighborPosition.Left:
+                var leftClmIdx = cell1.Column.Index - 1;
+                isNeighbor = cell2.Row.Index <= cell1.Row.Index &&
+                             cell2.Row.Index + cell2.MergeDown >= cell1.Row.Index &&
+                             cell2.Column.Index + cell2.MergeRight == leftClmIdx;
+                break;
 
-        case NeighborPosition.Right:
-          int rightClmIdx = cell1.Column.Index + cell1.MergeRight + 1;
-          isNeighbor = cell2.Row.Index <= cell1.Row.Index &&
-            cell2.Row.Index + cell2.MergeDown >= cell1.Row.Index &&
-            cell2.Column.Index == rightClmIdx;
-          break;
+            case NeighborPosition.Right:
+                var rightClmIdx = cell1.Column.Index + cell1.MergeRight + 1;
+                isNeighbor = cell2.Row.Index <= cell1.Row.Index &&
+                             cell2.Row.Index + cell2.MergeDown >= cell1.Row.Index &&
+                             cell2.Column.Index == rightClmIdx;
+                break;
 
-        case NeighborPosition.Top:
-          int topRowIdx = cell1.Row.Index - 1;
-          isNeighbor = cell2.Row.Index + cell2.MergeDown == topRowIdx &&
-            cell2.Column.Index + cell2.MergeRight >= cell1.Column.Index &&
-            cell2.Column.Index <= cell1.Column.Index;
-          break;
-      }
-      return isNeighbor;
+            case NeighborPosition.Top:
+                var topRowIdx = cell1.Row.Index - 1;
+                isNeighbor = cell2.Row.Index + cell2.MergeDown == topRowIdx &&
+                             cell2.Column.Index + cell2.MergeRight >= cell1.Column.Index &&
+                             cell2.Column.Index <= cell1.Column.Index;
+                break;
+        }
+        return isNeighbor;
     }
-  }
 }

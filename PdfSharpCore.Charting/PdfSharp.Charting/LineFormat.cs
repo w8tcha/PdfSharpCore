@@ -27,17 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.ComponentModel;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Defines the format of a line in a shape object.
+/// </summary>
+public class LineFormat : DocumentObject
 {
-  /// <summary>
-  /// Defines the format of a line in a shape object.
-  /// </summary>
-  public class LineFormat : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the LineFormat class.
     /// </summary>
@@ -56,7 +54,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new LineFormat Clone()
     {
-      return (LineFormat)DeepCopy();
+        return (LineFormat)DeepCopy();
     }
     #endregion
 
@@ -66,8 +64,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool Visible
     {
-      get { return this.visible; }
-      set { this.visible = value; }
+        get => this.visible;
+        set => this.visible = value;
     }
     internal bool visible;
 
@@ -76,8 +74,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XUnit Width
     {
-      get { return this.width; }
-      set { this.width = value; }
+        get => this.width;
+        set => this.width = value;
     }
     internal XUnit width;
 
@@ -86,8 +84,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XColor Color
     {
-      get { return this.color; }
-      set { this.color = value; }
+        get => this.color;
+        set => this.color = value;
     }
     internal XColor color = XColor.Empty;
 
@@ -96,8 +94,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XDashStyle DashStyle
     {
-      get { return this.dashStyle; }
-      set { this.dashStyle = value; }
+        get => this.dashStyle;
+        set => this.dashStyle = value;
     }
     internal XDashStyle dashStyle;
 
@@ -106,10 +104,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public LineStyle Style
     {
-      get { return this.style; }
-      set { this.style = value; }
+        get => this.style;
+        set => this.style = value;
     }
     internal LineStyle style;
     #endregion
-  }
 }

@@ -27,15 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Specifies with type of chart will be drawn.
+/// </summary>
+public enum ChartType
 {
-  /// <summary>
-  /// Specifies with type of chart will be drawn.
-  /// </summary>
-  public enum ChartType
-  {
     /// <summary>
     /// A line chart.
     /// </summary>
@@ -74,6 +72,5 @@ namespace PdfSharpCore.Charting
     /// <summary>
     /// An exploded 2d pie chart.
     /// </summary>
-    PieExploded2D,
-  }
+    PieExploded2D
 }

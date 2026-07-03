@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,33 +25,30 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using PdfSharpCore.Drawing;
 using MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+static class ColorHelper
 {
-  static class ColorHelper
-  {
     /// <summary>
     /// Converts Color to XColor.
     /// </summary>
     public static XColor ToXColor(Color color, bool cmyk)
     {
-      if (color.IsEmpty)
+        if (color.IsEmpty)
 #if DEBUG
-        //return XColor.Empty;
-        return XColors.LightGreen;
+            //return XColor.Empty;
+            return XColors.LightGreen;
 #else
       return XColor.Empty;
 #endif
 
-      if (cmyk)
-        return XColor.FromCmyk(color.Alpha / 100.0, color.C / 100.0, color.M / 100.0, color.Y / 100.0, color.K / 100.0);
-      else
-         return XColor.FromArgb((int)color.Argb);
+        if (cmyk)
+            return XColor.FromCmyk(color.Alpha / 100.0, color.C / 100.0, color.M / 100.0, color.Y / 100.0, color.K / 100.0);
+        else
+            return XColor.FromArgb((int)color.Argb);
     }
-  }
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Standard page sizes.
+/// </summary>
+public enum PageFormat
 {
-  /// <summary>
-  /// Standard page sizes.
-  /// </summary>
-  public enum PageFormat
-  {
     A0,
     A1,
     A2,
@@ -51,5 +47,4 @@ namespace MigraDocCore.DocumentObjectModel
     Legal,
     Ledger,
     P11x17
-  }
 }

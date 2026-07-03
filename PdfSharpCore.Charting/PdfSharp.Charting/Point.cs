@@ -27,16 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
-{
-  /// <summary>
-  /// Represents a formatted value on the data series.
-  /// </summary>
-  public class Point : ChartObject
-  {    
+/// <summary>
+/// Represents a formatted value on the data series.
+/// </summary>
+public class Point : ChartObject
+{    
     /// <summary>
     /// Initializes a new instance of the Point class.
     /// </summary>
@@ -49,7 +46,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Point(double value) : this() 
     {
-      this.Value = value;
+        this.Value = value;
     }
 
     /// <summary>
@@ -57,8 +54,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Point(string value) : this() 
     {
-      // = "34.5 23.9"
-      this.Value = 0;
+        // = "34.5 23.9"
+        this.Value = 0;
     }
 
     #region Methods
@@ -67,7 +64,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new Point Clone()
     {
-      return (Point)DeepCopy();
+        return (Point)DeepCopy();
     }
 
     /// <summary>
@@ -75,18 +72,18 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      Point point = (Point)base.DeepCopy();
-      if (point.lineFormat != null)
-      {
-        point.lineFormat = point.lineFormat.Clone();
-        point.lineFormat.parent = point;
-      }
-      if (point.fillFormat != null)
-      {
-        point.fillFormat = point.fillFormat.Clone();
-        point.fillFormat.parent = point;
-      }
-      return point;
+        var point = (Point)base.DeepCopy();
+        if (point.lineFormat != null)
+        {
+            point.lineFormat = point.lineFormat.Clone();
+            point.lineFormat.parent = point;
+        }
+        if (point.fillFormat != null)
+        {
+            point.fillFormat = point.fillFormat.Clone();
+            point.fillFormat.parent = point;
+        }
+        return point;
     }
     #endregion
 
@@ -96,13 +93,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
+            return this.lineFormat;
+        }
     }
     internal LineFormat lineFormat;
 
@@ -111,13 +108,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public FillFormat FillFormat
     {
-      get
-      {
-        if (this.fillFormat == null)
-          this.fillFormat = new FillFormat(this);
+        get
+        {
+            if (this.fillFormat == null)
+                this.fillFormat = new FillFormat(this);
 
-        return this.fillFormat;
-      }
+            return this.fillFormat;
+        }
     }
     internal FillFormat fillFormat;
 
@@ -126,10 +123,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public double Value
     {
-      get {return this.value;}
-      set {this.value = value;}
+        get => this.value;
+        set => this.value = value;
     }
     internal double value;
     #endregion
-  }
 }

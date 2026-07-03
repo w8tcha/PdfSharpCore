@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,19 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
-using MigraDocCore.DocumentObjectModel.IO;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes
+namespace MigraDocCore.DocumentObjectModel.Shapes;
+
+/// <summary>
+/// Defines the background filling of the shape.
+/// </summary>
+public class FillFormat : DocumentObject
 {
-  /// <summary>
-  /// Defines the background filling of the shape.
-  /// </summary>
-  public class FillFormat : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the FillFormat class.
     /// </summary>
@@ -53,24 +49,21 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     internal FillFormat(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new FillFormat Clone()
     {
-      return (FillFormat)DeepCopy();
+        return (FillFormat)DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the color of the filling.
     /// </summary>
     public Color Color
     {
-      get { return this.color; }
-      set { this.color = value; }
+        get => this.color;
+        set => this.color = value;
     }
     [DV]
     internal Color color = Color.Empty;
@@ -80,25 +73,23 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public bool Visible
     {
-      get { return this.visible.Value; }
-      set { this.visible.Value = value; }
+        get => this.visible.Value;
+        set => this.visible.Value = value;
     }
     [DV]
     internal NBool visible = NBool.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts FillFormat into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int pos = serializer.BeginContent("FillFormat");
-      if (!this.visible.IsNull)
-        serializer.WriteSimpleAttribute("Visible", this.Visible);
-      if (!this.color.IsNull)
-        serializer.WriteSimpleAttribute("Color", this.Color);
-      serializer.EndContent();
+        var pos = serializer.BeginContent("FillFormat");
+        if (!this.visible.IsNull)
+            serializer.WriteSimpleAttribute("Visible", this.Visible);
+        if (!this.color.IsNull)
+            serializer.WriteSimpleAttribute("Color", this.Color);
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -106,14 +97,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(FillFormat));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(FillFormat));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

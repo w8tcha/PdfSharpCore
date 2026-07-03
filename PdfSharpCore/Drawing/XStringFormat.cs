@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,69 +24,58 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Drawing
+/// <summary>
+/// Represents the text layout information.
+/// </summary>
+public class XStringFormat
 {
     /// <summary>
-    /// Represents the text layout information.
+    /// Initializes a new instance of the <see cref="XStringFormat"/> class.
     /// </summary>
-    public class XStringFormat
+    public XStringFormat()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XStringFormat"/> class.
-        /// </summary>
-        public XStringFormat()
-        {
-        }
-
-        //TODO public StringFormat(StringFormat format);
-        //public StringFormat(StringFormatFlags options);
-        //public StringFormat(StringFormatFlags options, int language);
-        //public object Clone();
-        //public void Dispose();
-        //private void Dispose(bool disposing);
-        //protected override void Finalize();
-        //public float[] GetTabStops(out float firstTabOffset);
-        //public void SetDigitSubstitution(int language, StringDigitSubstitute substitute);
-        //public void SetMeasurableCharacterRanges(CharacterRange[] ranges);
-        //public void SetTabStops(float firstTabOffset, float[] tabStops);
-        //public override string ToString();
-
-        /// <summary>
-        /// Gets or sets horizontal text alignment information.
-        /// </summary>
-        public XStringAlignment Alignment
-        {
-            get { return _alignment; }
-            set
-            {
-                _alignment = value;
-            }
-        }
-        XStringAlignment _alignment;
-
-        //public int DigitSubstitutionLanguage { get; }
-        //public StringDigitSubstitute DigitSubstitutionMethod { get; }
-        //public StringFormatFlags FormatFlags { get; set; }
-        //public static StringFormat GenericDefault { get; }
-        //public static StringFormat GenericTypographic { get; }
-        //public HotkeyPrefix HotkeyPrefix { get; set; }
-
-        /// <summary>
-        /// Gets or sets the line alignment.
-        /// </summary>
-        public XLineAlignment LineAlignment
-        {
-            get { return _lineAlignment; }
-            set
-            {
-                _lineAlignment = value;
-
-            }
-        }
-        XLineAlignment _lineAlignment;
     }
+
+    //TODO public StringFormat(StringFormat format);
+    //public StringFormat(StringFormatFlags options);
+    //public StringFormat(StringFormatFlags options, int language);
+    //public object Clone();
+    //public void Dispose();
+    //private void Dispose(bool disposing);
+    //protected override void Finalize();
+    //public float[] GetTabStops(out float firstTabOffset);
+    //public void SetDigitSubstitution(int language, StringDigitSubstitute substitute);
+    //public void SetMeasurableCharacterRanges(CharacterRange[] ranges);
+    //public void SetTabStops(float firstTabOffset, float[] tabStops);
+    //public override string ToString();
+
+    /// <summary>
+    /// Gets or sets horizontal text alignment information.
+    /// </summary>
+    public XStringAlignment Alignment
+    {
+        get => _alignment;
+        set => _alignment = value;
+    }
+    XStringAlignment _alignment;
+
+    //public int DigitSubstitutionLanguage { get; }
+    //public StringDigitSubstitute DigitSubstitutionMethod { get; }
+    //public StringFormatFlags FormatFlags { get; set; }
+    //public static StringFormat GenericDefault { get; }
+    //public static StringFormat GenericTypographic { get; }
+    //public HotkeyPrefix HotkeyPrefix { get; set; }
+
+    /// <summary>
+    /// Gets or sets the line alignment.
+    /// </summary>
+    public XLineAlignment LineAlignment
+    {
+        get => _lineAlignment;
+        set => _lineAlignment = value;
+    }
+    XLineAlignment _lineAlignment;
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
+
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Tables
+namespace MigraDocCore.DocumentObjectModel.Tables;
+
+/// <summary>
+/// Represents the collection of all cells of a row.
+/// </summary>
+public class Cells : DocumentObjectCollection
 {
-  /// <summary>
-  /// Represents the collection of all cells of a row.
-  /// </summary>
-  public class Cells : DocumentObjectCollection
-  {
     /// <summary>
     /// Initializes a new instance of the Cells class.
     /// </summary>
@@ -54,32 +51,29 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     internal Cells(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new Cells Clone()
     {
-      return (Cells)base.DeepCopy();
+        return (Cells)base.DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets the table the cells collection belongs to.
     /// </summary>
     public Table Table
     {
-      get
-      {
-        if (this.table == null)
+        get
         {
-          Row rw = this.Parent as Row;
-          if (rw != null)
-            this.table = rw.Table;
+            if (this.table == null)
+            {
+                var rw = this.Parent as Row;
+                if (rw != null)
+                    this.table = rw.Table;
+            }
+            return this.table;
         }
-        return this.table;
-      }
     }
     Table table;
 
@@ -88,13 +82,13 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public Row Row
     {
-      get
-      {
-        if (this.row == null)
-          this.row = this.Parent as Row;
+        get
+        {
+            if (this.row == null)
+                this.row = this.Parent as Row;
 
-        return this.row;
-      }
+            return this.row;
+        }
     }
     Row row;
 
@@ -103,35 +97,33 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public new Cell this[int index]
     {
-      get
-      {
-        if (index < 0 || (this.Table != null && index >= this.Table.Columns.Count))
-          throw new ArgumentOutOfRangeException("index");
+        get
+        {
+            if (index < 0 || (this.Table != null && index >= this.Table.Columns.Count))
+                throw new ArgumentOutOfRangeException("index");
 
-        Resize(index);
-        return base[index] as Cell;
-      }
+            Resize(index);
+            return base[index] as Cell;
+        }
     }
-    #endregion
 
     /// <summary>
     /// Resizes this cells' list if necessary.
     /// </summary>
     private void Resize(int index)
     {
-      for (int currentIndex = this.Count; currentIndex <= index; currentIndex++)
-        Add(new Cell());
+        for (var currentIndex = this.Count; currentIndex <= index; currentIndex++)
+            Add(new Cell());
     }
 
-    #region Internal
     /// <summary>
     /// Converts Cells into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int cells = Count;
-      for (int cell = 0; cell < cells; cell++)
-        this[cell].Serialize(serializer);
+        var cells = Count;
+        for (var cell = 0; cell < cells; cell++)
+            this[cell].Serialize(serializer);
     }
 
     /// <summary>
@@ -139,14 +131,12 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(Cells));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(Cells));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

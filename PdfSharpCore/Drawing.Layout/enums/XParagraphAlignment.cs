@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,38 +24,36 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing.Layout
+namespace PdfSharpCore.Drawing.Layout;
+
+/// <summary>
+/// Specifies the alignment of a paragraph.
+/// </summary>
+public enum XParagraphAlignment
 {
     /// <summary>
-    /// Specifies the alignment of a paragraph.
+    /// Default alignment, typically left alignment.
     /// </summary>
-    public enum XParagraphAlignment
-    {
-        /// <summary>
-        /// Default alignment, typically left alignment.
-        /// </summary>
-        Default,
+    Default,
 
-        /// <summary>
-        /// The paragraph is rendered left aligned.
-        /// </summary>
-        Left,
+    /// <summary>
+    /// The paragraph is rendered left aligned.
+    /// </summary>
+    Left,
 
-        /// <summary>
-        /// The paragraph is rendered centered.
-        /// </summary>
-        Center,
+    /// <summary>
+    /// The paragraph is rendered centered.
+    /// </summary>
+    Center,
 
-        /// <summary>
-        /// The paragraph is rendered right aligned.
-        /// </summary>
-        Right,
+    /// <summary>
+    /// The paragraph is rendered right aligned.
+    /// </summary>
+    Right,
 
-        /// <summary>
-        /// The paragraph is rendered justified.
-        /// </summary>
-        Justify,
-    }
+    /// <summary>
+    /// The paragraph is rendered justified.
+    /// </summary>
+    Justify
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents the gridlines on the axes.
+/// </summary>
+public class Gridlines : ChartObject
 {
-  /// <summary>
-  /// Represents the gridlines on the axes.
-  /// </summary>
-  public class Gridlines : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the Gridlines class.
     /// </summary>
@@ -52,13 +49,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal Gridlines(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new Gridlines Clone()
     {
-      return (Gridlines)DeepCopy();
+        return (Gridlines)DeepCopy();
     }
 
     /// <summary>
@@ -66,53 +62,49 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     protected override object DeepCopy()
     {
-      Gridlines gridlines = (Gridlines)base.DeepCopy();
-      if (gridlines.lineFormat != null)
-      {
-        gridlines.lineFormat = gridlines.lineFormat.Clone();
-        gridlines.lineFormat.parent = gridlines;
-      }
-      return gridlines;
+        var gridlines = (Gridlines)base.DeepCopy();
+        if (gridlines.lineFormat != null)
+        {
+            gridlines.lineFormat = gridlines.lineFormat.Clone();
+            gridlines.lineFormat.parent = gridlines;
+        }
+        return gridlines;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets the line format of the grid.
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
-      set
-      {
-        SetParent(value);
-        this.lineFormat = value;
-      }
+            return this.lineFormat;
+        }
+        set
+        {
+            SetParent(value);
+            this.lineFormat = value;
+        }
     }
     [DV]
     internal LineFormat lineFormat;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts Gridlines into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      Axis axisObject = this.parent as Axis;
+        var axisObject = this.parent as Axis;
 
-      int pos = serializer.BeginContent(axisObject.CheckGridlines(this));
+        var pos = serializer.BeginContent(axisObject.CheckGridlines(this));
 
-      if (!this.IsNull("LineFormat"))
-        this.lineFormat.Serialize(serializer);
+        if (!this.IsNull("LineFormat"))
+            this.lineFormat.Serialize(serializer);
 
-      serializer.EndContent();
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -120,14 +112,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(Gridlines));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(Gridlines));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

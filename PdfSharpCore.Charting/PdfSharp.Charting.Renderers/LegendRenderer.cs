@@ -30,18 +30,18 @@
 using System;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents the legend renderer for all chart types.
+/// </summary>
+internal abstract class LegendRenderer : Renderer
 {
-  /// <summary>
-  /// Represents the legend renderer for all chart types.
-  /// </summary>
-  internal abstract class LegendRenderer : Renderer
-  {
     /// <summary>
     /// Initializes a new instance of the LegendRenderer class with the specified renderer parameters.
     /// </summary>
     internal LegendRenderer(RendererParameters parms)
-      : base(parms)
+        : base(parms)
     { }
 
     /// <summary>
@@ -49,50 +49,50 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Format()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      LegendRendererInfo lri = cri.legendRendererInfo;
-      if (lri == null)
-        return;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var lri = cri.legendRendererInfo;
+        if (lri == null)
+            return;
 
-      RendererParameters parms = new RendererParameters();
-      parms.Graphics = this.rendererParms.Graphics;
+        var parms = new RendererParameters();
+        parms.Graphics = this.rendererParms.Graphics;
 
-      bool verticalLegend = (lri.legend.docking == DockingType.Left || lri.legend.docking == DockingType.Right);
-      XSize maxMarkerArea = new XSize();
-      LegendEntryRenderer ler = new LegendEntryRenderer(parms);
-      foreach (LegendEntryRendererInfo leri in lri.Entries)
-      {
-        parms.RendererInfo = leri;
-        ler.Format();
+        var verticalLegend = (lri.legend.docking == DockingType.Left || lri.legend.docking == DockingType.Right);
+        var maxMarkerArea = new XSize();
+        var ler = new LegendEntryRenderer(parms);
+        foreach (var leri in lri.Entries)
+        {
+            parms.RendererInfo = leri;
+            ler.Format();
 
-        maxMarkerArea.Width = Math.Max(leri.MarkerArea.Width, maxMarkerArea.Width);
-        maxMarkerArea.Height = Math.Max(leri.MarkerArea.Height, maxMarkerArea.Height);
+            maxMarkerArea.Width = Math.Max(leri.MarkerArea.Width, maxMarkerArea.Width);
+            maxMarkerArea.Height = Math.Max(leri.MarkerArea.Height, maxMarkerArea.Height);
 
+            if (verticalLegend)
+            {
+                lri.Width = Math.Max(lri.Width, leri.Width);
+                lri.Height += leri.Height;
+            }
+            else
+            {
+                lri.Width += leri.Width;
+                lri.Height = Math.Max(lri.Height, leri.Height);
+            }
+        }
+
+        // Add padding to left, right, top and bottom
+        var paddingFactor = 1;
+        if (lri.BorderPen != null)
+            paddingFactor = 2;
+        lri.Width += (LegendRenderer.LeftPadding + LegendRenderer.RightPadding) * paddingFactor;
+        lri.Height += (LegendRenderer.TopPadding + LegendRenderer.BottomPadding) * paddingFactor;
         if (verticalLegend)
-        {
-          lri.Width = Math.Max(lri.Width, leri.Width);
-          lri.Height += leri.Height;
-        }
+            lri.Height += LegendRenderer.EntrySpacing * (lri.Entries.Length - 1);
         else
-        {
-          lri.Width += leri.Width;
-          lri.Height = Math.Max(lri.Height, leri.Height);
-        }
-      }
+            lri.Width += LegendRenderer.EntrySpacing * (lri.Entries.Length - 1);
 
-      // Add padding to left, right, top and bottom
-      int paddingFactor = 1;
-      if (lri.BorderPen != null)
-        paddingFactor = 2;
-      lri.Width += (LegendRenderer.LeftPadding + LegendRenderer.RightPadding) * paddingFactor;
-      lri.Height += (LegendRenderer.TopPadding + LegendRenderer.BottomPadding) * paddingFactor;
-      if (verticalLegend)
-        lri.Height += LegendRenderer.EntrySpacing * (lri.Entries.Length - 1);
-      else
-        lri.Width += LegendRenderer.EntrySpacing * (lri.Entries.Length - 1);
-
-      foreach (LegendEntryRendererInfo leri in lri.Entries)
-        leri.MarkerArea = maxMarkerArea;
+        foreach (var leri in lri.Entries)
+            leri.MarkerArea = maxMarkerArea;
     }
 
     /// <summary>
@@ -100,50 +100,50 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      LegendRendererInfo lri = cri.legendRendererInfo;
-      if (lri == null)
-        return;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var lri = cri.legendRendererInfo;
+        if (lri == null)
+            return;
 
-      XGraphics gfx = this.rendererParms.Graphics;
-      RendererParameters parms = new RendererParameters();
-      parms.Graphics = gfx;
+        var gfx = this.rendererParms.Graphics;
+        var parms = new RendererParameters();
+        parms.Graphics = gfx;
 
-      LegendEntryRenderer ler = new LegendEntryRenderer(parms);
+        var ler = new LegendEntryRenderer(parms);
 
-      bool verticalLegend = (lri.legend.docking == DockingType.Left || lri.legend.docking == DockingType.Right);
-      int paddingFactor = 1;
-      if (lri.BorderPen != null)
-        paddingFactor = 2;
-      XRect legendRect = lri.Rect;
-      legendRect.X += LegendRenderer.LeftPadding * paddingFactor;
-      legendRect.Y += LegendRenderer.TopPadding * paddingFactor;
-      foreach (LegendEntryRendererInfo leri in cri.legendRendererInfo.Entries)
-      {
-        XRect entryRect = legendRect;
-        entryRect.Width = leri.Width;
-        entryRect.Height = leri.Height;
+        var verticalLegend = (lri.legend.docking == DockingType.Left || lri.legend.docking == DockingType.Right);
+        var paddingFactor = 1;
+        if (lri.BorderPen != null)
+            paddingFactor = 2;
+        var legendRect = lri.Rect;
+        legendRect.X += LegendRenderer.LeftPadding * paddingFactor;
+        legendRect.Y += LegendRenderer.TopPadding * paddingFactor;
+        foreach (var leri in cri.legendRendererInfo.Entries)
+        {
+            var entryRect = legendRect;
+            entryRect.Width = leri.Width;
+            entryRect.Height = leri.Height;
 
-        leri.Rect = entryRect;
-        parms.RendererInfo = leri;
-        ler.Draw();
+            leri.Rect = entryRect;
+            parms.RendererInfo = leri;
+            ler.Draw();
 
-        if (verticalLegend)
-          legendRect.Y += entryRect.Height + LegendRenderer.EntrySpacing;
-        else
-          legendRect.X += entryRect.Width + LegendRenderer.EntrySpacing;
-      }
+            if (verticalLegend)
+                legendRect.Y += entryRect.Height + LegendRenderer.EntrySpacing;
+            else
+                legendRect.X += entryRect.Width + LegendRenderer.EntrySpacing;
+        }
 
-      // Draw border around legend
-      if (lri.BorderPen != null)
-      {
-        XRect borderRect = lri.Rect;
-        borderRect.X += LegendRenderer.LeftPadding;
-        borderRect.Y += LegendRenderer.TopPadding;
-        borderRect.Width -= LegendRenderer.LeftPadding + LegendRenderer.RightPadding;
-        borderRect.Height -= LegendRenderer.TopPadding + LegendRenderer.BottomPadding;
-        gfx.DrawRectangle(lri.BorderPen, borderRect);
-      }
+        // Draw border around legend
+        if (lri.BorderPen != null)
+        {
+            var borderRect = lri.Rect;
+            borderRect.X += LegendRenderer.LeftPadding;
+            borderRect.Y += LegendRenderer.TopPadding;
+            borderRect.Width -= LegendRenderer.LeftPadding + LegendRenderer.RightPadding;
+            borderRect.Height -= LegendRenderer.TopPadding + LegendRenderer.BottomPadding;
+            gfx.DrawRectangle(lri.BorderPen, borderRect);
+        }
     }
 
     /// <summary>
@@ -175,5 +175,4 @@ namespace PdfSharpCore.Charting.Renderers
     /// Default line width used for the legend's border.
     /// </summary>
     protected const double DefaultLineWidth = 0.14; // 0.05 mm
-  }
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Shapes;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes
+/// <summary>
+/// Specifies the position of a shape. Values are used for both LeftPositon and TopPosition.
+/// </summary>
+public enum ShapePosition
 {
-  /// <summary>
-  /// Specifies the position of a shape. Values are used for both LeftPositon and TopPosition.
-  /// </summary>
-  public enum ShapePosition
-  {
     /// <summary>
     /// Undefined position.
     /// </summary>
@@ -71,5 +67,4 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// Used with mirrored margins: left-aligned on left page and right-aligned on right page.
     /// </summary>
     Outside
-  }
 }

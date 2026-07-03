@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,16 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+namespace MigraDocCore.DocumentObjectModel.Internals;
+
+[Flags]
+internal enum VDFlags
 {
-  [Flags]
-  internal enum VDFlags
-  {
     None = 0,
     RefOnly = 0x0001
-  }
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Fields
+namespace MigraDocCore.DocumentObjectModel.Fields;
+
+/// <summary>
+/// PageRefField is used to reference the page number of a bookmark in the document.
+/// </summary>
+public class PageRefField : NumericFieldBase
 {
-  /// <summary>
-  /// PageRefField is used to reference the page number of a bookmark in the document.
-  /// </summary>
-  public class PageRefField : NumericFieldBase
-  {
     /// <summary>
     /// Initializes a new instance of the PageRefField class.
     /// </summary>    
@@ -53,9 +48,9 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// Initializes a new instance of the PageRefField class with the necessary bookmark name.
     /// </summary>
     public PageRefField(string name)
-      : this()
+        : this()
     {
-      this.Name = name;
+        this.Name = name;
     }
 
     /// <summary>
@@ -63,43 +58,38 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     internal PageRefField(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new PageRefField Clone()
     {
-      return (PageRefField)DeepCopy();
+        return (PageRefField)DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the bookmark name whose page is to be shown.
     /// </summary>
     public string Name
     {
-      get { return this.name.Value; }
-      set { this.name.Value = value; }
+        get => this.name.Value;
+        set => this.name.Value = value;
     }
     [DV]
     internal NString name = NString.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts PageRefField into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      string str = "\\field(PageRef)";
-      str += "[Name = \"" + this.Name + "\"";
+        var str = "\\field(PageRef)";
+        str += "[Name = \"" + this.Name + "\"";
 
-      if (this.format.Value != "")
-        str += " Format = \"" + this.Format + "\"";
-      str += "]";
+        if (this.format.Value != "")
+            str += " Format = \"" + this.Format + "\"";
+        str += "]";
 
-      serializer.Write(str);
+        serializer.Write(str);
     }
 
     /// <summary>
@@ -107,14 +97,12 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(PageRefField));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(PageRefField));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

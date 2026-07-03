@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,15 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Specifies the type of the Border object and therefore its position.
+/// </summary>
+public enum BorderType
 {
-  /// <summary>
-  /// Specifies the type of the Border object and therefore its position.
-  /// </summary>
-  public enum BorderType
-  {
     Top,
     Left,
     Bottom,
@@ -45,5 +43,4 @@ namespace MigraDocCore.DocumentObjectModel
     Vertical,    // not used in MigraDoc 1.2
     DiagonalDown,
     DiagonalUp
-  }
 }

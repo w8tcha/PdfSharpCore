@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,43 +24,41 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// Specifies the page layout to be used by a viewer when the document is opened.
+/// </summary>
+public enum PdfPageLayout
 {
     /// <summary>
-    /// Specifies the page layout to be used by a viewer when the document is opened.
+    /// Display one page at a time.
     /// </summary>
-    public enum PdfPageLayout
-    {
-        /// <summary>
-        /// Display one page at a time.
-        /// </summary>
-        SinglePage,
+    SinglePage,
 
-        /// <summary>
-        /// Display the pages in one column.
-        /// </summary>
-        OneColumn,
+    /// <summary>
+    /// Display the pages in one column.
+    /// </summary>
+    OneColumn,
 
-        /// <summary>
-        /// Display the pages in two columns, with oddnumbered pages on the left.
-        /// </summary>
-        TwoColumnLeft,
+    /// <summary>
+    /// Display the pages in two columns, with oddnumbered pages on the left.
+    /// </summary>
+    TwoColumnLeft,
 
-        /// <summary>
-        /// Display the pages in two columns, with oddnumbered pages on the right.
-        /// </summary>
-        TwoColumnRight,
+    /// <summary>
+    /// Display the pages in two columns, with oddnumbered pages on the right.
+    /// </summary>
+    TwoColumnRight,
 
-        /// <summary>
-        /// (PDF 1.5) Display the pages two at a time, with odd-numbered pages on the left.
-        /// </summary>
-        TwoPageLeft,
+    /// <summary>
+    /// (PDF 1.5) Display the pages two at a time, with odd-numbered pages on the left.
+    /// </summary>
+    TwoPageLeft,
 
-        /// <summary>
-        /// (PDF 1.5) Display the pages two at a time, with odd-numbered pages on the right.
-        /// </summary>
-        TwoPageRight,
-    }
+    /// <summary>
+    /// (PDF 1.5) Display the pages two at a time, with odd-numbered pages on the right.
+    /// </summary>
+    TwoPageRight
 }

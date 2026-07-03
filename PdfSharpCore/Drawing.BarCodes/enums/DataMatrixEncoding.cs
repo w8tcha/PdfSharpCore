@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Klaus Potzesny
@@ -25,44 +24,42 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing.BarCodes
+namespace PdfSharpCore.Drawing.BarCodes;
+
+/// <summary>
+/// docDaSt
+/// </summary>
+public enum DataMatrixEncoding
 {
     /// <summary>
     /// docDaSt
     /// </summary>
-    public enum DataMatrixEncoding
-    {
-        /// <summary>
-        /// docDaSt
-        /// </summary>
-        Ascii,
+    Ascii,
 
-        /// <summary>
-        /// docDaSt
-        /// </summary>
-        C40,
+    /// <summary>
+    /// docDaSt
+    /// </summary>
+    C40,
 
-        /// <summary>
-        /// docDaSt
-        /// </summary>
-        Text,
+    /// <summary>
+    /// docDaSt
+    /// </summary>
+    Text,
 
-        /// <summary>
-        /// docDaSt
-        /// </summary>
-        X12,
+    /// <summary>
+    /// docDaSt
+    /// </summary>
+    X12,
 
-        /// <summary>
-        /// docDaSt
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        EDIFACT,
+    /// <summary>
+    /// docDaSt
+    /// </summary>
+    // ReSharper disable once InconsistentNaming
+    EDIFACT,
 
-        /// <summary>
-        /// docDaSt
-        /// </summary>
-        Base256
-    }
+    /// <summary>
+    /// docDaSt
+    /// </summary>
+    Base256
 }

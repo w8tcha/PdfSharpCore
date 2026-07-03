@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   David Stephensen (mailto:David.Stephensen@PdfSharpCore.com)
@@ -26,36 +25,33 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using PdfSharpCore.Charting;
 
-namespace MigraDocCore.Rendering.ChartMapper
+namespace MigraDocCore.Rendering.ChartMapper;
+
+internal class DataLabelMapper
 {
-  internal class DataLabelMapper
-  {
     private DataLabelMapper()
     {
     }
 
     void MapObject(DataLabel dataLabel, DocumentObjectModel.Shapes.Charts.DataLabel domDataLabel)
     {
-      if (!domDataLabel.IsNull("Style"))
-        FontMapper.Map(dataLabel.Font, domDataLabel.Document, domDataLabel.Style);
-      if (!domDataLabel.IsNull("Font"))
-        FontMapper.Map(dataLabel.Font, domDataLabel.Font);
-      dataLabel.Format = domDataLabel.Format;
-      if (!domDataLabel.IsNull("Position"))
-        dataLabel.Position = (DataLabelPosition)domDataLabel.Position;
-      if (!domDataLabel.IsNull("Type"))
-        dataLabel.Type = (DataLabelType)domDataLabel.Type;
+        if (!domDataLabel.IsNull("Style"))
+            FontMapper.Map(dataLabel.Font, domDataLabel.Document, domDataLabel.Style);
+        if (!domDataLabel.IsNull("Font"))
+            FontMapper.Map(dataLabel.Font, domDataLabel.Font);
+        dataLabel.Format = domDataLabel.Format;
+        if (!domDataLabel.IsNull("Position"))
+            dataLabel.Position = (DataLabelPosition)domDataLabel.Position;
+        if (!domDataLabel.IsNull("Type"))
+            dataLabel.Type = (DataLabelType)domDataLabel.Type;
     }
 
     internal static void Map(DataLabel dataLabel, DocumentObjectModel.Shapes.Charts.DataLabel domDataLabel)
     {
-      DataLabelMapper mapper = new DataLabelMapper();
-      mapper.MapObject(dataLabel, domDataLabel);
+        var mapper = new DataLabelMapper();
+        mapper.MapObject(dataLabel, domDataLabel);
     }
-  }
 }

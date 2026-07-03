@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Klaus Potzesny
@@ -25,33 +24,31 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing.BarCodes
+namespace PdfSharpCore.Drawing.BarCodes;
+
+/// <summary>
+/// Specifies the drawing direction of the code.
+/// </summary>
+public enum CodeDirection
 {
     /// <summary>
-    /// Specifies the drawing direction of the code.
+    /// Does not rotate the code.
     /// </summary>
-    public enum CodeDirection
-    {
-        /// <summary>
-        /// Does not rotate the code.
-        /// </summary>
-        LeftToRight,
+    LeftToRight,
 
-        /// <summary>
-        /// Rotates the code 180° at the anchor position.
-        /// </summary>
-        BottomToTop,
+    /// <summary>
+    /// Rotates the code 180° at the anchor position.
+    /// </summary>
+    BottomToTop,
 
-        /// <summary>
-        /// Rotates the code 180° at the anchor position.
-        /// </summary>
-        RightToLeft,
+    /// <summary>
+    /// Rotates the code 180° at the anchor position.
+    /// </summary>
+    RightToLeft,
 
-        /// <summary>
-        /// Rotates the code 180° at the anchor position.
-        /// </summary>
-        TopToBottom,
-    }
+    /// <summary>
+    /// Rotates the code 180° at the anchor position.
+    /// </summary>
+    TopToBottom
 }

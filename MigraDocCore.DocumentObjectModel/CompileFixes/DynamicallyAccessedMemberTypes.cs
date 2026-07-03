@@ -1,5 +1,4 @@
-﻿#region Copyright notice and license
-// Protocol Buffers - Google's data interchange format
+﻿// Protocol Buffers - Google's data interchange format
 // Copyright 2015 Google Inc.  All rights reserved.
 // https://developers.google.com/protocol-buffers/
 //
@@ -28,7 +27,6 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#endregion
 
 #if NETCOREAPP3_1 || NETSTANDARD2_0
 // Copied with permission from https://github.com/dotnet/runtime/tree/8fbf206d0e518b45ca855832e8bfb391afa85972/src/libraries/System.Private.CoreLib/src/System/Diagnostics/CodeAnalysis

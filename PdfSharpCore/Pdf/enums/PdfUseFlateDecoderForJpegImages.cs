@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,31 +24,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// Specifies whether to compress JPEG images with the FlateDecode filter.
+/// </summary>
+public enum PdfUseFlateDecoderForJpegImages
 {
     /// <summary>
-    /// Specifies whether to compress JPEG images with the FlateDecode filter.
+    /// PDFsharp will try FlateDecode and use it if it leads to a reduction in PDF file size.
+    /// When FlateEncodeMode is set to BestCompression, this is more likely to reduce the file size,
+    /// but it takes considerably more time to create the PDF file.
     /// </summary>
-    public enum PdfUseFlateDecoderForJpegImages
-    {
-        /// <summary>
-        /// PDFsharp will try FlateDecode and use it if it leads to a reduction in PDF file size.
-        /// When FlateEncodeMode is set to BestCompression, this is more likely to reduce the file size,
-        /// but it takes considerably more time to create the PDF file.
-        /// </summary>
-        Automatic,
+    Automatic,
 
-        /// <summary>
-        /// PDFsharp will never use FlateDecode - files may be a few bytes larger, but file creation is faster.
-        /// </summary>
-        Never,
+    /// <summary>
+    /// PDFsharp will never use FlateDecode - files may be a few bytes larger, but file creation is faster.
+    /// </summary>
+    Never,
 
-        /// <summary>
-        /// PDFsharp will always use FlateDecode, even if this leads to larger files;
-        /// this option is meant for testing purposes only and should not be used for production code.
-        /// </summary>
-        Always,
-    }
+    /// <summary>
+    /// PDFsharp will always use FlateDecode, even if this leads to larger files;
+    /// this option is meant for testing purposes only and should not be used for production code.
+    /// </summary>
+    Always
 }

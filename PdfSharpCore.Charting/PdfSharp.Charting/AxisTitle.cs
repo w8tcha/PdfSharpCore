@@ -28,15 +28,14 @@
 #endregion
 
 using System;
-using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Represents the title of an axis.
+/// </summary>
+public class AxisTitle : ChartObject
 {
-  /// <summary>
-  /// Represents the title of an axis.
-  /// </summary>
-  public class AxisTitle : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the AxisTitle class.
     /// </summary>
@@ -55,7 +54,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new AxisTitle Clone()
     {
-      return (AxisTitle)DeepCopy();
+        return (AxisTitle)DeepCopy();
     }
 
     /// <summary>
@@ -63,13 +62,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      AxisTitle axisTitle = (AxisTitle)base.DeepCopy();
-      if (axisTitle.font != null)
-      {
-        axisTitle.font = axisTitle.font.Clone();
-        axisTitle.font.parent = axisTitle;
-      }
-      return axisTitle;
+        var axisTitle = (AxisTitle)base.DeepCopy();
+        if (axisTitle.font != null)
+        {
+            axisTitle.font = axisTitle.font.Clone();
+            axisTitle.font.parent = axisTitle;
+        }
+        return axisTitle;
     }
     #endregion
 
@@ -79,8 +78,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public string Caption
     {
-      get {return this.caption;}
-      set {this.caption = value;}
+        get => this.caption;
+        set => this.caption = value;
     }
     internal string caption = String.Empty;
 
@@ -89,13 +88,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Font Font
     {
-      get
-      {
-        if (this.font == null)
-          this.font = new Font(this);
+        get
+        {
+            if (this.font == null)
+                this.font = new Font(this);
 
-        return this.font;
-      }
+            return this.font;
+        }
     }
     internal Font font;
 
@@ -104,8 +103,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public double Orientation
     {
-      get {return this.orientation;}
-      set {this.orientation = value;}
+        get => this.orientation;
+        set => this.orientation = value;
     }
     internal double orientation;
 
@@ -114,8 +113,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public HorizontalAlignment Alignment
     {
-      get {return this.alignment;}
-      set {this.alignment = value;}
+        get => this.alignment;
+        set => this.alignment = value;
     }
     internal HorizontalAlignment alignment;
 
@@ -124,10 +123,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public VerticalAlignment VerticalAlignment
     {
-      get {return this.verticalAlignment;}
-      set {this.verticalAlignment = value;}
+        get => this.verticalAlignment;
+        set => this.verticalAlignment = value;
     }
     internal VerticalAlignment verticalAlignment;
     #endregion
-  }
 }

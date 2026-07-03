@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Represents a tab inside a paragraph.
+/// </summary>
+public class TabStop : DocumentObject
 {
-  /// <summary>
-  /// Represents a tab inside a paragraph.
-  /// </summary>
-  public class TabStop : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the TabStop class.
     /// </summary>
@@ -58,29 +53,24 @@ namespace MigraDocCore.DocumentObjectModel
     /// Initializes a new instance of the TabStop class with the specified position.
     /// </summary>
     public TabStop(Unit position)
-      : this()
+        : this()
     {
-      this.position = position;
+        this.position = position;
     }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new TabStop Clone()
     {
-      return (TabStop)DeepCopy();
+        return (TabStop)DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets the tab stop position.
     /// </summary>
-    public Unit Position
-    {
-      get { return this.position; }
-    }
+    public Unit Position => this.position;
+
     [DV]
     internal Unit position = Unit.NullValue;  // always defined
     // useful enhancement: 'Position = Center' and 'Position = Right'
@@ -90,8 +80,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public TabAlignment Alignment
     {
-      get { return (TabAlignment)this.alignment.Value; }
-      set { this.alignment.Value = (int)value; }
+        get => (TabAlignment)this.alignment.Value;
+        set => this.alignment.Value = (int)value;
     }
     [DV(Type = typeof(TabAlignment))]
     internal NEnum alignment = NEnum.NullValue(typeof(TabAlignment));
@@ -101,8 +91,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public TabLeader Leader
     {
-      get { return (TabLeader)this.leader.Value; }
-      set { this.leader.Value = (int)value; }
+        get => (TabLeader)this.leader.Value;
+        set => this.leader.Value = (int)value;
     }
     [DV(Type = typeof(TabLeader))]
     internal NEnum leader = NEnum.NullValue(typeof(TabLeader));
@@ -111,27 +101,25 @@ namespace MigraDocCore.DocumentObjectModel
     /// Generates a '+=' in DDL if it is true, otherwise '-='.
     /// </summary>
     internal bool AddTab = true;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts TabStop into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      if (this.AddTab)
-      {
-        serializer.WriteLine("TabStops +=");
-        serializer.BeginContent();
-        serializer.WriteSimpleAttribute("Position", this.Position);
-        if (!this.alignment.IsNull)
-          serializer.WriteSimpleAttribute("Alignment", this.Alignment);
-        if (!this.leader.IsNull)
-          serializer.WriteSimpleAttribute("Leader", this.Leader);
-        serializer.EndContent();
-      }
-      else
-        serializer.WriteLine("TabStops -= \"" + this.Position.ToString() + "\"");
+        if (this.AddTab)
+        {
+            serializer.WriteLine("TabStops +=");
+            serializer.BeginContent();
+            serializer.WriteSimpleAttribute("Position", this.Position);
+            if (!this.alignment.IsNull)
+                serializer.WriteSimpleAttribute("Alignment", this.Alignment);
+            if (!this.leader.IsNull)
+                serializer.WriteSimpleAttribute("Leader", this.Leader);
+            serializer.EndContent();
+        }
+        else
+            serializer.WriteLine("TabStops -= \"" + this.Position.ToString() + "\"");
     }
 
     /// <summary>
@@ -139,14 +127,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(TabStop));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(TabStop));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,29 +27,27 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
+
 using MigraDocCore.DocumentObjectModel.Internals;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Resources;
 
-namespace MigraDocCore.DocumentObjectModel.Fields
+namespace MigraDocCore.DocumentObjectModel.Fields;
+
+/// <summary>
+/// NumericFieldBase serves as a base for Numeric fields, which are: 
+/// NumPagesField, PageField, PageRefField, SectionField, SectionPagesField
+/// </summary>
+public abstract class NumericFieldBase : DocumentObject
 {
-  /// <summary>
-  /// NumericFieldBase serves as a base for Numeric fields, which are: 
-  /// NumPagesField, PageField, PageRefField, SectionField, SectionPagesField
-  /// </summary>
-  public abstract class NumericFieldBase : DocumentObject
-  {
     protected static string[] validFormatStrings =
     {
-      "",
-      "ROMAN",
-      "roman",
-      "ALPHABETIC",
-      "alphabetic"
+        "",
+        "ROMAN",
+        "roman",
+        "ALPHABETIC",
+        "alphabetic"
     };
 
     /// <summary>
@@ -65,13 +62,12 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     internal NumericFieldBase(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new NumericFieldBase Clone()
     {
-      return (NumericFieldBase)DeepCopy();
+        return (NumericFieldBase)DeepCopy();
     }
 
     /// <summary>
@@ -79,41 +75,38 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     protected override object DeepCopy()
     {
-      NumericFieldBase numericFieldBase = (NumericFieldBase)base.DeepCopy();
-      return numericFieldBase;
+        var numericFieldBase = (NumericFieldBase)base.DeepCopy();
+        return numericFieldBase;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the format of the number.
     /// </summary>
     public string Format
     {
-      get { return this.format.Value; }
-      set
-      {
-        if (IsValidFormat(value))
-          this.format.Value = value;
-        else
-          throw new ArgumentException(DomSR.InvalidFieldFormat(value));
-      }
+        get => this.format.Value;
+        set
+        {
+            if (IsValidFormat(value))
+                this.format.Value = value;
+            else
+                throw new ArgumentException(DomSR.InvalidFieldFormat(value));
+        }
     }
     [DV]
     internal NString format = NString.NullValue;
-    #endregion
 
     /// <summary>
     /// Determines whether the format is valid for numeric fields.
     /// </summary>
     protected bool IsValidFormat(string format)
     {
-      foreach (string name in validFormatStrings)
-      {
-        if (name == this.Format)
-          return true;
-      }
-      return false;
+        foreach (var name in validFormatStrings)
+        {
+            if (name == this.Format)
+                return true;
+        }
+        return false;
     }
 
     /// <summary>
@@ -121,7 +114,6 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     public override bool IsNull()
     {
-      return false;
+        return false;
     }
-  }
 }

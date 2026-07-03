@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,17 +25,15 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using System.Collections;
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Represents a class that provides a series of Areas to render into.
+/// </summary>
+internal interface IAreaProvider
 {
-  /// <summary>
-  /// Represents a class that provides a series of Areas to render into.
-  /// </summary>
-  internal interface IAreaProvider
-  {
     /// <summary>
     /// Gets the next area to render into.
     /// </summary>
@@ -50,7 +47,7 @@ namespace MigraDocCore.Rendering
 
     FieldInfos AreaFieldInfos
     {
-      get;
+        get;
     }
 
     /// <summary>
@@ -78,5 +75,4 @@ namespace MigraDocCore.Rendering
     /// </summary>
     /// <param name="renderInfos"></param>
     void StoreRenderInfos(ArrayList renderInfos);
-  }
 }

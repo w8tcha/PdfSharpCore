@@ -27,22 +27,19 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting.Renderers;
 
-namespace PdfSharpCore.Charting.Renderers
+/// <summary>
+/// Represents the border renderer for plot areas.
+/// </summary>
+internal class PlotAreaBorderRenderer : Renderer
 {
-  /// <summary>
-  /// Represents the border renderer for plot areas.
-  /// </summary>
-  internal class PlotAreaBorderRenderer : Renderer
-  {
     /// <summary>
     /// Initializes a new instance of the PlotAreaBorderRenderer class with the specified
     /// renderer parameters.
     /// </summary>
     internal PlotAreaBorderRenderer(RendererParameters parms)
-      : base(parms)
+        : base(parms)
     { }
 
     /// <summary>
@@ -50,13 +47,12 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      if (cri.plotAreaRendererInfo.LineFormat != null && cri.plotAreaRendererInfo.LineFormat.Width > 0)
-      {
-        XGraphics gfx = this.rendererParms.Graphics;
-        LineFormatRenderer lineFormatRenderer = new LineFormatRenderer(gfx, cri.plotAreaRendererInfo.LineFormat);
-        lineFormatRenderer.DrawRectangle(cri.plotAreaRendererInfo.Rect);
-      }
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        if (cri.plotAreaRendererInfo.LineFormat != null && cri.plotAreaRendererInfo.LineFormat.Width > 0)
+        {
+            var gfx = this.rendererParms.Graphics;
+            var lineFormatRenderer = new LineFormatRenderer(gfx, cri.plotAreaRendererInfo.LineFormat);
+            lineFormatRenderer.DrawRectangle(cri.plotAreaRendererInfo.Rect);
+        }
     }
-  }
 }

@@ -27,15 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Base class for all chart classes.
+/// </summary>
+public class DocumentObject
 {
-  /// <summary>
-  /// Base class for all chart classes.
-  /// </summary>
-  public class DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the DocumentObject class.
     /// </summary>
@@ -48,7 +46,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public DocumentObject(DocumentObject parent)
     {
-      this.parent = parent;
+        this.parent = parent;
     }
 
     #region Methods
@@ -57,7 +55,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public object Clone()
     {
-      return DeepCopy();
+        return DeepCopy();
     }
 
     /// <summary>
@@ -65,9 +63,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected virtual object DeepCopy()
     {
-      DocumentObject value = (DocumentObject)MemberwiseClone();
-      value.parent = null;
-      return value;
+        var value = (DocumentObject)MemberwiseClone();
+        value.parent = null;
+        return value;
     }
     #endregion
 
@@ -75,14 +73,11 @@ namespace PdfSharpCore.Charting
     /// <summary>
     /// Gets the parent object.
     /// </summary>
-    public DocumentObject Parent
-    {
-      get {return this.parent;}
-    }
+    public DocumentObject Parent => this.parent;
+
     /// <summary>
     /// 
     /// </summary>
     protected internal DocumentObject parent;
     #endregion
-  }
 }

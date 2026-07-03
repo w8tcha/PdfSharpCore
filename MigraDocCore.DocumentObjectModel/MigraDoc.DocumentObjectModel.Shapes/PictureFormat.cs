@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,21 +27,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes
+namespace MigraDocCore.DocumentObjectModel.Shapes;
+
+/// <summary>
+/// A PictureFormat object.
+/// Used to set more detailed image attributes
+/// </summary>
+public class PictureFormat : DocumentObject
 {
-  /// <summary>
-  /// A PictureFormat object.
-  /// Used to set more detailed image attributes
-  /// </summary>
-  public class PictureFormat : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the PictureFormat class.
     /// </summary>
@@ -55,24 +50,21 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     internal PictureFormat(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new PictureFormat Clone()
     {
-      return (PictureFormat)DeepCopy();
+        return (PictureFormat)DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the part cropped from the left of the image.
     /// </summary>
     public Unit CropLeft
     {
-      get { return this.cropLeft; }
-      set { this.cropLeft = value; }
+        get => this.cropLeft;
+        set => this.cropLeft = value;
     }
     [DV]
     protected Unit cropLeft = Unit.NullValue;
@@ -82,8 +74,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public Unit CropRight
     {
-      get { return this.cropRight; }
-      set { this.cropRight = value; }
+        get => this.cropRight;
+        set => this.cropRight = value;
     }
     [DV]
     protected Unit cropRight = Unit.NullValue;
@@ -93,8 +85,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public Unit CropTop
     {
-      get { return this.cropTop; }
-      set { this.cropTop = value; }
+        get => this.cropTop;
+        set => this.cropTop = value;
     }
     [DV]
     protected Unit cropTop = Unit.NullValue;
@@ -104,29 +96,27 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public Unit CropBottom
     {
-      get { return this.cropBottom; }
-      set { this.cropBottom = value; }
+        get => this.cropBottom;
+        set => this.cropBottom = value;
     }
     [DV]
     protected Unit cropBottom = Unit.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts PictureFormat into DDL
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      serializer.BeginContent("PictureFormat");
-      if (!this.cropLeft.IsNull)
-        serializer.WriteSimpleAttribute("CropLeft", this.CropLeft);
-      if (!this.cropRight.IsNull)
-        serializer.WriteSimpleAttribute("CropRight", this.CropRight);
-      if (!this.cropTop.IsNull)
-        serializer.WriteSimpleAttribute("CropTop", this.CropTop);
-      if (!this.cropBottom.IsNull)
-        serializer.WriteSimpleAttribute("CropBottom", this.CropBottom);
-      serializer.EndContent();
+        serializer.BeginContent("PictureFormat");
+        if (!this.cropLeft.IsNull)
+            serializer.WriteSimpleAttribute("CropLeft", this.CropLeft);
+        if (!this.cropRight.IsNull)
+            serializer.WriteSimpleAttribute("CropRight", this.CropRight);
+        if (!this.cropTop.IsNull)
+            serializer.WriteSimpleAttribute("CropTop", this.CropTop);
+        if (!this.cropBottom.IsNull)
+            serializer.WriteSimpleAttribute("CropBottom", this.CropBottom);
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -134,14 +124,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(PictureFormat));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(PictureFormat));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

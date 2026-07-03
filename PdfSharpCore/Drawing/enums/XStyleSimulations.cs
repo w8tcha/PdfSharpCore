@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,36 +24,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Describes the simulation style of a font.
+/// </summary>
+[Flags]
+public enum XStyleSimulations  // Identical to WpfStyleSimulations.
 {
     /// <summary>
-    /// Describes the simulation style of a font.
+    /// No font style simulation.
     /// </summary>
-    [Flags]
-    public enum XStyleSimulations  // Identical to WpfStyleSimulations.
-    {
-        /// <summary>
-        /// No font style simulation.
-        /// </summary>
-        None = 0,
+    None = 0,
 
-        /// <summary>
-        /// Bold style simulation.
-        /// </summary>
-        BoldSimulation = 1,
+    /// <summary>
+    /// Bold style simulation.
+    /// </summary>
+    BoldSimulation = 1,
 
-        /// <summary>
-        /// Italic style simulation.
-        /// </summary>
-        ItalicSimulation = 2,
+    /// <summary>
+    /// Italic style simulation.
+    /// </summary>
+    ItalicSimulation = 2,
 
-        /// <summary>
-        /// Bold and Italic style simulation.
-        /// </summary>
-        BoldItalicSimulation = ItalicSimulation | BoldSimulation,
-    }
+    /// <summary>
+    /// Bold and Italic style simulation.
+    /// </summary>
+    BoldItalicSimulation = ItalicSimulation | BoldSimulation
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,19 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
-using MigraDocCore.DocumentObjectModel.IO;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents a series of data on the chart.
+/// </summary>
+public class Series : ChartObject
 {
-  /// <summary>
-  /// Represents a series of data on the chart.
-  /// </summary>
-  public class Series : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the Series class.
     /// </summary>
@@ -48,13 +44,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     {
     }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new Series Clone()
     {
-      return (Series)DeepCopy();
+        return (Series)DeepCopy();
     }
 
     /// <summary>
@@ -62,28 +57,28 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     protected override object DeepCopy()
     {
-      Series series = (Series)base.DeepCopy();
-      if (series.seriesElements != null)
-      {
-        series.seriesElements = series.seriesElements.Clone();
-        series.seriesElements.parent = series;
-      }
-      if (series.lineFormat != null)
-      {
-        series.lineFormat = series.lineFormat.Clone();
-        series.lineFormat.parent = series;
-      }
-      if (series.fillFormat != null)
-      {
-        series.fillFormat = series.fillFormat.Clone();
-        series.fillFormat.parent = series;
-      }
-      if (series.dataLabel != null)
-      {
-        series.dataLabel = series.dataLabel.Clone();
-        series.dataLabel.parent = series;
-      }
-      return series;
+        var series = (Series)base.DeepCopy();
+        if (series.seriesElements != null)
+        {
+            series.seriesElements = series.seriesElements.Clone();
+            series.seriesElements.parent = series;
+        }
+        if (series.lineFormat != null)
+        {
+            series.lineFormat = series.lineFormat.Clone();
+            series.lineFormat.parent = series;
+        }
+        if (series.fillFormat != null)
+        {
+            series.fillFormat = series.fillFormat.Clone();
+            series.fillFormat.parent = series;
+        }
+        if (series.dataLabel != null)
+        {
+            series.dataLabel = series.dataLabel.Clone();
+            series.dataLabel.parent = series;
+        }
+        return series;
     }
 
     /// <summary>
@@ -91,7 +86,7 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public void AddBlank()
     {
-      this.Elements.AddBlank();
+        this.Elements.AddBlank();
     }
 
     /// <summary>
@@ -99,7 +94,7 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Point Add(double value)
     {
-      return this.Elements.Add(value);
+        return this.Elements.Add(value);
     }
 
     /// <summary>
@@ -107,28 +102,26 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public void Add(params double[] values)
     {
-      this.Elements.Add(values);
+        this.Elements.Add(values);
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// The actual value container of the series.
     /// </summary>
     public SeriesElements Elements
     {
-      get
-      {
-        if (this.seriesElements == null)
-          this.seriesElements = new SeriesElements(this);
+        get
+        {
+            if (this.seriesElements == null)
+                this.seriesElements = new SeriesElements(this);
 
-        return this.seriesElements;
-      }
-      set
-      {
-        SetParent(value);
-        this.seriesElements = value;
-      }
+            return this.seriesElements;
+        }
+        set
+        {
+            SetParent(value);
+            this.seriesElements = value;
+        }
     }
     [DV]
     internal SeriesElements seriesElements;
@@ -138,8 +131,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public string Name
     {
-      get { return this.name.Value; }
-      set { this.name.Value = value; }
+        get => this.name.Value;
+        set => this.name.Value = value;
     }
     [DV]
     internal NString name = NString.NullValue;
@@ -149,18 +142,18 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
-      set
-      {
-        SetParent(value);
-        this.lineFormat = value;
-      }
+            return this.lineFormat;
+        }
+        set
+        {
+            SetParent(value);
+            this.lineFormat = value;
+        }
     }
     [DV]
     internal LineFormat lineFormat;
@@ -170,18 +163,18 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public FillFormat FillFormat
     {
-      get
-      {
-        if (this.fillFormat == null)
-          this.fillFormat = new FillFormat(this);
+        get
+        {
+            if (this.fillFormat == null)
+                this.fillFormat = new FillFormat(this);
 
-        return this.fillFormat;
-      }
-      set
-      {
-        SetParent(value);
-        this.fillFormat = value;
-      }
+            return this.fillFormat;
+        }
+        set
+        {
+            SetParent(value);
+            this.fillFormat = value;
+        }
     }
     [DV]
     internal FillFormat fillFormat;
@@ -191,8 +184,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Unit MarkerSize
     {
-      get { return this.markerSize; }
-      set { this.markerSize = value; }
+        get => this.markerSize;
+        set => this.markerSize = value;
     }
     [DV]
     internal Unit markerSize = Unit.NullValue;
@@ -202,8 +195,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public MarkerStyle MarkerStyle
     {
-      get { return (MarkerStyle)this.markerStyle.Value; }
-      set { this.markerStyle.Value = (int)value; }
+        get => (MarkerStyle)this.markerStyle.Value;
+        set => this.markerStyle.Value = (int)value;
     }
     [DV(Type = typeof(MarkerStyle))]
     internal NEnum markerStyle = NEnum.NullValue(typeof(MarkerStyle));
@@ -213,8 +206,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Color MarkerForegroundColor
     {
-      get { return this.markerForegroundColor; }
-      set { this.markerForegroundColor = value; }
+        get => this.markerForegroundColor;
+        set => this.markerForegroundColor = value;
     }
     [DV]
     internal Color markerForegroundColor = Color.Empty;
@@ -224,8 +217,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Color MarkerBackgroundColor
     {
-      get { return this.markerBackgroundColor; }
-      set { this.markerBackgroundColor = value; }
+        get => this.markerBackgroundColor;
+        set => this.markerBackgroundColor = value;
     }
     [DV]
     internal Color markerBackgroundColor = Color.Empty;
@@ -235,8 +228,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public ChartType ChartType
     {
-      get { return (ChartType)this.chartType.Value; }
-      set { this.chartType.Value = (int)value; }
+        get => (ChartType)this.chartType.Value;
+        set => this.chartType.Value = (int)value;
     }
     [DV(Type = typeof(ChartType))]
     internal NEnum chartType = NEnum.NullValue(typeof(ChartType));
@@ -246,18 +239,18 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public DataLabel DataLabel
     {
-      get
-      {
-        if (this.dataLabel == null)
-          this.dataLabel = new DataLabel(this);
+        get
+        {
+            if (this.dataLabel == null)
+                this.dataLabel = new DataLabel(this);
 
-        return this.dataLabel;
-      }
-      set
-      {
-        SetParent(value);
-        this.dataLabel = value;
-      }
+            return this.dataLabel;
+        }
+        set
+        {
+            SetParent(value);
+            this.dataLabel = value;
+        }
     }
     [DV]
     internal DataLabel dataLabel;
@@ -267,8 +260,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public bool HasDataLabel
     {
-      get { return this.hasDataLabel.Value; }
-      set { this.hasDataLabel.Value = value; }
+        get => this.hasDataLabel.Value;
+        set => this.hasDataLabel.Value = value;
     }
     [DV]
     internal NBool hasDataLabel = NBool.NullValue;
@@ -278,58 +271,56 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public int Count
     {
-      get
-      {
-        if (this.seriesElements != null)
-          return this.seriesElements.Count;
+        get
+        {
+            if (this.seriesElements != null)
+                return this.seriesElements.Count;
 
-        return 0;
-      }
+            return 0;
+        }
     }
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts Series into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      serializer.WriteLine("\\series");
+        serializer.WriteLine("\\series");
 
-      int pos = serializer.BeginAttributes();
+        var pos = serializer.BeginAttributes();
 
-      if (!this.name.IsNull)
-        serializer.WriteSimpleAttribute("Name", this.Name);
+        if (!this.name.IsNull)
+            serializer.WriteSimpleAttribute("Name", this.Name);
 
-      if (!this.markerSize.IsNull)
-        serializer.WriteSimpleAttribute("MarkerSize", this.MarkerSize);
-      if (!this.markerStyle.IsNull)
-        serializer.WriteSimpleAttribute("MarkerStyle", this.MarkerStyle);
+        if (!this.markerSize.IsNull)
+            serializer.WriteSimpleAttribute("MarkerSize", this.MarkerSize);
+        if (!this.markerStyle.IsNull)
+            serializer.WriteSimpleAttribute("MarkerStyle", this.MarkerStyle);
 
-      if (!this.markerBackgroundColor.IsNull)
-        serializer.WriteSimpleAttribute("MarkerBackgroundColor", this.MarkerBackgroundColor);
-      if (!this.markerForegroundColor.IsNull)
-        serializer.WriteSimpleAttribute("MarkerForegroundColor", this.MarkerForegroundColor);
+        if (!this.markerBackgroundColor.IsNull)
+            serializer.WriteSimpleAttribute("MarkerBackgroundColor", this.MarkerBackgroundColor);
+        if (!this.markerForegroundColor.IsNull)
+            serializer.WriteSimpleAttribute("MarkerForegroundColor", this.MarkerForegroundColor);
 
-      if (!this.chartType.IsNull)
-        serializer.WriteSimpleAttribute("ChartType", this.ChartType);
+        if (!this.chartType.IsNull)
+            serializer.WriteSimpleAttribute("ChartType", this.ChartType);
 
-      if (!this.hasDataLabel.IsNull)
-        serializer.WriteSimpleAttribute("HasDataLabel", this.HasDataLabel);
+        if (!this.hasDataLabel.IsNull)
+            serializer.WriteSimpleAttribute("HasDataLabel", this.HasDataLabel);
 
-      if (!this.IsNull("LineFormat"))
-        this.lineFormat.Serialize(serializer);
-      if (!this.IsNull("FillFormat"))
-        this.fillFormat.Serialize(serializer);
-      if (!this.IsNull("DataLabel"))
-        this.dataLabel.Serialize(serializer);
+        if (!this.IsNull("LineFormat"))
+            this.lineFormat.Serialize(serializer);
+        if (!this.IsNull("FillFormat"))
+            this.fillFormat.Serialize(serializer);
+        if (!this.IsNull("DataLabel"))
+            this.dataLabel.Serialize(serializer);
 
-      serializer.EndAttributes(pos);
+        serializer.EndAttributes(pos);
 
-      serializer.BeginContent();
-      this.seriesElements.Serialize(serializer);
-      serializer.WriteLine("");
-      serializer.EndContent();
+        serializer.BeginContent();
+        this.seriesElements.Serialize(serializer);
+        serializer.WriteLine("");
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -337,14 +328,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(Series));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(Series));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

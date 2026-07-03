@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,110 +25,100 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using MigraDocCore.DocumentObjectModel;
 using PdfSharpCore.Drawing;
 using MigraDocCore.DocumentObjectModel.Shapes;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Renders textframes.
+/// </summary>
+internal class TextFrameRenderer : ShapeRenderer
 {
-  /// <summary>
-  /// Renders textframes.
-  /// </summary>
-  internal class TextFrameRenderer : ShapeRenderer
-  {
     internal TextFrameRenderer(XGraphics gfx, TextFrame textframe, FieldInfos fieldInfos)
-      : base(gfx, textframe, fieldInfos)
+        : base(gfx, textframe, fieldInfos)
     {
-      this.textframe = textframe;
-      TextFrameRenderInfo renderInfo = new TextFrameRenderInfo();
-      renderInfo.shape = this.shape;
-      this.renderInfo = renderInfo;
+        this.textframe = textframe;
+        var renderInfo = new TextFrameRenderInfo();
+        renderInfo.shape = this.shape;
+        this.renderInfo = renderInfo;
     }
 
     internal TextFrameRenderer(XGraphics gfx, RenderInfo renderInfo, FieldInfos fieldInfos)
-      : base(gfx, renderInfo, fieldInfos)
+        : base(gfx, renderInfo, fieldInfos)
     {
-      this.textframe = (TextFrame)renderInfo.DocumentObject;
+        this.textframe = (TextFrame)renderInfo.DocumentObject;
     }
 
     internal override void Format(Area area, FormatInfo previousFormatInfo)
     {
-      FormattedTextFrame formattedTextFrame = new FormattedTextFrame(this.textframe, this.documentRenderer, this.fieldInfos);
-      formattedTextFrame.Format(this.gfx);
-      ((TextFrameFormatInfo)this.renderInfo.FormatInfo).formattedTextFrame = formattedTextFrame;
-      base.Format(area, previousFormatInfo);
+        var formattedTextFrame = new FormattedTextFrame(this.textframe, this.documentRenderer, this.fieldInfos);
+        formattedTextFrame.Format(this.gfx);
+        ((TextFrameFormatInfo)this.renderInfo.FormatInfo).formattedTextFrame = formattedTextFrame;
+        base.Format(area, previousFormatInfo);
     }
 
 
-    internal override LayoutInfo InitialLayoutInfo
-    {
-      get
-      {
-        return base.InitialLayoutInfo;
-      }
-    }
+    internal override LayoutInfo InitialLayoutInfo => base.InitialLayoutInfo;
 
     internal override void Render()
     {
-      RenderFilling();
-      RenderContent();
-      RenderLine();
+        RenderFilling();
+        RenderContent();
+        RenderLine();
     }
 
     void RenderContent()
     {
-      FormattedTextFrame formattedTextFrame = ((TextFrameFormatInfo)this.renderInfo.FormatInfo).formattedTextFrame;
-      RenderInfo[] renderInfos = formattedTextFrame.GetRenderInfos();
-      if (renderInfos == null)
-        return;
+        var formattedTextFrame = ((TextFrameFormatInfo)this.renderInfo.FormatInfo).formattedTextFrame;
+        var renderInfos = formattedTextFrame.GetRenderInfos();
+        if (renderInfos == null)
+            return;
 
-      XGraphicsState state = Transform();
-      RenderByInfos(renderInfos);
-      ResetTransform(state);
+        var state = Transform();
+        RenderByInfos(renderInfos);
+        ResetTransform(state);
     }
 
     XGraphicsState Transform()
     {
-      Area frameContentArea = this.renderInfo.LayoutInfo.ContentArea;
-      XGraphicsState state = this.gfx.Save();
-      XUnit xPosition;
-      XUnit yPosition;
-      switch (this.textframe.Orientation)
-      {
-        case TextOrientation.Downward:
-        case TextOrientation.Vertical:
-        case TextOrientation.VerticalFarEast:
-          xPosition = frameContentArea.X + frameContentArea.Width;
-          yPosition = frameContentArea.Y;
-          this.gfx.TranslateTransform(xPosition, yPosition);
-          this.gfx.RotateTransform(90);
-          break;
+        var frameContentArea = this.renderInfo.LayoutInfo.ContentArea;
+        var state = this.gfx.Save();
+        XUnit xPosition;
+        XUnit yPosition;
+        switch (this.textframe.Orientation)
+        {
+            case TextOrientation.Downward:
+            case TextOrientation.Vertical:
+            case TextOrientation.VerticalFarEast:
+                xPosition = frameContentArea.X + frameContentArea.Width;
+                yPosition = frameContentArea.Y;
+                this.gfx.TranslateTransform(xPosition, yPosition);
+                this.gfx.RotateTransform(90);
+                break;
 
-        case TextOrientation.Upward:
-          state = this.gfx.Save();
-          xPosition = frameContentArea.X;
-          yPosition = frameContentArea.Y + frameContentArea.Height;
-          this.gfx.TranslateTransform(xPosition, yPosition);
-          this.gfx.RotateTransform(-90);
-          break;
+            case TextOrientation.Upward:
+                state = this.gfx.Save();
+                xPosition = frameContentArea.X;
+                yPosition = frameContentArea.Y + frameContentArea.Height;
+                this.gfx.TranslateTransform(xPosition, yPosition);
+                this.gfx.RotateTransform(-90);
+                break;
 
-        default:
-          xPosition = frameContentArea.X;
-          yPosition = frameContentArea.Y;
-          this.gfx.TranslateTransform(xPosition, yPosition);
-          break;
-      }
-      return state;
+            default:
+                xPosition = frameContentArea.X;
+                yPosition = frameContentArea.Y;
+                this.gfx.TranslateTransform(xPosition, yPosition);
+                break;
+        }
+        return state;
     }
 
     void ResetTransform(XGraphicsState state)
     {
-      if (state != null)
-        this.gfx.Restore(state);
+        if (state != null)
+            this.gfx.Restore(state);
     }
     TextFrame textframe;
-  }
 }

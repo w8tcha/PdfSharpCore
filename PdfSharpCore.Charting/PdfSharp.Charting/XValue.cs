@@ -28,15 +28,14 @@
 #endregion
 
 using System;
-using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Represents the actual value on the XSeries.
+/// </summary>
+public class XValue : ChartObject
 {
-  /// <summary>
-  /// Represents the actual value on the XSeries.
-  /// </summary>
-  public class XValue : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the XValue class.
     /// </summary>
@@ -49,10 +48,10 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XValue(string value) : this()
     {
-      if (value == null)
-        throw new ArgumentNullException("value");
+        if (value == null)
+            throw new ArgumentNullException("value");
 
-      this.Value = value;
+        this.Value = value;
     }
 
     /// <summary>
@@ -66,8 +65,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new XValue Clone()
     {
-      return (XValue)DeepCopy();
+        return (XValue)DeepCopy();
     }
     #endregion
-  }
 }

@@ -27,17 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a plot area renderer of clustered bars, i. e. all bars are drawn side by side.
+/// </summary>
+internal class BarClusteredPlotAreaRenderer : BarPlotAreaRenderer
 {
-  /// <summary>
-  /// Represents a plot area renderer of clustered bars, i. e. all bars are drawn side by side.
-  /// </summary>
-  internal class BarClusteredPlotAreaRenderer : BarPlotAreaRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the BarClusteredPlotAreaRenderer class with the
     /// specified renderer parameters.
@@ -51,71 +49,71 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected override void CalcBars()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      if (cri.seriesRendererInfos.Length == 0)
-        return;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        if (cri.seriesRendererInfos.Length == 0)
+            return;
 
-      double xMax = cri.xAxisRendererInfo.MaximumScale;
-      double yMin = cri.yAxisRendererInfo.MinimumScale;
-      double yMax = cri.yAxisRendererInfo.MaximumScale;
+        var xMax = cri.xAxisRendererInfo.MaximumScale;
+        var yMin = cri.yAxisRendererInfo.MinimumScale;
+        var yMax = cri.yAxisRendererInfo.MaximumScale;
 
-      int pointCount = 0;
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-        pointCount += sri.series.seriesElements.Count;
+        var pointCount = 0;
+        foreach (var sri in cri.seriesRendererInfos)
+            pointCount += sri.series.seriesElements.Count;
 
-      // Space shared by one clustered bar.
-      double groupWidth = cri.xAxisRendererInfo.MajorTick;
+        // Space shared by one clustered bar.
+        var groupWidth = cri.xAxisRendererInfo.MajorTick;
 
-      // Space used by one bar.
-      double columnWidth = groupWidth * 0.75 / cri.seriesRendererInfos.Length;
+        // Space used by one bar.
+        var columnWidth = groupWidth * 0.75 / cri.seriesRendererInfos.Length;
 
-      int seriesIdx = 0;
-      XPoint[] points = new XPoint[2];
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-      {
-        // Set x to first clustered bar for each series.
-        double x = xMax - groupWidth / 2;
-        
-        // Offset for bars of a particular series from the start of a clustered bar.
-        double dx = (columnWidth * seriesIdx) - (columnWidth / 2 * cri.seriesRendererInfos.Length);
-        double y0 = yMin;
-
-        foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+        var seriesIdx = 0;
+        var points = new XPoint[2];
+        foreach (var sri in cri.seriesRendererInfos)
         {
-          if (column.point != null)
-          {
-            double x0 = x - dx;
-            double x1 = x - dx - columnWidth;
-            double y1 = column.point.Value;
+            // Set x to first clustered bar for each series.
+            var x = xMax - groupWidth / 2;
+        
+            // Offset for bars of a particular series from the start of a clustered bar.
+            var dx = (columnWidth * seriesIdx) - (columnWidth / 2 * cri.seriesRendererInfos.Length);
+            var y0 = yMin;
 
-            // Draw from zero base line, if it exists.
-            if (y0 < 0 && yMax >= 0)
-              y0 = 0;
-
-            // y0 should always be lower than y1, i. e. draw bar from bottom to top.
-            if (y1 < 0 && y1 < y0)
+            foreach (ColumnRendererInfo column in sri.pointRendererInfos)
             {
-              double y = y0;
-              y0 = y1;
-              y1 = y;
+                if (column.point != null)
+                {
+                    var x0 = x - dx;
+                    var x1 = x - dx - columnWidth;
+                    var y1 = column.point.Value;
+
+                    // Draw from zero base line, if it exists.
+                    if (y0 < 0 && yMax >= 0)
+                        y0 = 0;
+
+                    // y0 should always be lower than y1, i. e. draw bar from bottom to top.
+                    if (y1 < 0 && y1 < y0)
+                    {
+                        var y = y0;
+                        y0 = y1;
+                        y1 = y;
+                    }
+
+                    points[0].X = y0; // upper left
+                    points[0].Y = x0;
+                    points[1].X = y1; // lower right
+                    points[1].Y = x1;
+
+                    cri.plotAreaRendererInfo.matrix.TransformPoints(points);
+
+                    column.Rect = new XRect(points[0].X,
+                        points[1].Y,
+                        points[1].X - points[0].X,
+                        points[0].Y - points[1].Y);
+                }
+                x--; // Next clustered bar.
             }
-
-            points[0].X = y0; // upper left
-            points[0].Y = x0;
-            points[1].X = y1; // lower right
-            points[1].Y = x1;
-
-            cri.plotAreaRendererInfo.matrix.TransformPoints(points);
-
-            column.Rect = new XRect(points[0].X,
-              points[1].Y,
-              points[1].X - points[0].X,
-              points[0].Y - points[1].Y);
-          }
-          x--; // Next clustered bar.
+            seriesIdx++;
         }
-        seriesIdx++;
-      }
     }
 
     /// <summary>
@@ -123,7 +121,6 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected override bool IsDataInside(double yMin, double yMax, double yValue)
     {
-      return yValue <= yMax && yValue >= yMin;
+        return yValue <= yMax && yValue >= yMin;
     }
-  }
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,18 +25,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using PdfSharpCore.Drawing;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Abstract base class for all areas to render in.
+/// </summary>
+public abstract class Area
 {
-  /// <summary>
-  /// Abstract base class for all areas to render in.
-  /// </summary>
-  public abstract class Area
-  {
     internal Area()
     {
     }
@@ -47,8 +45,8 @@ namespace MigraDocCore.Rendering
     /// </summary>
     public abstract XUnit X
     {
-      get;
-      set;
+        get;
+        set;
     }
 
     /// <summary>
@@ -56,8 +54,8 @@ namespace MigraDocCore.Rendering
     /// </summary>
     public abstract XUnit Y
     {
-      get;
-      set;
+        get;
+        set;
     }
 
     /// <summary>
@@ -76,8 +74,8 @@ namespace MigraDocCore.Rendering
     /// </summary>
     public abstract XUnit Height
     {
-      get;
-      set;
+        get;
+        set;
     }
 
     /// <summary>
@@ -85,8 +83,8 @@ namespace MigraDocCore.Rendering
     /// </summary>
     public abstract XUnit Width
     {
-      get;
-      set;
+        get;
+        set;
     }
 
     /// <summary>
@@ -102,10 +100,10 @@ namespace MigraDocCore.Rendering
     /// <param name="verticalOffset">The measure of lowering.</param>
     /// <returns>The lowered Area.</returns>
     internal abstract Area Lower(XUnit verticalOffset);
-  }
+}
 
-  internal class Rectangle : Area
-  {
+internal class Rectangle : Area
+{
     /// <summary>
     /// Initializes a new rectangle object.
     /// </summary>
@@ -115,10 +113,10 @@ namespace MigraDocCore.Rendering
     /// <param name="height">Height of the rectangle.</param>
     internal Rectangle(XUnit x, XUnit y, XUnit width, XUnit height)
     {
-      this.x = x;
-      this.y = y;
-      this.width = width;
-      this.height = height;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     /// <summary>
@@ -127,10 +125,10 @@ namespace MigraDocCore.Rendering
     /// <param name="rect">The rectangle to copy.</param>
     internal Rectangle(Rectangle rect)
     {
-      this.x = rect.x;
-      this.y = rect.y;
-      this.width = rect.width;
-      this.height = rect.height;
+        this.x = rect.x;
+        this.y = rect.y;
+        this.width = rect.width;
+        this.height = rect.height;
     }
 
     /// <summary>
@@ -141,12 +139,12 @@ namespace MigraDocCore.Rendering
     /// <returns>The largest fitting rect with the given y position and height</returns>
     internal override Rectangle GetFittingRect(XUnit yPosition, XUnit height)
     {
-      // BUG: Code removed because null is not handled in caller
+        // BUG: Code removed because null is not handled in caller
 #if true
-      if (yPosition + height > this.y + this.height + Renderer.Tolerance)
-        return null;
+        if (yPosition + height > this.y + this.height + Renderer.Tolerance)
+            return null;
 #endif
-      return new Rectangle(this.x, yPosition, this.width, height);
+        return new Rectangle(this.x, yPosition, this.width, height);
     }
 
     /// <summary>
@@ -154,8 +152,8 @@ namespace MigraDocCore.Rendering
     /// </summary>
     public override XUnit X
     {
-      get { return this.x; }
-      set { this.x = value; }
+        get => this.x;
+        set => this.x = value;
     }
     XUnit x;
 
@@ -164,8 +162,8 @@ namespace MigraDocCore.Rendering
     /// </summary>
     public override XUnit Y
     {
-      get { return this.y; }
-      set { this.y = value; }
+        get => this.y;
+        set => this.y = value;
     }
     XUnit y;
 
@@ -174,8 +172,8 @@ namespace MigraDocCore.Rendering
     /// </summary>
     public override XUnit Width
     {
-      get { return this.width; }
-      set { this.width = value; }
+        get => this.width;
+        set => this.width = value;
     }
     XUnit width;
 
@@ -184,8 +182,8 @@ namespace MigraDocCore.Rendering
     /// </summary>
     public override XUnit Height
     {
-      get { return this.height; }
-      set { this.height = value; }
+        get => this.height;
+        set => this.height = value;
     }
     XUnit height;
 
@@ -196,19 +194,18 @@ namespace MigraDocCore.Rendering
     /// <returns>The union of the two areas.</returns>
     internal override Area Unite(Area area)
     {
-      if (area == null)
-        return this;
-      //This implementation is of course not correct, but it works for our purposes.
-      XUnit minTop = Math.Min(this.y, area.Y);
-      XUnit minLeft = Math.Min(this.x, area.X);
-      XUnit maxRight = Math.Max(this.x + this.width, area.X + area.Width);
-      XUnit maxBottom = Math.Max(this.y + this.height, area.Y + area.Height);
-      return new Rectangle(minLeft, minTop, maxRight - minLeft, maxBottom - minTop);
+        if (area == null)
+            return this;
+        //This implementation is of course not correct, but it works for our purposes.
+        XUnit minTop = Math.Min(this.y, area.Y);
+        XUnit minLeft = Math.Min(this.x, area.X);
+        XUnit maxRight = Math.Max(this.x + this.width, area.X + area.Width);
+        XUnit maxBottom = Math.Max(this.y + this.height, area.Y + area.Height);
+        return new Rectangle(minLeft, minTop, maxRight - minLeft, maxBottom - minTop);
     }
 
     internal override Area Lower(XUnit verticalOffset)
     {
-      return new Rectangle(this.x, this.y + verticalOffset, this.width, this.height - verticalOffset);
+        return new Rectangle(this.x, this.y + verticalOffset, this.width, this.height - verticalOffset);
     }
-  }
 }

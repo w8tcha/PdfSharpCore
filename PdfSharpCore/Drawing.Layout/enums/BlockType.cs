@@ -1,7 +1,6 @@
-﻿namespace PdfSharpCore.Drawing.Layout.enums
+﻿namespace PdfSharpCore.Drawing.Layout.enums;
+
+internal enum BlockType
 {
-	internal enum BlockType
-	{
-		Text, Space, Hyphen, LineBreak,
-	}
+    Text, Space, Hyphen, LineBreak
 }

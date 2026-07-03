@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   David Stephensen (mailto:David.Stephensen@PdfSharpCore.com)
@@ -26,58 +25,55 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using PdfSharpCore.Charting;
 using PdfSharpCore.Drawing;
 
-namespace MigraDocCore.Rendering.ChartMapper
+namespace MigraDocCore.Rendering.ChartMapper;
+
+internal class FontMapper
 {
-  internal class FontMapper
-  {
     private FontMapper()
     {
     }
 
     void MapObject(Font font, DocumentObjectModel.Font domFont)
     {
-      font.Bold = domFont.Bold;
-      if (domFont.Color.IsEmpty)
-        font.Color = XColor.Empty;
-      else
-      {
+        font.Bold = domFont.Bold;
+        if (domFont.Color.IsEmpty)
+            font.Color = XColor.Empty;
+        else
+        {
 #if noCMYK
         font.Color = XColor.FromArgb((int)domFont.Color.Argb);
 #else
-        font.Color = ColorHelper.ToXColor(domFont.Color, domFont.Document.UseCmykColor);
+            font.Color = ColorHelper.ToXColor(domFont.Color, domFont.Document.UseCmykColor);
 #endif
-      }
-      font.Italic = domFont.Italic;
-      if (!domFont.IsNull("Name"))
-        font.Name = domFont.Name;
-      if (!domFont.IsNull("Size"))
-        font.Size = domFont.Size.Point;
-      font.Subscript = domFont.Subscript;
-      font.Superscript = domFont.Superscript;
-      font.Strikethrough = (Strikethrough)domFont.Strikethrough;
-      font.Underline = (Underline)domFont.Underline;
+        }
+        font.Italic = domFont.Italic;
+        if (!domFont.IsNull("Name"))
+            font.Name = domFont.Name;
+        if (!domFont.IsNull("Size"))
+            font.Size = domFont.Size.Point;
+        font.Subscript = domFont.Subscript;
+        font.Superscript = domFont.Superscript;
+        font.Strikethrough = (Strikethrough)domFont.Strikethrough;
+        font.Underline = (Underline)domFont.Underline;
     }
 
     internal static void Map(Font font, DocumentObjectModel.Document domDocument, string domStyleName)
     {
-      DocumentObjectModel.Style domStyle = domDocument.Styles[domStyleName];
-      if (domStyle != null)
-      {
-        FontMapper mapper = new FontMapper();
-        mapper.MapObject(font, domStyle.Font);
-      }
+        var domStyle = domDocument.Styles[domStyleName];
+        if (domStyle != null)
+        {
+            var mapper = new FontMapper();
+            mapper.MapObject(font, domStyle.Font);
+        }
     }
 
     internal static void Map(Font font, DocumentObjectModel.Font domFont)
     {
-      FontMapper mapper = new FontMapper();
-      mapper.MapObject(font, domFont);
+        var mapper = new FontMapper();
+        mapper.MapObject(font, domFont);
     }
-  }
 }

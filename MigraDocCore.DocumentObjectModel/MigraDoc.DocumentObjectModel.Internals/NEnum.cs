@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,98 +27,92 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.ComponentModel;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+namespace MigraDocCore.DocumentObjectModel.Internals;
+///// <summary>
+///// Exists only to make code like 'NInt n = null' compile.
+///// </summary>
+//public class Dummy
+//{
+//  Dummy() {}
+//}
+
+/// <summary>
+/// Represents a nullable Enum value.
+/// </summary>
+internal struct NEnum : INullableValue
 {
-  ///// <summary>
-  ///// Exists only to make code like 'NInt n = null' compile.
-  ///// </summary>
-  //public class Dummy
-  //{
-  //  Dummy() {}
-  //}
-
-  /// <summary>
-  /// Represents a nullable Enum value.
-  /// </summary>
-  internal struct NEnum : INullableValue
-  {
     public NEnum(int val, Type type)
     {
-      this.type = type;
-      this.val = val;
+        this.type = type;
+        this.val = val;
     }
 
     NEnum(int value)
     {
-      this.type = null;
-      this.val = value;
+        this.type = null;
+        this.val = value;
     }
 
     internal Type Type
     {
-      get { return this.type; }
-      set { this.type = value; }
+        get => this.type;
+        set => this.type = value;
     }
     Type type;
 
     public int Value
     {
-      get { return this.val != int.MinValue ? this.val : 0; }
-      set
-      {
-        //TODO: Klasse Character So ändern, dass symbolName und char in unterschiedlichen Feldern gespeichert wird
-        //Diese Spezialbehandlung entfällt dann.
-        if (this.type == typeof(SymbolName))
+        get => this.val != int.MinValue ? this.val : 0;
+        set
         {
-          //          if (Enum.IsDefined(this.type, (uint)value))
-          this.val = value;
-          //          else
-          //            throw new ArgumentOutOfRangeException("value");
+            //TODO: Klasse Character So ändern, dass symbolName und char in unterschiedlichen Feldern gespeichert wird
+            //Diese Spezialbehandlung entfällt dann.
+            if (this.type == typeof(SymbolName))
+            {
+                //          if (Enum.IsDefined(this.type, (uint)value))
+                this.val = value;
+                //          else
+                //            throw new ArgumentOutOfRangeException("value");
+            }
+            else
+            {
+                if (Enum.IsDefined(this.type, value))
+                    this.val = value;
+                else
+                    throw new ArgumentException("value");
+            }
         }
-        else
-        {
-          if (Enum.IsDefined(this.type, value))
-            this.val = value;
-          else
-            throw new ArgumentException("value");
-        }
-      }
     }
 
     object INullableValue.GetValue()
     {
-      return ToObject();
+        return ToObject();
     }
 
     void INullableValue.SetValue(object value)
     {
-      this.val = (int)value;
+        this.val = (int)value;
     }
 
     public void SetNull()
     {
-      this.val = int.MinValue;
+        this.val = int.MinValue;
     }
 
     /// <summary>
     /// Determines whether this instance is null (not set).
     /// </summary>
-    public bool IsNull
-    {
-      get { return this.val == int.MinValue; }
-    }
+    public bool IsNull => this.val == int.MinValue;
 
     public object ToObject()
     {
-      if (this.val != int.MinValue)
-        return Enum.ToObject(this.type, this.val);
-      // BUG Have all enum 0 as valid value?
-      return Enum.ToObject(this.type, 0);
+        if (this.val != int.MinValue)
+            return Enum.ToObject(this.type, this.val);
+        // BUG Have all enum 0 as valid value?
+        return Enum.ToObject(this.type, 0);
     }
 
     //public static readonly NEnum NullValue = new NEnum(int.MinValue);
@@ -129,41 +122,40 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     public override bool Equals(object value)
     {
-      if (value is NEnum)
-        return this == (NEnum)value;
-      return false;
+        if (value is NEnum)
+            return this == (NEnum)value;
+        return false;
     }
 
     public override int GetHashCode()
     {
-      return this.val.GetHashCode();
+        return this.val.GetHashCode();
     }
 
     public static bool operator ==(NEnum l, NEnum r)
     {
-      if (l.IsNull)
-        return r.IsNull;
-      else if (r.IsNull)
-        return false;
-      else
-      {
-        if (l.type == r.type)
-          return l.Value == r.Value;
+        if (l.IsNull)
+            return r.IsNull;
+        else if (r.IsNull)
+            return false;
         else
-          return false;
-      }
+        {
+            if (l.type == r.type)
+                return l.Value == r.Value;
+            else
+                return false;
+        }
     }
 
     public static bool operator !=(NEnum l, NEnum r)
     {
-      return !(l == r);
+        return !(l == r);
     }
 
     public static NEnum NullValue(Type fieldType)
     {
-      return new NEnum(int.MinValue, fieldType);
+        return new NEnum(int.MinValue, fieldType);
     }
 
     int val;
-  }
 }

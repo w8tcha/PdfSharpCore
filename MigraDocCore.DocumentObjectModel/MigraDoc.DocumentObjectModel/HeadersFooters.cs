@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,21 +27,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
 using MigraDocCore.DocumentObjectModel.Internals;
 using MigraDocCore.DocumentObjectModel.Visitors;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Represents the collection of HeaderFooter objects.
+/// </summary>
+public class HeadersFooters : DocumentObject, IVisitable
 {
-  /// <summary>
-  /// Represents the collection of HeaderFooter objects.
-  /// </summary>
-  public class HeadersFooters : DocumentObject, IVisitable
-  {
     /// <summary>
     /// Initializes a new instance of the HeadersFooters class.
     /// </summary>
@@ -55,13 +50,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public HeadersFooters(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new HeadersFooters Clone()
     {
-      return (HeadersFooters)DeepCopy();
+        return (HeadersFooters)DeepCopy();
     }
 
     /// <summary>
@@ -69,53 +63,48 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     protected override object DeepCopy()
     {
-      HeadersFooters headersFooters = (HeadersFooters)base.DeepCopy();
-      if (headersFooters.evenPage != null)
-      {
-        headersFooters.evenPage = headersFooters.evenPage.Clone();
-        headersFooters.evenPage.parent = headersFooters;
-      }
-      if (headersFooters.firstPage != null)
-      {
-        headersFooters.firstPage = headersFooters.firstPage.Clone();
-        headersFooters.firstPage.parent = headersFooters;
-      }
-      if (headersFooters.primary != null)
-      {
-        headersFooters.primary = headersFooters.primary.Clone();
-        headersFooters.primary.parent = headersFooters;
-      }
-      return headersFooters;
+        var headersFooters = (HeadersFooters)base.DeepCopy();
+        if (headersFooters.evenPage != null)
+        {
+            headersFooters.evenPage = headersFooters.evenPage.Clone();
+            headersFooters.evenPage.parent = headersFooters;
+        }
+        if (headersFooters.firstPage != null)
+        {
+            headersFooters.firstPage = headersFooters.firstPage.Clone();
+            headersFooters.firstPage.parent = headersFooters;
+        }
+        if (headersFooters.primary != null)
+        {
+            headersFooters.primary = headersFooters.primary.Clone();
+            headersFooters.primary.parent = headersFooters;
+        }
+        return headersFooters;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Returns true if this collection contains headers, false otherwise.
     /// </summary>
     public bool IsHeader
     {
-      get
-      {
-        Section sec = (Section)this.parent;
-        return sec.headers == this;
-      }
+        get
+        {
+            var sec = (Section)this.parent;
+            return sec.headers == this;
+        }
     }
 
     /// <summary>
     /// Returns true if this collection contains footers, false otherwise.
     /// </summary>
-    public bool IsFooter
-    {
-      get { return !IsHeader; }
-    }
+    public bool IsFooter => !IsHeader;
 
     /// <summary>
     /// Determines whether a particular header or footer exists.
     /// </summary>
     public bool HasHeaderFooter(HeaderFooterIndex index)
     {
-      return !this.IsNull(index.ToString());
+        return !this.IsNull(index.ToString());
     }
 
     /// <summary>
@@ -123,18 +112,18 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public HeaderFooter EvenPage
     {
-      get
-      {
-        if (this.evenPage == null)
-          this.evenPage = new HeaderFooter(this);
+        get
+        {
+            if (this.evenPage == null)
+                this.evenPage = new HeaderFooter(this);
 
-        return this.evenPage;
-      }
-      set
-      {
-        SetParent(value);
-        this.evenPage = value;
-      }
+            return this.evenPage;
+        }
+        set
+        {
+            SetParent(value);
+            this.evenPage = value;
+        }
     }
     [DV]
     internal HeaderFooter evenPage;
@@ -144,18 +133,18 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public HeaderFooter FirstPage
     {
-      get
-      {
-        if (this.firstPage == null)
-          this.firstPage = new HeaderFooter(this);
+        get
+        {
+            if (this.firstPage == null)
+                this.firstPage = new HeaderFooter(this);
 
-        return this.firstPage;
-      }
-      set
-      {
-        SetParent(value);
-        this.firstPage = value;
-      }
+            return this.firstPage;
+        }
+        set
+        {
+            SetParent(value);
+            this.firstPage = value;
+        }
     }
     [DV]
     internal HeaderFooter firstPage;
@@ -165,44 +154,42 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public HeaderFooter Primary
     {
-      get
-      {
-        if (this.primary == null)
-          this.primary = new HeaderFooter(this);
+        get
+        {
+            if (this.primary == null)
+                this.primary = new HeaderFooter(this);
 
-        return this.primary;
-      }
-      set
-      {
-        SetParent(value);
-        this.primary = value;
-      }
+            return this.primary;
+        }
+        set
+        {
+            SetParent(value);
+            this.primary = value;
+        }
     }
     [DV]
     internal HeaderFooter primary;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts HeadersFooters into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      bool hasPrimary = HasHeaderFooter(HeaderFooterIndex.Primary);
-      bool hasEvenPage = HasHeaderFooter(HeaderFooterIndex.EvenPage);
-      bool hasFirstPage = HasHeaderFooter(HeaderFooterIndex.FirstPage);
+        var hasPrimary = HasHeaderFooter(HeaderFooterIndex.Primary);
+        var hasEvenPage = HasHeaderFooter(HeaderFooterIndex.EvenPage);
+        var hasFirstPage = HasHeaderFooter(HeaderFooterIndex.FirstPage);
 
-      // \primary...
-      if (hasPrimary)
-        Primary.Serialize(serializer, "primary");
+        // \primary...
+        if (hasPrimary)
+            Primary.Serialize(serializer, "primary");
 
-      // \even... 
-      if (hasEvenPage)
-        EvenPage.Serialize(serializer, "evenpage");
+        // \even... 
+        if (hasEvenPage)
+            EvenPage.Serialize(serializer, "evenpage");
 
-      // \firstpage...
-      if (hasFirstPage)
-        FirstPage.Serialize(serializer, "firstpage");
+        // \firstpage...
+        if (hasFirstPage)
+            FirstPage.Serialize(serializer, "firstpage");
     }
 
     /// <summary>
@@ -210,17 +197,17 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void IVisitable.AcceptVisitor(DocumentObjectVisitor visitor, bool visitChildren)
     {
-      visitor.VisitHeadersFooters(this);
+        visitor.VisitHeadersFooters(this);
 
-      if (visitChildren)
-      {
-        if (HasHeaderFooter(HeaderFooterIndex.Primary))
-          ((IVisitable)this.primary).AcceptVisitor(visitor, visitChildren);
-        if (HasHeaderFooter(HeaderFooterIndex.EvenPage))
-          ((IVisitable)this.evenPage).AcceptVisitor(visitor, visitChildren);
-        if (HasHeaderFooter(HeaderFooterIndex.FirstPage))
-          ((IVisitable)this.firstPage).AcceptVisitor(visitor, visitChildren);
-      }
+        if (visitChildren)
+        {
+            if (HasHeaderFooter(HeaderFooterIndex.Primary))
+                ((IVisitable)this.primary).AcceptVisitor(visitor, visitChildren);
+            if (HasHeaderFooter(HeaderFooterIndex.EvenPage))
+                ((IVisitable)this.evenPage).AcceptVisitor(visitor, visitChildren);
+            if (HasHeaderFooter(HeaderFooterIndex.FirstPage))
+                ((IVisitable)this.firstPage).AcceptVisitor(visitor, visitChildren);
+        }
     }
 
     /// <summary>
@@ -228,14 +215,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(HeadersFooters));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(HeadersFooters));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

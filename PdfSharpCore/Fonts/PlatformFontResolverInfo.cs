@@ -1,5 +1,4 @@
-﻿#region PDFsharp - A .NET library for processing PDF
-//
+﻿//
 // Authors:
 //   Stefan Lange
 //
@@ -25,20 +24,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Fonts
+namespace PdfSharpCore.Fonts;
+
+/// <summary>
+/// Represents a font resolver info created by the platform font resolver.
+/// </summary>
+internal class PlatformFontResolverInfo : FontResolverInfo
 {
-    /// <summary>
-    /// Represents a font resolver info created by the platform font resolver.
-    /// </summary>
-    internal class PlatformFontResolverInfo : FontResolverInfo
-    {
 
-        public PlatformFontResolverInfo(string faceName, bool mustSimulateBold, bool mustSimulateItalic)
-            : base(faceName, mustSimulateBold, mustSimulateItalic)
-        {
-            //_gdiFont = gdiFont;
-        }
+    public PlatformFontResolverInfo(string faceName, bool mustSimulateBold, bool mustSimulateItalic)
+        : base(faceName, mustSimulateBold, mustSimulateItalic)
+    {
+        //_gdiFont = gdiFont;
     }
 }

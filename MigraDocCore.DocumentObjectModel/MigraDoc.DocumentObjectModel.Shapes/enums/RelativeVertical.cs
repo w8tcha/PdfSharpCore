@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Shapes;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes
+/// <summary>
+/// Reference point of the Top attribute.
+/// </summary>
+public enum RelativeVertical
 {
-  /// <summary>
-  /// Reference point of the Top attribute.
-  /// </summary>
-  public enum RelativeVertical
-  {
     /// <summary>
     /// Alignment relative to the bottom side of the previous element.
     /// </summary>
@@ -55,5 +51,4 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// Alignment relative to the bottom line of the previous element.
     /// </summary>
     Paragraph
-  }
 }

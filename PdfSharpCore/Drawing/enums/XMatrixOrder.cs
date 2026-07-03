@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,23 +24,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Specifies the order for matrix transform operations.
+/// </summary>
+public enum XMatrixOrder
 {
     /// <summary>
-    /// Specifies the order for matrix transform operations.
+    /// The new operation is applied before the old operation.
     /// </summary>
-    public enum XMatrixOrder
-    {
-        /// <summary>
-        /// The new operation is applied before the old operation.
-        /// </summary>
-        Prepend = 0,
+    Prepend = 0,
 
-        /// <summary>
-        /// The new operation is applied after the old operation.
-        /// </summary>
-        Append = 1,
-    }
+    /// <summary>
+    /// The new operation is applied after the old operation.
+    /// </summary>
+    Append = 1
 }

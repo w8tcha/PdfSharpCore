@@ -27,23 +27,22 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using System.Globalization;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents the legend renderer specific to pie charts.
+/// </summary>
+internal class PieLegendRenderer : LegendRenderer
 {
-  /// <summary>
-  /// Represents the legend renderer specific to pie charts.
-  /// </summary>
-  internal class PieLegendRenderer : LegendRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the PieLegendRenderer class with the specified renderer
     /// parameters.
     /// </summary>
     internal PieLegendRenderer(RendererParameters parms)
-      : base(parms)
+        : base(parms)
     { }
 
     /// <summary>
@@ -52,46 +51,45 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override RendererInfo Init()
     {
-      LegendRendererInfo lri = null;
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      if (cri.chart.legend != null)
-      {
-        lri = new LegendRendererInfo();
-        lri.legend = cri.chart.legend;
-
-        lri.Font = Converter.ToXFont(lri.legend.font, cri.DefaultFont);
-        lri.FontColor = new XSolidBrush(XColors.Black);
-
-        if (lri.legend.lineFormat != null)
-          lri.BorderPen = Converter.ToXPen(lri.legend.lineFormat, XColors.Black, DefaultLineWidth, XDashStyle.Solid);
-
-        XSeries xseries = null;
-        if (cri.chart.xValues != null)
-          xseries = cri.chart.xValues[0];
-
-        int index = 0;
-        SeriesRendererInfo sri = cri.seriesRendererInfos[0];
-        lri.Entries = new LegendEntryRendererInfo[sri.pointRendererInfos.Length];
-        foreach (PointRendererInfo pri in sri.pointRendererInfos)
+        LegendRendererInfo lri = null;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        if (cri.chart.legend != null)
         {
-          LegendEntryRendererInfo leri = new LegendEntryRendererInfo();
-          leri.seriesRendererInfo = sri;
-          leri.legendRendererInfo = lri;
-          leri.EntryText = string.Empty;
-          if (xseries != null)
-          {
-            if (xseries.Count > index)
-              leri.EntryText = xseries[index].Value;
-          }
-          else
-            leri.EntryText = (index + 1).ToString(CultureInfo.InvariantCulture); // create default/dummy entry
-          leri.MarkerPen = pri.LineFormat;
-          leri.MarkerBrush = pri.FillFormat;
+            lri = new LegendRendererInfo();
+            lri.legend = cri.chart.legend;
 
-          lri.Entries[index++] = leri;
+            lri.Font = Converter.ToXFont(lri.legend.font, cri.DefaultFont);
+            lri.FontColor = new XSolidBrush(XColors.Black);
+
+            if (lri.legend.lineFormat != null)
+                lri.BorderPen = Converter.ToXPen(lri.legend.lineFormat, XColors.Black, DefaultLineWidth, XDashStyle.Solid);
+
+            XSeries xseries = null;
+            if (cri.chart.xValues != null)
+                xseries = cri.chart.xValues[0];
+
+            var index = 0;
+            var sri = cri.seriesRendererInfos[0];
+            lri.Entries = new LegendEntryRendererInfo[sri.pointRendererInfos.Length];
+            foreach (var pri in sri.pointRendererInfos)
+            {
+                var leri = new LegendEntryRendererInfo();
+                leri.seriesRendererInfo = sri;
+                leri.legendRendererInfo = lri;
+                leri.EntryText = string.Empty;
+                if (xseries != null)
+                {
+                    if (xseries.Count > index)
+                        leri.EntryText = xseries[index].Value;
+                }
+                else
+                    leri.EntryText = (index + 1).ToString(CultureInfo.InvariantCulture); // create default/dummy entry
+                leri.MarkerPen = pri.LineFormat;
+                leri.MarkerBrush = pri.FillFormat;
+
+                lri.Entries[index++] = leri;
+            }
         }
-      }
-      return lri;
+        return lri;
     }
-  }
 }

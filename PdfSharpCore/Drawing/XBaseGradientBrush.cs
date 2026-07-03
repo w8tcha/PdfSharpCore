@@ -1,5 +1,4 @@
-﻿#region PDFsharp - A .NET library for processing PDF
-//
+﻿//
 // Authors:
 //   Ben Askren
 //
@@ -25,122 +24,117 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.ComponentModel;
-using PdfSharpCore.Internal;
 
 // ReSharper disable RedundantNameQualifier because it is required for hybrid build
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+public class XBaseGradientBrush : XBrush
 {
-    public class XBaseGradientBrush : XBrush
+    protected XBaseGradientBrush(XColor color1, XColor color2)
     {
-        protected XBaseGradientBrush(XColor color1, XColor color2)
-        {
-            _color1 = color1;
-            _color2 = color2;
-
-        }
-
-        /// <summary>
-        /// Gets or sets an XMatrix that defines a local geometric transform for this LinearGradientBrush.
-        /// </summary>
-        public XMatrix Transform
-        {
-            get { return _matrix; }
-            set { _matrix = value; }
-        }
-
-        /// <summary>
-        /// Translates the brush with the specified offset.
-        /// </summary>
-        public void TranslateTransform(double dx, double dy)
-        {
-            _matrix.TranslatePrepend(dx, dy);
-        }
-
-        /// <summary>
-        /// Translates the brush with the specified offset.
-        /// </summary>
-        public void TranslateTransform(double dx, double dy, XMatrixOrder order)
-        {
-            _matrix.Translate(dx, dy, order);
-        }
-
-        /// <summary>
-        /// Scales the brush with the specified scalars.
-        /// </summary>
-        public void ScaleTransform(double sx, double sy)
-        {
-            _matrix.ScalePrepend(sx, sy);
-        }
-
-        /// <summary>
-        /// Scales the brush with the specified scalars.
-        /// </summary>
-        public void ScaleTransform(double sx, double sy, XMatrixOrder order)
-        {
-            _matrix.Scale(sx, sy, order);
-        }
-
-        /// <summary>
-        /// Rotates the brush with the specified angle.
-        /// </summary>
-        public void RotateTransform(double angle)
-        {
-            _matrix.RotatePrepend(angle);
-        }
-
-        /// <summary>
-        /// Rotates the brush with the specified angle.
-        /// </summary>
-        public void RotateTransform(double angle, XMatrixOrder order)
-        {
-            _matrix.Rotate(angle, order);
-        }
-
-        /// <summary>
-        /// Multiply the brush transformation matrix with the specified matrix.
-        /// </summary>
-        public void MultiplyTransform(XMatrix matrix)
-        {
-            _matrix.Prepend(matrix);
-        }
-
-        /// <summary>
-        /// Multiply the brush transformation matrix with the specified matrix.
-        /// </summary>
-        public void MultiplyTransform(XMatrix matrix, XMatrixOrder order)
-        {
-            _matrix.Multiply(matrix, order);
-        }
-
-        /// <summary>
-        /// Resets the brush transformation matrix with identity matrix.
-        /// </summary>
-        public void ResetTransform()
-        {
-            _matrix = new XMatrix();
-        }
-
-        //public void SetBlendTriangularShape(double focus);
-        //public void SetBlendTriangularShape(double focus, double scale);
-        //public void SetSigmaBellShape(double focus);
-        //public void SetSigmaBellShape(double focus, double scale);
-
-
-
-        //public Blend Blend { get; set; }
-        //public bool GammaCorrection { get; set; }
-        //public ColorBlend InterpolationColors { get; set; }
-        //public XColor[] LinearColors { get; set; }
-        //public RectangleF Rectangle { get; }
-        //public WrapMode WrapMode { get; set; }
-        //private bool interpolationColorsWasSet;
-
-        internal XColor _color1, _color2;
-        internal XMatrix _matrix;
+        _color1 = color1;
+        _color2 = color2;
 
     }
+
+    /// <summary>
+    /// Gets or sets an XMatrix that defines a local geometric transform for this LinearGradientBrush.
+    /// </summary>
+    public XMatrix Transform
+    {
+        get => _matrix;
+        set => _matrix = value;
+    }
+
+    /// <summary>
+    /// Translates the brush with the specified offset.
+    /// </summary>
+    public void TranslateTransform(double dx, double dy)
+    {
+        _matrix.TranslatePrepend(dx, dy);
+    }
+
+    /// <summary>
+    /// Translates the brush with the specified offset.
+    /// </summary>
+    public void TranslateTransform(double dx, double dy, XMatrixOrder order)
+    {
+        _matrix.Translate(dx, dy, order);
+    }
+
+    /// <summary>
+    /// Scales the brush with the specified scalars.
+    /// </summary>
+    public void ScaleTransform(double sx, double sy)
+    {
+        _matrix.ScalePrepend(sx, sy);
+    }
+
+    /// <summary>
+    /// Scales the brush with the specified scalars.
+    /// </summary>
+    public void ScaleTransform(double sx, double sy, XMatrixOrder order)
+    {
+        _matrix.Scale(sx, sy, order);
+    }
+
+    /// <summary>
+    /// Rotates the brush with the specified angle.
+    /// </summary>
+    public void RotateTransform(double angle)
+    {
+        _matrix.RotatePrepend(angle);
+    }
+
+    /// <summary>
+    /// Rotates the brush with the specified angle.
+    /// </summary>
+    public void RotateTransform(double angle, XMatrixOrder order)
+    {
+        _matrix.Rotate(angle, order);
+    }
+
+    /// <summary>
+    /// Multiply the brush transformation matrix with the specified matrix.
+    /// </summary>
+    public void MultiplyTransform(XMatrix matrix)
+    {
+        _matrix.Prepend(matrix);
+    }
+
+    /// <summary>
+    /// Multiply the brush transformation matrix with the specified matrix.
+    /// </summary>
+    public void MultiplyTransform(XMatrix matrix, XMatrixOrder order)
+    {
+        _matrix.Multiply(matrix, order);
+    }
+
+    /// <summary>
+    /// Resets the brush transformation matrix with identity matrix.
+    /// </summary>
+    public void ResetTransform()
+    {
+        _matrix = new XMatrix();
+    }
+
+    //public void SetBlendTriangularShape(double focus);
+    //public void SetBlendTriangularShape(double focus, double scale);
+    //public void SetSigmaBellShape(double focus);
+    //public void SetSigmaBellShape(double focus, double scale);
+
+
+
+    //public Blend Blend { get; set; }
+    //public bool GammaCorrection { get; set; }
+    //public ColorBlend InterpolationColors { get; set; }
+    //public XColor[] LinearColors { get; set; }
+    //public RectangleF Rectangle { get; }
+    //public WrapMode WrapMode { get; set; }
+    //private bool interpolationColorsWasSet;
+
+    internal XColor _color1, _color2;
+    internal XMatrix _matrix;
+
 }

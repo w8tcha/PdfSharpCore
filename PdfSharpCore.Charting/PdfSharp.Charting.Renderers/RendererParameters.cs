@@ -27,17 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents the necessary data for chart rendering.
+/// </summary>
+internal class RendererParameters
 {
-  /// <summary>
-  /// Represents the necessary data for chart rendering.
-  /// </summary>
-  internal class RendererParameters
-  {
     /// <summary>
     /// Initializes a new instance of the RendererParameters class.
     /// </summary>
@@ -51,8 +49,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public RendererParameters(XGraphics gfx, double x, double y, double width, double height)
     {
-      this.gfx = gfx;
-      this.box = new XRect(x, y, width, height);
+        this.gfx = gfx;
+        this.box = new XRect(x, y, width, height);
     }
 
     /// <summary>
@@ -61,8 +59,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public RendererParameters(XGraphics gfx, XRect boundingBox)
     {
-      this.gfx = gfx;
-      this.box = boundingBox;
+        this.gfx = gfx;
+        this.box = boundingBox;
     }
 
     /// <summary>
@@ -70,8 +68,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public XGraphics Graphics
     {
-      get {return this.gfx;}
-      set {this.gfx = value;}
+        get => this.gfx;
+        set => this.gfx = value;
     }
     XGraphics gfx;
 
@@ -80,8 +78,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public object DrawingItem
     {
-      get {return this.item;}
-      set {this.item = value;}
+        get => this.item;
+        set => this.item = value;
     }
     object item;
 
@@ -90,8 +88,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public XRect Box
     {
-      get {return this.box;}
-      set {this.box = value;}
+        get => this.box;
+        set => this.box = value;
     }
     XRect box;
 
@@ -100,9 +98,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public RendererInfo RendererInfo
     {
-      get {return this.rendererInfo;}
-      set {this.rendererInfo = value;}
+        get => this.rendererInfo;
+        set => this.rendererInfo = value;
     }
     RendererInfo rendererInfo;
-  }
 }

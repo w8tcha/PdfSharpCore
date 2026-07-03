@@ -1,16 +1,19 @@
 using System;
-using Xunit;
 
-namespace PdfSharpCore.Test
+using AwesomeAssertions;
+
+using NUnit.Framework;
+
+namespace PdfSharpCore.Test;
+
+public class PdfInteger
 {
-    public class PdfInteger
+    [Test]
+    public void Should_beAbleToConvertToInt32()
     {
-        [Fact]
-        public void Should_beAbleToConvertToInt32()
-        {
-            var pdfInt = new Pdf.PdfInteger(10);
-            var convertedInt = Convert.ToInt32(pdfInt);
-            Assert.Equal(10, convertedInt);
-        }
+        var pdfInt = new Pdf.PdfInteger(10);
+        var convertedInt = Convert.ToInt32(pdfInt);
+            
+        convertedInt.Should().Be(10);
     }
 }

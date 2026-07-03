@@ -30,13 +30,13 @@
 using System;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a line chart renderer.
+/// </summary>
+internal class LineChartRenderer : ColumnLikeChartRenderer
 {
-  /// <summary>
-  /// Represents a line chart renderer.
-  /// </summary>
-  internal class LineChartRenderer : ColumnLikeChartRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the LineChartRenderer class with the specified renderer parameters.
     /// </summary>
@@ -49,26 +49,26 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override RendererInfo Init()
     {
-      ChartRendererInfo cri = new ChartRendererInfo();
-      cri.chart = (Chart)this.rendererParms.DrawingItem;
-      this.rendererParms.RendererInfo = cri;
+        var cri = new ChartRendererInfo();
+        cri.chart = (Chart)this.rendererParms.DrawingItem;
+        this.rendererParms.RendererInfo = cri;
 
-      InitSeriesRendererInfo();
+        InitSeriesRendererInfo();
 
-      LegendRenderer lr = new ColumnLikeLegendRenderer(this.rendererParms);
-      cri.legendRendererInfo = (LegendRendererInfo)lr.Init();
+        LegendRenderer lr = new ColumnLikeLegendRenderer(this.rendererParms);
+        cri.legendRendererInfo = (LegendRendererInfo)lr.Init();
 
-      AxisRenderer xar = new HorizontalXAxisRenderer(this.rendererParms);
-      cri.xAxisRendererInfo = (AxisRendererInfo)xar.Init();
+        AxisRenderer xar = new HorizontalXAxisRenderer(this.rendererParms);
+        cri.xAxisRendererInfo = (AxisRendererInfo)xar.Init();
 
-      AxisRenderer yar = new VerticalYAxisRenderer(this.rendererParms);
-      cri.yAxisRendererInfo = (AxisRendererInfo)yar.Init();
+        AxisRenderer yar = new VerticalYAxisRenderer(this.rendererParms);
+        cri.yAxisRendererInfo = (AxisRendererInfo)yar.Init();
 
-      PlotArea plotArea = cri.chart.PlotArea;
-      LinePlotAreaRenderer lpar = new LinePlotAreaRenderer(this.rendererParms);
-      cri.plotAreaRendererInfo = (PlotAreaRendererInfo)lpar.Init();
+        var plotArea = cri.chart.PlotArea;
+        var lpar = new LinePlotAreaRenderer(this.rendererParms);
+        cri.plotAreaRendererInfo = (PlotAreaRendererInfo)lpar.Init();
 
-      return cri;
+        return cri;
     }
 
     /// <summary>
@@ -76,24 +76,24 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Format()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      LegendRenderer lr = new ColumnLikeLegendRenderer(this.rendererParms);
-      lr.Format();
+        LegendRenderer lr = new ColumnLikeLegendRenderer(this.rendererParms);
+        lr.Format();
 
-      // axes
-      AxisRenderer xar = new HorizontalXAxisRenderer(this.rendererParms);
-      xar.Format();
+        // axes
+        AxisRenderer xar = new HorizontalXAxisRenderer(this.rendererParms);
+        xar.Format();
 
-      AxisRenderer yar = new VerticalYAxisRenderer(this.rendererParms);
-      yar.Format();
+        AxisRenderer yar = new VerticalYAxisRenderer(this.rendererParms);
+        yar.Format();
 
-      // Calculate rects and positions.
-      CalcLayout();
+        // Calculate rects and positions.
+        CalcLayout();
 
-      // Calculated remaining plot area, now it's safe to format.
-      LinePlotAreaRenderer lpar = new LinePlotAreaRenderer(this.rendererParms);
-      lpar.Format();
+        // Calculated remaining plot area, now it's safe to format.
+        var lpar = new LinePlotAreaRenderer(this.rendererParms);
+        lpar.Format();
     }
 
     /// <summary>
@@ -101,38 +101,38 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      LegendRenderer lr = new ColumnLikeLegendRenderer(this.rendererParms);
-      lr.Draw();
+        LegendRenderer lr = new ColumnLikeLegendRenderer(this.rendererParms);
+        lr.Draw();
 
-      // Draw wall.
-      WallRenderer wr = new WallRenderer(this.rendererParms);
-      wr.Draw();
+        // Draw wall.
+        var wr = new WallRenderer(this.rendererParms);
+        wr.Draw();
 
-      // Draw gridlines.
-      GridlinesRenderer glr = new ColumnLikeGridlinesRenderer(this.rendererParms);
-      glr.Draw();
+        // Draw gridlines.
+        GridlinesRenderer glr = new ColumnLikeGridlinesRenderer(this.rendererParms);
+        glr.Draw();
 
-      PlotAreaBorderRenderer pabr = new PlotAreaBorderRenderer(this.rendererParms);
-      pabr.Draw();
+        var pabr = new PlotAreaBorderRenderer(this.rendererParms);
+        pabr.Draw();
 
-      // Draw line chart's plot area.
-      LinePlotAreaRenderer lpar = new LinePlotAreaRenderer(this.rendererParms);
-      lpar.Draw();
+        // Draw line chart's plot area.
+        var lpar = new LinePlotAreaRenderer(this.rendererParms);
+        lpar.Draw();
 
-      // Draw x- and y-axis.
-      if (cri.xAxisRendererInfo.axis != null)
-      {
-        AxisRenderer xar = new HorizontalXAxisRenderer(this.rendererParms);
-        xar.Draw();
-      }
+        // Draw x- and y-axis.
+        if (cri.xAxisRendererInfo.axis != null)
+        {
+            AxisRenderer xar = new HorizontalXAxisRenderer(this.rendererParms);
+            xar.Draw();
+        }
 
-      if (cri.yAxisRendererInfo.axis != null)
-      {
-        AxisRenderer yar = new VerticalYAxisRenderer(this.rendererParms);
-        yar.Draw();
-      }
+        if (cri.yAxisRendererInfo.axis != null)
+        {
+            AxisRenderer yar = new VerticalYAxisRenderer(this.rendererParms);
+            yar.Draw();
+        }
     }
 
     /// <summary>
@@ -140,18 +140,18 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     private void InitSeriesRendererInfo()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      SeriesCollection seriesColl = cri.chart.SeriesCollection;
-      cri.seriesRendererInfos = new SeriesRendererInfo[seriesColl.Count];
-      for (int idx = 0; idx < seriesColl.Count; ++idx)
-      {
-        SeriesRendererInfo sri = new SeriesRendererInfo();
-        sri.series = seriesColl[idx];
-        cri.seriesRendererInfos[idx] = sri;
-      }
+        var seriesColl = cri.chart.SeriesCollection;
+        cri.seriesRendererInfos = new SeriesRendererInfo[seriesColl.Count];
+        for (var idx = 0; idx < seriesColl.Count; ++idx)
+        {
+            var sri = new SeriesRendererInfo();
+            sri.series = seriesColl[idx];
+            cri.seriesRendererInfos[idx] = sri;
+        }
 
-      InitSeries();
+        InitSeries();
     }
 
     /// <summary>
@@ -159,39 +159,38 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal void InitSeries()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      int seriesIndex = 0;
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-      {
-        if (sri.series.markerBackgroundColor.IsEmpty)
-          sri.LineFormat = Converter.ToXPen(sri.series.lineFormat, LineColors.Item(seriesIndex), ChartRenderer.DefaultSeriesLineWidth);
-        else
-          sri.LineFormat = Converter.ToXPen(sri.series.lineFormat, sri.series.markerBackgroundColor, ChartRenderer.DefaultSeriesLineWidth);
-        sri.LineFormat.LineJoin = XLineJoin.Bevel;
+        var seriesIndex = 0;
+        foreach (var sri in cri.seriesRendererInfos)
+        {
+            if (sri.series.markerBackgroundColor.IsEmpty)
+                sri.LineFormat = Converter.ToXPen(sri.series.lineFormat, LineColors.Item(seriesIndex), ChartRenderer.DefaultSeriesLineWidth);
+            else
+                sri.LineFormat = Converter.ToXPen(sri.series.lineFormat, sri.series.markerBackgroundColor, ChartRenderer.DefaultSeriesLineWidth);
+            sri.LineFormat.LineJoin = XLineJoin.Bevel;
 
-        MarkerRendererInfo mri = new MarkerRendererInfo();
-        sri.markerRendererInfo = mri;
+            var mri = new MarkerRendererInfo();
+            sri.markerRendererInfo = mri;
 
-        mri.MarkerForegroundColor = sri.series.markerForegroundColor;
-        if (mri.MarkerForegroundColor.IsEmpty)
-          mri.MarkerForegroundColor = XColors.Black;
+            mri.MarkerForegroundColor = sri.series.markerForegroundColor;
+            if (mri.MarkerForegroundColor.IsEmpty)
+                mri.MarkerForegroundColor = XColors.Black;
 
-        mri.MarkerBackgroundColor = sri.series.markerBackgroundColor;
-        if (mri.MarkerBackgroundColor.IsEmpty)
-          mri.MarkerBackgroundColor = sri.LineFormat.Color;
+            mri.MarkerBackgroundColor = sri.series.markerBackgroundColor;
+            if (mri.MarkerBackgroundColor.IsEmpty)
+                mri.MarkerBackgroundColor = sri.LineFormat.Color;
 
-        mri.MarkerSize = sri.series.markerSize;
-        if (mri.MarkerSize == 0)
-          mri.MarkerSize = 7;
+            mri.MarkerSize = sri.series.markerSize;
+            if (mri.MarkerSize == 0)
+                mri.MarkerSize = 7;
 
-        if (!sri.series.markerStyleInitialized)
-          mri.MarkerStyle = (MarkerStyle)(seriesIndex % (Enum.GetNames(typeof(MarkerStyle)).Length - 1) + 1);
-        else
-          mri.MarkerStyle = sri.series.markerStyle;
+            if (!sri.series.markerStyleInitialized)
+                mri.MarkerStyle = (MarkerStyle)(seriesIndex % (Enum.GetNames(typeof(MarkerStyle)).Length - 1) + 1);
+            else
+                mri.MarkerStyle = sri.series.markerStyle;
 
-        ++seriesIndex;
-      }
+            ++seriesIndex;
+        }
     }
-  }
 }

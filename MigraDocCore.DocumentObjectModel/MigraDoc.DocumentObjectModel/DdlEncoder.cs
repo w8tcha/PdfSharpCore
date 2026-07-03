@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
 using System.Text;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Provides functions for encoding and decoding of DDL text.
+/// </summary>
+public sealed class DdlEncoder
 {
-  /// <summary>
-  /// Provides functions for encoding and decoding of DDL text.
-  /// </summary>
-  public sealed class DdlEncoder
-  {
     /// <summary>
     /// Initializes a new instance of the DdlEncoder class.
     /// </summary>
@@ -54,46 +50,46 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public static string StringToText(string str)
     {
-      if (str == null)
-        return null;
+        if (str == null)
+            return null;
 
-      int length = str.Length;
-      StringBuilder strb = new StringBuilder(length + (int)(length >> 2));
-      for (int index = 0; index < length; ++index)
-      {
-        // Don't convert characters into DDL.
-        char ch = str[index];
-        switch (ch)
+        var length = str.Length;
+        var strb = new StringBuilder(length + (int)(length >> 2));
+        for (var index = 0; index < length; ++index)
         {
-          case '\\':
-            strb.Append("\\\\");
-            break;
-
-          case '{':
-            strb.Append("\\{");
-            break;
-
-          case '}':
-            strb.Append("\\}");
-            break;
-
-          // escape comments
-          case '/':
-            if (index < length - 1 && str[index + 1] == '/')
+            // Don't convert characters into DDL.
+            var ch = str[index];
+            switch (ch)
             {
-              strb.Append("\\//");
-              ++index;
-            }
-            else
-              strb.Append("/");
-            break;
+                case '\\':
+                    strb.Append("\\\\");
+                    break;
 
-          default:
-            strb.Append(ch);
-            break;
+                case '{':
+                    strb.Append("\\{");
+                    break;
+
+                case '}':
+                    strb.Append("\\}");
+                    break;
+
+                // escape comments
+                case '/':
+                    if (index < length - 1 && str[index + 1] == '/')
+                    {
+                        strb.Append("\\//");
+                        ++index;
+                    }
+                    else
+                        strb.Append("/");
+                    break;
+
+                default:
+                    strb.Append(ch);
+                    break;
+            }
         }
-      }
-      return strb.ToString();
+        return strb.ToString();
     }
 
     /// <summary>
@@ -101,33 +97,33 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public static string StringToLiteral(string str)
     {
-      int length = 0;
-      if (str == null || (length = str.Length) == 0)
-        return "\"\"";
+        var length = 0;
+        if (str == null || (length = str.Length) == 0)
+            return "\"\"";
 
-      StringBuilder strb = new StringBuilder(length + (int)(length >> 2));
-      strb.Append("\"");
-      for (int index = 0; index < length; ++index)
-      {
-        char ch = str[index];
-        switch (ch)
+        var strb = new StringBuilder(length + (int)(length >> 2));
+        strb.Append("\"");
+        for (var index = 0; index < length; ++index)
         {
-          case '\\':
-            strb.Append("\\\\");
-            break;
+            var ch = str[index];
+            switch (ch)
+            {
+                case '\\':
+                    strb.Append("\\\\");
+                    break;
 
-          case '"':
-            strb.Append("\\\"");
-            break;
+                case '"':
+                    strb.Append("\\\"");
+                    break;
 
-          default:
-            strb.Append(ch);
-            break;
+                default:
+                    strb.Append(ch);
+                    break;
+            }
         }
-      }
-      strb.Append("\"");
+        strb.Append("\"");
 
-      return strb.ToString();
+        return strb.ToString();
     }
 
     /// <summary>
@@ -136,31 +132,31 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal static bool IsDdeIdentifier(string name)
     {
-      if (name == null || name == String.Empty)
-        return false;
-
-      int len = name.Length;
-      if (len > 64)
-        return false;
-
-      for (int index = 0; index < len; index++)
-      {
-        char ch = name[index];
-        if (ch == ' ')
-          return false;
-
-        if (index == 0)
-        {
-          if (!Char.IsLetter(ch) && ch != '_')
+        if (name == null || name == String.Empty)
             return false;
-        }
-        else
-        {
-          if (!Char.IsLetterOrDigit(ch) && ch != '_')
+
+        var len = name.Length;
+        if (len > 64)
             return false;
+
+        for (var index = 0; index < len; index++)
+        {
+            var ch = name[index];
+            if (ch == ' ')
+                return false;
+
+            if (index == 0)
+            {
+                if (!Char.IsLetter(ch) && ch != '_')
+                    return false;
+            }
+            else
+            {
+                if (!Char.IsLetterOrDigit(ch) && ch != '_')
+                    return false;
+            }
         }
-      }
-      return true;
+        return true;
     }
 
     /// <summary>
@@ -168,11 +164,10 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal static string QuoteIfNameContainsBlanks(string name)
     {
-      if (IsDdeIdentifier(name))
-        return name;
-      else
-        return "\"" + name + "\"";
+        if (IsDdeIdentifier(name))
+            return name;
+        else
+            return "\"" + name + "\"";
     }
 
-  }
 }

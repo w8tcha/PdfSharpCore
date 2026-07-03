@@ -27,21 +27,18 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting.Renderers;
 
-namespace PdfSharpCore.Charting.Renderers
+/// <summary>
+/// Represents a renderer for the plot area background.
+/// </summary>
+internal class WallRenderer : Renderer
 {
-  /// <summary>
-  /// Represents a renderer for the plot area background.
-  /// </summary>
-  internal class WallRenderer : Renderer
-  {
     /// <summary>
     /// Initializes a new instance of the WallRenderer class with the specified renderer parameters.
     /// </summary>
     internal WallRenderer(RendererParameters parms)
-      : base(parms)
+        : base(parms)
     { }
 
     /// <summary>
@@ -49,15 +46,14 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      if (cri.plotAreaRendererInfo.FillFormat != null)
-      {
-        XRect plotAreaBox = cri.plotAreaRendererInfo.Rect;
-        if (plotAreaBox.IsEmpty)
-          return;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        if (cri.plotAreaRendererInfo.FillFormat != null)
+        {
+            var plotAreaBox = cri.plotAreaRendererInfo.Rect;
+            if (plotAreaBox.IsEmpty)
+                return;
 
-        this.rendererParms.Graphics.DrawRectangle(cri.plotAreaRendererInfo.FillFormat, plotAreaBox);
-      }
+            this.rendererParms.Graphics.DrawRectangle(cri.plotAreaRendererInfo.FillFormat, plotAreaBox);
+        }
     }
-  }
 }

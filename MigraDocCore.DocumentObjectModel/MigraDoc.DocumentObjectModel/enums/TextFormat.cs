@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,19 +27,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Specifies the format of a text.
+/// Bold, Italic, or Underline will be ignored if NotBold, NotItalic, or NoUnderline respectively are specified at the same time.
+/// </summary>
+[Flags]
+public enum TextFormat
 {
-  /// <summary>
-  /// Specifies the format of a text.
-  /// Bold, Italic, or Underline will be ignored if NotBold, NotItalic, or NoUnderline respectively are specified at the same time.
-  /// </summary>
-  [Flags]
-  public enum TextFormat
-  {
     /// <summary>
     /// Specifies bold text (heavy font weight).
     /// </summary>
@@ -65,5 +63,4 @@ namespace MigraDocCore.DocumentObjectModel
     /// Specifies text without underline.
     /// </summary>
     NoUnderline = 0x000030
-  }
 }

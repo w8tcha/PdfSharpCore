@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,15 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Enumerates the predefined style names.
+/// </summary>
+public class StyleNames
 {
-  /// <summary>
-  /// Enumerates the predefined style names.
-  /// </summary>
-  public class StyleNames
-  {
     public const string DefaultParagraphFont = "DefaultParagraphFont";
     public const string Normal = "Normal";
     public const string Heading1 = "Heading1";
@@ -53,5 +51,4 @@ namespace MigraDocCore.DocumentObjectModel
     public const string Footer = "Footer";
     public const string Hyperlink = "Hyperlink";
     public const string InvalidStyleName = "InvalidStyleName";
-  }
 }

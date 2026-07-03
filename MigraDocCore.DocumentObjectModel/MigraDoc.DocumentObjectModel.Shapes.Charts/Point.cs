@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents a formatted value on the data series.
+/// </summary>
+public class Point : ChartObject
 {
-  /// <summary>
-  /// Represents a formatted value on the data series.
-  /// </summary>
-  public class Point : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the Point class.
     /// </summary>
@@ -51,18 +48,17 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// Initializes a new instance of the Point class with a real value.
     /// </summary>
     public Point(double value)
-      : this()
+        : this()
     {
-      this.Value = value;
+        this.Value = value;
     }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new Point Clone()
     {
-      return (Point)DeepCopy();
+        return (Point)DeepCopy();
     }
 
     /// <summary>
@@ -70,39 +66,37 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     protected override object DeepCopy()
     {
-      Point point = (Point)base.DeepCopy();
-      if (point.lineFormat != null)
-      {
-        point.lineFormat = point.lineFormat.Clone();
-        point.lineFormat.parent = point;
-      }
-      if (point.fillFormat != null)
-      {
-        point.fillFormat = point.fillFormat.Clone();
-        point.fillFormat.parent = point;
-      }
-      return point;
+        var point = (Point)base.DeepCopy();
+        if (point.lineFormat != null)
+        {
+            point.lineFormat = point.lineFormat.Clone();
+            point.lineFormat.parent = point;
+        }
+        if (point.fillFormat != null)
+        {
+            point.fillFormat = point.fillFormat.Clone();
+            point.fillFormat.parent = point;
+        }
+        return point;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets the line format of the data point's border.
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
-      set
-      {
-        SetParent(value);
-        this.lineFormat = value;
-      }
+            return this.lineFormat;
+        }
+        set
+        {
+            SetParent(value);
+            this.lineFormat = value;
+        }
     }
     [DV]
     internal LineFormat lineFormat;
@@ -112,18 +106,18 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public FillFormat FillFormat
     {
-      get
-      {
-        if (this.fillFormat == null)
-          this.fillFormat = new FillFormat(this);
+        get
+        {
+            if (this.fillFormat == null)
+                this.fillFormat = new FillFormat(this);
 
-        return this.fillFormat;
-      }
-      set
-      {
-        SetParent(value);
-        this.fillFormat = value;
-      }
+            return this.fillFormat;
+        }
+        set
+        {
+            SetParent(value);
+            this.fillFormat = value;
+        }
     }
     [DV]
     internal FillFormat fillFormat;
@@ -133,39 +127,37 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public double Value
     {
-      get { return this.value.Value; }
-      set { this.value.Value = value; }
+        get => this.value.Value;
+        set => this.value.Value = value;
     }
     [DV]
     internal NDouble value = NDouble.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts Point into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      if (!this.IsNull("LineFormat") || !this.IsNull("FillFormat"))
-      {
-        serializer.WriteLine("");
-        serializer.WriteLine("\\point");
-        int pos = serializer.BeginAttributes();
+        if (!this.IsNull("LineFormat") || !this.IsNull("FillFormat"))
+        {
+            serializer.WriteLine("");
+            serializer.WriteLine("\\point");
+            var pos = serializer.BeginAttributes();
 
-        if (!this.IsNull("LineFormat"))
-          this.lineFormat.Serialize(serializer);
-        if (!this.IsNull("FillFormat"))
-          this.fillFormat.Serialize(serializer);
+            if (!this.IsNull("LineFormat"))
+                this.lineFormat.Serialize(serializer);
+            if (!this.IsNull("FillFormat"))
+                this.fillFormat.Serialize(serializer);
 
-        serializer.EndAttributes(pos);
-        serializer.BeginContent();
-        serializer.WriteLine(this.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
-        serializer.EndContent();
-      }
-      else
-        serializer.Write(this.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            serializer.EndAttributes(pos);
+            serializer.BeginContent();
+            serializer.WriteLine(this.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            serializer.EndContent();
+        }
+        else
+            serializer.Write(this.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
 
-      serializer.Write(", ");
+        serializer.Write(", ");
     }
 
     /// <summary>
@@ -173,14 +165,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(Point));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(Point));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

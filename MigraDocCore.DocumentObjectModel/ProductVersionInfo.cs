@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Copyright (c) 2001-2009 empira Software GmbH, Cologne (Germany)
 //
@@ -23,22 +22,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace MigraDoc
+namespace MigraDoc;
+
+/// <summary>
+/// Base namespace of MigraDoc. Classes are implemented in nested namespaces like e. g. MigraDoc.DocumentObjectModel.
+/// </summary>
+/// <seealso cref="MigraDoc.DocumentObjectModel"></seealso>
+[System.Runtime.CompilerServices.CompilerGenerated]
+internal class NamespaceDoc { }
+
+/// <summary>
+/// Version info base for all MigraDoc related assemblies.
+/// </summary>
+public static class ProductVersionInfo
 {
-  /// <summary>
-  /// Base namespace of MigraDoc. Classes are implemented in nested namespaces like e. g. MigraDoc.DocumentObjectModel.
-  /// </summary>
-  /// <seealso cref="MigraDoc.DocumentObjectModel"></seealso>
-  [System.Runtime.CompilerServices.CompilerGenerated]
-  internal class NamespaceDoc { }
-
-  /// <summary>
-  /// Version info base for all MigraDoc related assemblies.
-  /// </summary>
-  public static class ProductVersionInfo
-  {
     /// <summary>
     /// The title of the product.
     /// </summary>
@@ -190,5 +188,4 @@ namespace MigraDoc
 #if DEBUG
     public static int BuildNumber = (System.DateTime.Now - new System.DateTime(2001, 7, 4)).Days;
 #endif
-  }
 }

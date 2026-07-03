@@ -27,17 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.ComponentModel;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Represents charts with different types.
+/// </summary>
+public class Chart : DocumentObject
 {
-  /// <summary>
-  /// Represents charts with different types.
-  /// </summary>
-  public class Chart : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the Chart class.
     /// </summary>
@@ -55,7 +51,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Chart(ChartType type) : this()
     {
-      this.Type = type;
+        this.Type = type;
     }
 
     #region Methods
@@ -64,7 +60,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new Chart Clone()
     {
-      return (Chart)DeepCopy();
+        return (Chart)DeepCopy();
     }
 
     /// <summary>
@@ -72,43 +68,43 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      Chart chart = (Chart)base.DeepCopy();
-      if (chart.xAxis != null)
-      {
-        chart.xAxis = chart.xAxis.Clone();
-        chart.xAxis.parent = chart;
-      }
-      if (chart.yAxis != null)
-      {
-        chart.yAxis = chart.yAxis.Clone();
-        chart.yAxis.parent = chart;
-      }
-      if (chart.zAxis != null)
-      {
-        chart.zAxis = chart.zAxis.Clone();
-        chart.zAxis.parent = chart;
-      }
-      if (chart.seriesCollection != null)
-      {
-        chart.seriesCollection = chart.seriesCollection.Clone();
-        chart.seriesCollection.parent = chart;
-      }
-      if (chart.xValues != null)
-      {
-        chart.xValues = chart.xValues.Clone();
-        chart.xValues.parent = chart;
-      }
-      if (chart.plotArea != null)
-      {
-        chart.plotArea = chart.plotArea.Clone();
-        chart.plotArea.parent = chart;
-      }
-      if (chart.dataLabel != null)
-      {
-        chart.dataLabel = chart.dataLabel.Clone();
-        chart.dataLabel.parent = chart;
-      }
-      return chart;
+        var chart = (Chart)base.DeepCopy();
+        if (chart.xAxis != null)
+        {
+            chart.xAxis = chart.xAxis.Clone();
+            chart.xAxis.parent = chart;
+        }
+        if (chart.yAxis != null)
+        {
+            chart.yAxis = chart.yAxis.Clone();
+            chart.yAxis.parent = chart;
+        }
+        if (chart.zAxis != null)
+        {
+            chart.zAxis = chart.zAxis.Clone();
+            chart.zAxis.parent = chart;
+        }
+        if (chart.seriesCollection != null)
+        {
+            chart.seriesCollection = chart.seriesCollection.Clone();
+            chart.seriesCollection.parent = chart;
+        }
+        if (chart.xValues != null)
+        {
+            chart.xValues = chart.xValues.Clone();
+            chart.xValues.parent = chart;
+        }
+        if (chart.plotArea != null)
+        {
+            chart.plotArea = chart.plotArea.Clone();
+            chart.plotArea.parent = chart;
+        }
+        if (chart.dataLabel != null)
+        {
+            chart.dataLabel = chart.dataLabel.Clone();
+            chart.dataLabel.parent = chart;
+        }
+        return chart;
     }
 
     /// <summary>
@@ -116,14 +112,14 @@ namespace PdfSharpCore.Charting
     /// </summary>
     internal string CheckAxis (Axis axis)
     {
-      if ((this.xAxis != null) && (axis == this.xAxis))
-        return "xaxis";
-      if ((this.yAxis != null) && (axis == this.yAxis))
-        return "yaxis";
-      if ((this.zAxis != null) && (axis == this.zAxis))
-        return "zaxis";
+        if ((this.xAxis != null) && (axis == this.xAxis))
+            return "xaxis";
+        if ((this.yAxis != null) && (axis == this.yAxis))
+            return "yaxis";
+        if ((this.zAxis != null) && (axis == this.zAxis))
+            return "zaxis";
 
-      return "";
+        return "";
     }
     #endregion
 
@@ -134,8 +130,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public ChartType Type
     {
-      get {return this.type;}
-      set {this.type = value;}
+        get => this.type;
+        set => this.type = value;
     }
     internal ChartType type;
 
@@ -145,13 +141,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Font Font
     {
-      get 
-      {
-        if (this.font == null)
-          this.font = new Font(this);
+        get 
+        {
+            if (this.font == null)
+                this.font = new Font(this);
 
-        return this.font;
-      }
+            return this.font;
+        }
     }
     internal Font font;
 
@@ -160,13 +156,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Legend Legend
     {
-      get
-      {
-        if (this.legend == null)
-          this.legend = new Legend(this);
+        get
+        {
+            if (this.legend == null)
+                this.legend = new Legend(this);
 
-        return this.legend;
-      }
+            return this.legend;
+        }
     }
     internal Legend legend;
 
@@ -175,13 +171,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Axis XAxis
     {
-      get
-      {
-        if (this.xAxis == null)
-          this.xAxis = new Axis(this);
+        get
+        {
+            if (this.xAxis == null)
+                this.xAxis = new Axis(this);
 
-        return this.xAxis;
-      }
+            return this.xAxis;
+        }
     }
     internal Axis xAxis;
 
@@ -190,13 +186,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Axis YAxis
     {
-      get
-      {
-        if (this.yAxis == null)
-          this.yAxis = new Axis(this);
+        get
+        {
+            if (this.yAxis == null)
+                this.yAxis = new Axis(this);
 
-        return this.yAxis;
-      }
+            return this.yAxis;
+        }
     }
     internal Axis yAxis;
 
@@ -205,13 +201,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Axis ZAxis
     {
-      get
-      {
-        if (this.zAxis == null)
-          this.zAxis = new Axis(this);
+        get
+        {
+            if (this.zAxis == null)
+                this.zAxis = new Axis(this);
 
-        return this.zAxis;
-      }
+            return this.zAxis;
+        }
     }
     internal Axis zAxis;
 
@@ -220,13 +216,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public SeriesCollection SeriesCollection
     {
-      get
-      {
-        if (this.seriesCollection == null)
-          this.seriesCollection = new SeriesCollection(this);
+        get
+        {
+            if (this.seriesCollection == null)
+                this.seriesCollection = new SeriesCollection(this);
 
-        return this.seriesCollection;
-      }
+            return this.seriesCollection;
+        }
     }
     internal SeriesCollection seriesCollection;
 
@@ -235,13 +231,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XValues XValues
     {
-      get
-      {
-        if (this.xValues == null)
-          this.xValues = new XValues(this);
+        get
+        {
+            if (this.xValues == null)
+                this.xValues = new XValues(this);
 
-        return this.xValues;
-      }
+            return this.xValues;
+        }
     }
     internal XValues xValues;
 
@@ -250,13 +246,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public PlotArea PlotArea
     {
-      get
-      {
-        if (this.plotArea == null)
-          this.plotArea = new PlotArea(this);
+        get
+        {
+            if (this.plotArea == null)
+                this.plotArea = new PlotArea(this);
 
-        return this.plotArea;
-      }
+            return this.plotArea;
+        }
     }
     internal PlotArea plotArea;
 
@@ -265,8 +261,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public BlankType DisplayBlanksAs
     {
-      get {return this.displayBlanksAs;}
-      set {this.displayBlanksAs = value;}
+        get => this.displayBlanksAs;
+        set => this.displayBlanksAs = value;
     }
     internal BlankType displayBlanksAs;
 
@@ -275,13 +271,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public DataLabel DataLabel
     {
-      get 
-      {
-        if (this.dataLabel == null)
-          this.dataLabel = new DataLabel(this);
+        get 
+        {
+            if (this.dataLabel == null)
+                this.dataLabel = new DataLabel(this);
 
-        return this.dataLabel;
-      }
+            return this.dataLabel;
+        }
     }
     internal DataLabel dataLabel;
 
@@ -290,10 +286,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool HasDataLabel
     {
-      get {return this.hasDataLabel;}
-      set {this.hasDataLabel = value;}
+        get => this.hasDataLabel;
+        set => this.hasDataLabel = value;
     }
     internal bool hasDataLabel;
     #endregion
-  }
 }

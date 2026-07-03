@@ -1,5 +1,4 @@
-﻿#region MigraDoc - Creating Documents on the Fly
-//
+﻿//
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -28,19 +27,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace MigraDocCore.DocumentObjectModel.Tables
+namespace MigraDocCore.DocumentObjectModel.Tables;
+
+/// <summary>
+/// Specifies if the Cell should be rendered as a rounded corner.
+/// </summary>
+public enum RoundedCorner
 {
-    /// <summary>
-    /// Specifies if the Cell should be rendered as a rounded corner.
-    /// </summary>
-    public enum RoundedCorner
-    {
-        None,
-        TopLeft,
-        TopRight,
-        BottomLeft,
-        BottomRight
-    }
+    None,
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight
 }

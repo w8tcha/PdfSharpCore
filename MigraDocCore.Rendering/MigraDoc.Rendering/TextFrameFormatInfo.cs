@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,17 +25,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.Rendering;
 
-namespace MigraDocCore.Rendering
+/// <summary>
+/// Formatting information for textframes.
+/// </summary>
+internal class TextFrameFormatInfo : ShapeFormatInfo
 {
-  /// <summary>
-  /// Formatting information for textframes.
-  /// </summary>
-  internal class TextFrameFormatInfo : ShapeFormatInfo
-  {
     internal FormattedTextFrame formattedTextFrame;
-  }
 }

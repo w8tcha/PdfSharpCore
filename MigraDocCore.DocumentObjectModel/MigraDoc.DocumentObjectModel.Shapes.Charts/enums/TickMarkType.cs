@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+/// <summary>
+/// Determines the position where the Tickmarks will be rendered.
+/// </summary>
+public enum TickMarkType
 {
-  /// <summary>
-  /// Determines the position where the Tickmarks will be rendered.
-  /// </summary>
-  public enum TickMarkType
-  {
     /// <summary>
     /// Tickmarks are not rendered.
     /// </summary>
@@ -58,5 +54,4 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// Tickmarks are rendered inside and outside the plot area.
     /// </summary>
     Cross
-  }
 }

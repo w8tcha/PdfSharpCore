@@ -27,15 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Determines the type of the data label.
+/// </summary>
+public enum DataLabelType
 {
-  /// <summary>
-  /// Determines the type of the data label.
-  /// </summary>
-  public enum DataLabelType
-  {
     /// <summary>
     /// No DataLabel.
     /// </summary>
@@ -50,5 +48,4 @@ namespace PdfSharpCore.Charting
     /// Value of the data.
     /// </summary>
     Value
-  }
 }

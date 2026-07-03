@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents the actual value on the XSeries.
+/// </summary>
+public class XValue : ChartObject
 {
-  /// <summary>
-  /// Represents the actual value on the XSeries.
-  /// </summary>
-  public class XValue : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the XValue class.
     /// </summary>
@@ -51,12 +49,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// Initializes a new instance of the XValue class with the specified value.
     /// </summary>
     public XValue(string value)
-      : this()
+        : this()
     {
-      if (value == null)
-        throw new ArgumentNullException("value");
+        if (value == null)
+            throw new ArgumentNullException("value");
 
-      this.Value = value;
+        this.Value = value;
     }
 
     /// <summary>
@@ -65,23 +63,20 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     [DV] // No Get- and Set -Property.
     protected string Value;
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new XValue Clone()
     {
-      return (XValue)DeepCopy();
+        return (XValue)DeepCopy();
     }
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts XValue into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      serializer.Write("\"" + this.Value + "\", ");
+        serializer.Write("\"" + this.Value + "\", ");
     }
 
     /// <summary>
@@ -89,14 +84,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(XValue));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(XValue));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

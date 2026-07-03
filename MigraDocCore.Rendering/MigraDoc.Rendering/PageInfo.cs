@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,44 +25,38 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using PdfSharpCore;
 using PdfSharpCore.Drawing;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Provides information necessary to render the page.
+/// </summary>
+public class PageInfo
 {
-  /// <summary>
-  /// Provides information necessary to render the page.
-  /// </summary>
-  public class PageInfo
-  {
     internal PageInfo(XUnit width, XUnit height, PageOrientation orientation)
     {
-      this.width = width;
-      this.height = height;
-      this.orientation = orientation;
+        this.width = width;
+        this.height = height;
+        this.orientation = orientation;
     }
 
     /// <summary>
     /// Gets the with of the described page as specified in Document.PageSetup, i.e. the orientation
     /// is not taken into account.
     /// </summary>
-    public XUnit Width
-    {
-      get { return this.width; }
-    }
+    public XUnit Width => this.width;
+
     private XUnit width;
 
     /// <summary>
     /// Gets the height of the described page as specified in Document.PageSetup, i.e. the orientation
     /// is not taken into account.
     /// </summary>
-    public XUnit Height
-    {
-      get { return this.height; }
-    }
+    public XUnit Height => this.height;
+
     private XUnit height;
 
     /// <summary>
@@ -71,10 +64,7 @@ namespace MigraDocCore.Rendering
     /// The value has no influence on the properties Width or Height, i.e. if the result is PageOrientation.Landscape
     /// you must exchange the values of Width or Height to get the real page size.
     /// </summary>
-    public PageOrientation Orientation
-    {
-      get { return this.orientation; }
-    }
+    public PageOrientation Orientation => this.orientation;
+
     private PageOrientation orientation;
-  }
 }

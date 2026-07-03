@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,40 +24,32 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf.Annotations
+namespace PdfSharpCore.Pdf.Annotations;
+
+/// <summary>
+/// Represents a generic annotation. Used for annotation dictionaries unknown to PdfSharpCore.
+/// </summary>
+internal sealed class PdfGenericAnnotation : PdfAnnotation
 {
+    //DMH 6/7/06
+    //Make this public so we can use it in PdfAnnotations to
+    //get the Meta data from existings annotations.
+    public PdfGenericAnnotation(PdfDictionary dict)
+        : base(dict)
+    { }
+
     /// <summary>
-    /// Represents a generic annotation. Used for annotation dictionaries unknown to PdfSharpCore.
+    /// Predefined keys of this dictionary.
     /// </summary>
-    internal sealed class PdfGenericAnnotation : PdfAnnotation
+    internal new class Keys : PdfAnnotation.Keys
     {
-        //DMH 6/7/06
-        //Make this public so we can use it in PdfAnnotations to
-        //get the Meta data from existings annotations.
-        public PdfGenericAnnotation(PdfDictionary dict)
-            : base(dict)
-        { }
-
-        /// <summary>
-        /// Predefined keys of this dictionary.
-        /// </summary>
-        internal new class Keys : PdfAnnotation.Keys
-        {
-            public static DictionaryMeta Meta
-            {
-                get { return _meta ?? (_meta = CreateMeta(typeof(Keys))); }
-            }
-            static DictionaryMeta _meta;
-        }
-
-        /// <summary>
-        /// Gets the KeysMeta of this dictionary type.
-        /// </summary>
-        internal override DictionaryMeta Meta
-        {
-            get { return Keys.Meta; }
-        }
+        public static DictionaryMeta Meta => _meta ?? (_meta = CreateMeta(typeof(Keys)));
+        static DictionaryMeta _meta;
     }
+
+    /// <summary>
+    /// Gets the KeysMeta of this dictionary type.
+    /// </summary>
+    internal override DictionaryMeta Meta => Keys.Meta;
 }

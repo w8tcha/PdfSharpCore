@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Specifies the target of the hyperlink.
+/// </summary>
+public enum HyperlinkType
 {
-  /// <summary>
-  /// Specifies the target of the hyperlink.
-  /// </summary>
-  public enum HyperlinkType
-  {
     /// <summary>
     /// Targets a position in the document. Same as 'Bookmark'.
     /// </summary>
@@ -63,5 +59,4 @@ namespace MigraDocCore.DocumentObjectModel
     /// Targets a physical file.
     /// </summary>
     File
-  }
 }

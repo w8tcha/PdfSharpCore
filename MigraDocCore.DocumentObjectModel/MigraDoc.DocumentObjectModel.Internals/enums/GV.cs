@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+/// <summary>
+/// Indicates how to retrieve a value from a DocumentObject.
+/// </summary>
+public enum GV
 {
-  /// <summary>
-  /// Indicates how to retrieve a value from a DocumentObject.
-  /// </summary>
-  public enum GV
-  {
     /// <summary>
     /// Gets the value for reading and writing. If the value does not exist, it is created.
     /// </summary>
@@ -52,6 +48,5 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// <summary>
     /// Returns null if value is Null or does not exist.
     /// </summary>
-    GetNull = 2,
-  }
+    GetNull = 2
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,22 +27,20 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using System.Diagnostics;
-using System.Globalization;
-using System.Reflection;
+
 using MigraDocCore.DocumentObjectModel.Internals;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Resources;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Base class of all objects of the MigraDoc Document Object Model.
+/// </summary>
+public abstract class DocumentObject
 {
-  /// <summary>
-  /// Base class of all objects of the MigraDoc Document Object Model.
-  /// </summary>
-  public abstract class DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the DocumentObject class.
     /// </summary>
@@ -56,8 +53,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal DocumentObject(DocumentObject parent)
     {
-      Debug.Assert(parent != null, "Parent must not be null.");
-      this.parent = parent;
+        Debug.Assert(parent != null, "Parent must not be null.");
+        this.parent = parent;
     }
 
     /// <summary>
@@ -65,7 +62,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public object Clone()
     {
-      return DeepCopy();
+        return DeepCopy();
     }
 
     /// <summary>
@@ -73,9 +70,9 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     protected virtual object DeepCopy()
     {
-      DocumentObject value = (DocumentObject)MemberwiseClone();
-      value.parent = null;
-      return value;
+        var value = (DocumentObject)MemberwiseClone();
+        value.parent = null;
+        return value;
     }
 
     /// <summary>
@@ -83,19 +80,17 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public object CreateValue(string name)
     {
-      ValueDescriptor vd = Meta[name];
-      if (vd != null)
-        return vd.CreateValue();
-      return null;
+        var vd = Meta[name];
+        if (vd != null)
+            return vd.CreateValue();
+        return null;
     }
 
     /// <summary>
     /// Gets the parent object.
     /// </summary>
-    internal DocumentObject Parent
-    {
-      get { return this.parent; }
-    }
+    internal DocumentObject Parent => this.parent;
+
     [DV(RefOnly = true)]
     protected internal DocumentObject parent;
 
@@ -104,18 +99,18 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public Document Document
     {
-      get
-      {
-        DocumentObject doc = Parent;
-        while (doc != null)
+        get
         {
-          Document document = doc as Document;
-          if (document != null)
-            return document;
-          doc = doc.parent;
+            var doc = Parent;
+            while (doc != null)
+            {
+                var document = doc as Document;
+                if (document != null)
+                    return document;
+                doc = doc.parent;
+            }
+            return null;
         }
-        return null;
-      }
     }
 
     /// <summary>
@@ -123,18 +118,18 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public Section Section
     {
-      get
-      {
-        DocumentObject doc = Parent;
-        while (doc != null)
+        get
         {
-          Section section = doc as Section;
-          if (section != null)
-            return section;
-          doc = doc.parent;
+            var doc = Parent;
+            while (doc != null)
+            {
+                var section = doc as Section;
+                if (section != null)
+                    return section;
+                doc = doc.parent;
+            }
+            return null;
         }
-        return null;
-      }
     }
 
     /// <summary>
@@ -147,7 +142,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual object GetValue(string name)
     {
-      return GetValue(name, GV.ReadWrite);
+        return GetValue(name, GV.ReadWrite);
     }
 
     /// <summary>
@@ -155,7 +150,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual object GetValue(string name, GV flags)
     {
-      return Meta.GetValue(this, name, flags);
+        return Meta.GetValue(this, name, flags);
     }
 
     /// <summary>
@@ -163,9 +158,9 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual void SetValue(string name, object val)
     {
-      Meta.SetValue(this, name, val);
-      if (val is DocumentObject)
-        ((DocumentObject)val).parent = this;
+        Meta.SetValue(this, name, val);
+        if (val is DocumentObject)
+            ((DocumentObject)val).parent = this;
     }
 
     /// <summary>
@@ -173,7 +168,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual bool HasValue(string name)
     {
-      return Meta.HasValue(name);
+        return Meta.HasValue(name);
     }
 
     /// <summary>
@@ -181,7 +176,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual bool IsNull(string name)
     {
-      return Meta.IsNull(this, name);
+        return Meta.IsNull(this, name);
     }
 
     /// <summary>
@@ -189,7 +184,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual void SetNull(string name)
     {
-      Meta.SetNull(this, name);
+        Meta.SetNull(this, name);
     }
 
     /// <summary>
@@ -197,7 +192,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual bool IsNull()
     {
-      return Meta.IsNull(this);
+        return Meta.IsNull(this);
     }
 
     /// <summary>
@@ -205,7 +200,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual void SetNull()
     {
-      Meta.SetNull(this);
+        Meta.SetNull(this);
     }
 
     /// <summary>
@@ -213,8 +208,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public object Tag
     {
-      get { return this.tag; }
-      set { this.tag = value; }
+        get => this.tag;
+        set => this.tag = value;
     }
     object tag;
 
@@ -223,7 +218,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal abstract Meta Meta
     {
-      get;
+        get;
     }
 
     /// <summary>
@@ -232,13 +227,13 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     protected void SetParent(DocumentObject val)
     {
-      if (val != null)
-      {
-        if (val.Parent != null)
-          throw new ArgumentException(DomSR.ParentAlreadySet(val, this));
+        if (val != null)
+        {
+            if (val.Parent != null)
+                throw new ArgumentException(DomSR.ParentAlreadySet(val, this));
 
-        val.parent = this;
-      }
+            val.parent = this;
+        }
     }
 
     /// <summary>
@@ -248,5 +243,4 @@ namespace MigraDocCore.DocumentObjectModel
     internal virtual void ResetCachedValues()
     {
     }
-  }
 }

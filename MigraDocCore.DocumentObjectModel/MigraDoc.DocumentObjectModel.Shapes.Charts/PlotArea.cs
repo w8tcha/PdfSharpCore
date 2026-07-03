@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents the area where the actual chart is drawn.
+/// </summary>
+public class PlotArea : ChartObject
 {
-  /// <summary>
-  /// Represents the area where the actual chart is drawn.
-  /// </summary>
-  public class PlotArea : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the PlotArea class.
     /// </summary>
@@ -52,13 +49,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal PlotArea(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new PlotArea Clone()
     {
-      return (PlotArea)DeepCopy();
+        return (PlotArea)DeepCopy();
     }
 
     /// <summary>
@@ -66,39 +62,37 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     protected override object DeepCopy()
     {
-      PlotArea plotArea = (PlotArea)base.DeepCopy();
-      if (plotArea.lineFormat != null)
-      {
-        plotArea.lineFormat = plotArea.lineFormat.Clone();
-        plotArea.lineFormat.parent = plotArea;
-      }
-      if (plotArea.fillFormat != null)
-      {
-        plotArea.fillFormat = plotArea.fillFormat.Clone();
-        plotArea.fillFormat.parent = plotArea;
-      }
-      return plotArea;
+        var plotArea = (PlotArea)base.DeepCopy();
+        if (plotArea.lineFormat != null)
+        {
+            plotArea.lineFormat = plotArea.lineFormat.Clone();
+            plotArea.lineFormat.parent = plotArea;
+        }
+        if (plotArea.fillFormat != null)
+        {
+            plotArea.fillFormat = plotArea.fillFormat.Clone();
+            plotArea.fillFormat.parent = plotArea;
+        }
+        return plotArea;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets the line format of the plot area's border.
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
-      set
-      {
-        SetParent(value);
-        this.lineFormat = value;
-      }
+            return this.lineFormat;
+        }
+        set
+        {
+            SetParent(value);
+            this.lineFormat = value;
+        }
     }
     [DV]
     internal LineFormat lineFormat;
@@ -108,18 +102,18 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public FillFormat FillFormat
     {
-      get
-      {
-        if (this.fillFormat == null)
-          this.fillFormat = new FillFormat(this);
+        get
+        {
+            if (this.fillFormat == null)
+                this.fillFormat = new FillFormat(this);
 
-        return this.fillFormat;
-      }
-      set
-      {
-        SetParent(value);
-        this.fillFormat = value;
-      }
+            return this.fillFormat;
+        }
+        set
+        {
+            SetParent(value);
+            this.fillFormat = value;
+        }
     }
     [DV]
     internal FillFormat fillFormat;
@@ -129,8 +123,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Unit LeftPadding
     {
-      get { return this.leftPadding; }
-      set { this.leftPadding = value; }
+        get => this.leftPadding;
+        set => this.leftPadding = value;
     }
     [DV]
     internal Unit leftPadding = Unit.NullValue;
@@ -140,8 +134,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Unit RightPadding
     {
-      get { return this.rightPadding; }
-      set { this.rightPadding = value; }
+        get => this.rightPadding;
+        set => this.rightPadding = value;
     }
     [DV]
     internal Unit rightPadding = Unit.NullValue;
@@ -151,8 +145,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Unit TopPadding
     {
-      get { return this.topPadding; }
-      set { this.topPadding = value; }
+        get => this.topPadding;
+        set => this.topPadding = value;
     }
     [DV]
     internal Unit topPadding = Unit.NullValue;
@@ -162,40 +156,38 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Unit BottomPadding
     {
-      get { return this.bottomPadding; }
-      set { this.bottomPadding = value; }
+        get => this.bottomPadding;
+        set => this.bottomPadding = value;
     }
     [DV]
     internal Unit bottomPadding = Unit.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts PlotArea into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      serializer.WriteLine("\\plotarea");
-      int pos = serializer.BeginAttributes();
+        serializer.WriteLine("\\plotarea");
+        var pos = serializer.BeginAttributes();
 
-      if (!this.topPadding.IsNull)
-        serializer.WriteSimpleAttribute("TopPadding", this.TopPadding);
-      if (!this.leftPadding.IsNull)
-        serializer.WriteSimpleAttribute("LeftPadding", this.LeftPadding);
-      if (!this.rightPadding.IsNull)
-        serializer.WriteSimpleAttribute("RightPadding", this.RightPadding);
-      if (!this.bottomPadding.IsNull)
-        serializer.WriteSimpleAttribute("BottomPadding", this.BottomPadding);
+        if (!this.topPadding.IsNull)
+            serializer.WriteSimpleAttribute("TopPadding", this.TopPadding);
+        if (!this.leftPadding.IsNull)
+            serializer.WriteSimpleAttribute("LeftPadding", this.LeftPadding);
+        if (!this.rightPadding.IsNull)
+            serializer.WriteSimpleAttribute("RightPadding", this.RightPadding);
+        if (!this.bottomPadding.IsNull)
+            serializer.WriteSimpleAttribute("BottomPadding", this.BottomPadding);
 
-      if (!this.IsNull("LineFormat"))
-        this.lineFormat.Serialize(serializer);
-      if (!this.IsNull("FillFormat"))
-        this.fillFormat.Serialize(serializer);
+        if (!this.IsNull("LineFormat"))
+            this.lineFormat.Serialize(serializer);
+        if (!this.IsNull("FillFormat"))
+            this.fillFormat.Serialize(serializer);
 
-      serializer.EndAttributes(pos);
+        serializer.EndAttributes(pos);
 
-      serializer.BeginContent();
-      serializer.EndContent();
+        serializer.BeginContent();
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -203,14 +195,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(PlotArea));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(PlotArea));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

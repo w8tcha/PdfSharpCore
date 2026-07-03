@@ -28,18 +28,16 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
-using System.Globalization;
+
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Font represents the formatting of characters in a paragraph.
+/// </summary>
+public sealed class Font : DocumentObject
 {
-  /// <summary>
-  /// Font represents the formatting of characters in a paragraph.
-  /// </summary>
-  public sealed class Font : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the Font class that can be used as a template.
     /// </summary>
@@ -57,8 +55,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Font(string name, XUnit size) : this()
     {
-      this.name = name;
-      this.size = size;
+        this.name = name;
+        this.size = size;
     }
 
     #region Methods
@@ -67,7 +65,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new Font Clone()
     {
-      return (Font)DeepCopy();
+        return (Font)DeepCopy();
     }
     #endregion
 
@@ -77,8 +75,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public string Name 
     {
-      get {return this.name;}
-      set {this.name = value;}
+        get => this.name;
+        set => this.name = value;
     }
     internal string name = String.Empty;
 
@@ -87,8 +85,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XUnit Size
     {
-      get {return this.size;}
-      set {this.size = value;}
+        get => this.size;
+        set => this.size = value;
     }
     internal XUnit size;
 
@@ -97,8 +95,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool Bold
     {
-      get {return this.bold;}
-      set {this.bold = value;}
+        get => this.bold;
+        set => this.bold = value;
     }
     internal bool bold;
 
@@ -107,8 +105,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool Italic
     {
-      get {return this.italic;}
-      set {this.italic = value;}
+        get => this.italic;
+        set => this.italic = value;
     }
     internal bool italic;
     
@@ -117,8 +115,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Underline Underline
     {
-      get {return this.underline;}
-      set {this.underline = value;}
+        get => this.underline;
+        set => this.underline = value;
     }
     internal Underline underline;
 
@@ -127,8 +125,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Strikethrough Strikethrough
     {
-      get { return this.strikethrough; }
-      set { this.strikethrough = value; }
+        get => this.strikethrough;
+        set => this.strikethrough = value;
     }
     internal Strikethrough strikethrough;
 
@@ -137,8 +135,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XColor Color
     {
-      get {return this.color;}
-      set {this.color = value;}
+        get => this.color;
+        set => this.color = value;
     }
     internal XColor color = XColor.Empty;
 
@@ -147,12 +145,12 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool Superscript
     {
-      get {return this.superscript;}
-      set 
-      {
-        this.superscript = value;
-        this.subscript = false;
-      }    
+        get => this.superscript;
+        set 
+        {
+            this.superscript = value;
+            this.subscript = false;
+        }    
     }
     internal bool superscript;
 
@@ -161,14 +159,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool Subscript
     {
-      get {return this.subscript;}
-      set 
-      {
-        this.subscript = value;
-        this.superscript = false;
-      }
+        get => this.subscript;
+        set 
+        {
+            this.subscript = value;
+            this.superscript = false;
+        }
     }
     internal bool subscript;
     #endregion
-  }
 }

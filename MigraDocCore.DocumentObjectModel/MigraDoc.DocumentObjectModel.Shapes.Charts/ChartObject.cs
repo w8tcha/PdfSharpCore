@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Base class for all chart classes.
+/// </summary>
+public class ChartObject : DocumentObject
 {
-  /// <summary>
-  /// Base class for all chart classes.
-  /// </summary>
-  public class ChartObject : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the ChartObject class.
     /// </summary>
@@ -52,13 +49,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal ChartObject(DocumentObject parent) : base(parent) { }
 
-    #region Internal
     /// <summary>
     /// Converts ChartObject into DDL.
     /// </summary>
     internal override void Serialize(Serializer _serializer)
     {
-      // Nothing to do
+        // Nothing to do
     }
 
     /// <summary>
@@ -66,14 +62,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(ChartObject));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(ChartObject));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

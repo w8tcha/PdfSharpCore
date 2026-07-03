@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Provides relational information between document objects.
+/// </summary>
+public class DocumentRelations
 {
-  /// <summary>
-  /// Provides relational information between document objects.
-  /// </summary>
-  public class DocumentRelations
-  {
     /// <summary>
     /// Determines whether the specified documentObject has a
     /// parent of the given type somewhere within the document hierarchy.
@@ -47,13 +45,13 @@ namespace MigraDocCore.DocumentObjectModel
     /// <param name="type">The parent type to search for.</param>
     public static bool HasParentOfType(DocumentObject documentObject, Type type)
     {
-      if (documentObject == null)
-        throw new ArgumentNullException("documentObject");
+        if (documentObject == null)
+            throw new ArgumentNullException("documentObject");
 
-      if (type == null)
-        throw new ArgumentNullException("type");
+        if (type == null)
+            throw new ArgumentNullException("type");
 
-      return GetParentOfType(documentObject, type) != null;
+        return GetParentOfType(documentObject, type) != null;
     }
 
     /// <summary>
@@ -62,10 +60,10 @@ namespace MigraDocCore.DocumentObjectModel
     /// <param name="documentObject">The document object the parent is searched for.</param>
     public static DocumentObject GetParent(DocumentObject documentObject)
     {
-      if (documentObject == null)
-        throw new ArgumentNullException("documentObject");
+        if (documentObject == null)
+            throw new ArgumentNullException("documentObject");
 
-      return documentObject.Parent;
+        return documentObject.Parent;
     }
 
     /// <summary>
@@ -76,20 +74,19 @@ namespace MigraDocCore.DocumentObjectModel
     /// <param name="type">The parent type to search for.</param>
     public static DocumentObject GetParentOfType(DocumentObject documentObject, Type type)
     {
-      if (documentObject == null)
-        throw new ArgumentNullException("documentObject");
+        if (documentObject == null)
+            throw new ArgumentNullException("documentObject");
 
-      if (type == null)
-        throw new ArgumentNullException("type");
+        if (type == null)
+            throw new ArgumentNullException("type");
 
-      if (documentObject.parent != null)
-      {
-        if (documentObject.parent.GetType() == type)
-          return documentObject.parent;
-        else
-          return GetParentOfType(documentObject.parent, type);
-      }
-      return null;
+        if (documentObject.parent != null)
+        {
+            if (documentObject.parent.GetType() == type)
+                return documentObject.parent;
+            else
+                return GetParentOfType(documentObject.parent, type);
+        }
+        return null;
     }
-  }
 }

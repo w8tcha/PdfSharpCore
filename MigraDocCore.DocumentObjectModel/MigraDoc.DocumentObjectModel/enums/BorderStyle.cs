@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,15 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Specifies the style of the line of the Border object.
+/// </summary>
+public enum BorderStyle
 {
-  /// <summary>
-  /// Specifies the style of the line of the Border object.
-  /// </summary>
-  public enum BorderStyle
-  {
     /// <summary>
     /// No border.
     /// </summary>
@@ -64,7 +62,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// <summary>
     /// A dash followed by two dots.
     /// </summary>
-    DashDotDot,
+    DashDotDot
     /* --- unsupported ---
       Double                = 7,
       Triple                = 8,
@@ -85,5 +83,4 @@ namespace MigraDocCore.DocumentObjectModel
       LineStyleOutset       = 23, //!!!newEG 02-07-22
       LineStyleInset        = 24  //!!!newEG 02-07-22
     */
-  }
 }

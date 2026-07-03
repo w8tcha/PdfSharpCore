@@ -28,16 +28,16 @@
 #endregion
 
 using System;
-using System.Diagnostics;
+
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a plot area renderer of stacked columns, i. e. all columns are drawn one on another.
+/// </summary>
+internal class ColumnStackedPlotAreaRenderer : ColumnPlotAreaRenderer
 {
-  /// <summary>
-  /// Represents a plot area renderer of stacked columns, i. e. all columns are drawn one on another.
-  /// </summary>
-  internal class ColumnStackedPlotAreaRenderer : ColumnPlotAreaRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the ColumnStackedPlotAreaRenderer class with the
     /// specified renderer parameters.
@@ -51,67 +51,67 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected override void CalcColumns()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      if (cri.seriesRendererInfos.Length == 0)
-        return;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        if (cri.seriesRendererInfos.Length == 0)
+            return;
 
-      double xMin = cri.xAxisRendererInfo.MinimumScale;
-      double xMajorTick = cri.xAxisRendererInfo.MajorTick;
+        var xMin = cri.xAxisRendererInfo.MinimumScale;
+        var xMajorTick = cri.xAxisRendererInfo.MajorTick;
 
-      int maxPoints = 0;
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-        maxPoints = Math.Max(maxPoints, sri.series.seriesElements.Count);
+        var maxPoints = 0;
+        foreach (var sri in cri.seriesRendererInfos)
+            maxPoints = Math.Max(maxPoints, sri.series.seriesElements.Count);
 
-      double x = xMin + xMajorTick / 2;
+        var x = xMin + xMajorTick / 2;
 
-      // Space used by one column.
-      double columnWidth = xMajorTick * 0.75 / 2;
+        // Space used by one column.
+        var columnWidth = xMajorTick * 0.75 / 2;
 
-      XPoint[] points = new XPoint[2];
-      for (int pointIdx = 0; pointIdx < maxPoints; ++pointIdx)
-      {
-        // Set x to first clustered column for each series.
-        double yMin = 0, yMax = 0, y0 = 0, y1 = 0;
-        double x0 = x - columnWidth;
-        double x1 = x + columnWidth;
-
-        foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
+        var points = new XPoint[2];
+        for (var pointIdx = 0; pointIdx < maxPoints; ++pointIdx)
         {
-          if (sri.pointRendererInfos.Length <= pointIdx)
-            break;
+            // Set x to first clustered column for each series.
+            double yMin = 0, yMax = 0, y0 = 0, y1 = 0;
+            var x0 = x - columnWidth;
+            var x1 = x + columnWidth;
 
-          ColumnRendererInfo column = (ColumnRendererInfo)sri.pointRendererInfos[pointIdx];
-          if (column.point != null && !double.IsNaN(column.point.value))
-          {
-            double y = column.point.value;
-            if (y < 0)
+            foreach (var sri in cri.seriesRendererInfos)
             {
-              y0 = yMin + y;
-              y1 = yMin;
-              yMin += y;
+                if (sri.pointRendererInfos.Length <= pointIdx)
+                    break;
+
+                var column = (ColumnRendererInfo)sri.pointRendererInfos[pointIdx];
+                if (column.point != null && !double.IsNaN(column.point.value))
+                {
+                    var y = column.point.value;
+                    if (y < 0)
+                    {
+                        y0 = yMin + y;
+                        y1 = yMin;
+                        yMin += y;
+                    }
+                    else
+                    {
+                        y0 = yMax;
+                        y1 = yMax + y;
+                        yMax += y;
+                    }
+
+                    points[0].X = x0; // upper left
+                    points[0].Y = y1;
+                    points[1].X = x1; // lower right
+                    points[1].Y = y0;
+
+                    cri.plotAreaRendererInfo.matrix.TransformPoints(points);
+
+                    column.Rect = new XRect(points[0].X,
+                        points[0].Y,
+                        points[1].X - points[0].X,
+                        points[1].Y - points[0].Y);
+                }
             }
-            else
-            {
-              y0 = yMax;
-              y1 = yMax + y;
-              yMax += y;
-            }
-
-            points[0].X = x0; // upper left
-            points[0].Y = y1;
-            points[1].X = x1; // lower right
-            points[1].Y = y0;
-
-            cri.plotAreaRendererInfo.matrix.TransformPoints(points);
-
-            column.Rect = new XRect(points[0].X,
-                                    points[0].Y,
-                                    points[1].X - points[0].X,
-                                    points[1].Y - points[0].Y);
-          }
+            x++; // Next stacked column.
         }
-        x++; // Next stacked column.
-      }
     }
 
     /// <summary>
@@ -119,7 +119,6 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected override bool IsDataInside(double yMin, double yMax, double yValue)
     {
-      return true;
+        return true;
     }
-  }
 }

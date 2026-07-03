@@ -27,17 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a plot area renderer of clustered columns, i. e. all columns are drawn side by side.
+/// </summary>
+internal class ColumnClusteredPlotAreaRenderer : ColumnPlotAreaRenderer
 {
-  /// <summary>
-  /// Represents a plot area renderer of clustered columns, i. e. all columns are drawn side by side.
-  /// </summary>
-  internal class ColumnClusteredPlotAreaRenderer : ColumnPlotAreaRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the ColumnClusteredPlotAreaRenderer class with the
     /// specified renderer parameters.
@@ -51,71 +49,71 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected override void CalcColumns()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      if (cri.seriesRendererInfos.Length == 0)
-        return;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        if (cri.seriesRendererInfos.Length == 0)
+            return;
 
-      double xMin = cri.xAxisRendererInfo.MinimumScale;
-      double yMin = cri.yAxisRendererInfo.MinimumScale;
-      double yMax = cri.yAxisRendererInfo.MaximumScale;
+        var xMin = cri.xAxisRendererInfo.MinimumScale;
+        var yMin = cri.yAxisRendererInfo.MinimumScale;
+        var yMax = cri.yAxisRendererInfo.MaximumScale;
 
-      int pointCount = 0;
-      foreach (SeriesRendererInfo sr in cri.seriesRendererInfos)
-        pointCount += sr.series.seriesElements.Count;
+        var pointCount = 0;
+        foreach (var sr in cri.seriesRendererInfos)
+            pointCount += sr.series.seriesElements.Count;
 
-      // Space shared by one clustered column.
-      double groupWidth = cri.xAxisRendererInfo.MajorTick;
+        // Space shared by one clustered column.
+        var groupWidth = cri.xAxisRendererInfo.MajorTick;
 
-      // Space used by one column.
-      double columnWidth = groupWidth * 3 / 4 / cri.seriesRendererInfos.Length;
+        // Space used by one column.
+        var columnWidth = groupWidth * 3 / 4 / cri.seriesRendererInfos.Length;
 
-      int seriesIdx = 0;
-      XPoint[] points = new XPoint[2];
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-      {
-        // Set x to first clustered column for each series.
-        double x = xMin + groupWidth / 2;
-        
-        // Offset for columns of a particular series from the start of a clustered cloumn.
-        double dx = (columnWidth * seriesIdx) - (columnWidth / 2 * cri.seriesRendererInfos.Length);
-
-        foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+        var seriesIdx = 0;
+        var points = new XPoint[2];
+        foreach (var sri in cri.seriesRendererInfos)
         {
-          if (column.point != null)
-          {
-            double x0 = x + dx;
-            double x1 = x + dx + columnWidth;
-            double y0 = yMin;
-            double y1 = column.point.Value;
+            // Set x to first clustered column for each series.
+            var x = xMin + groupWidth / 2;
+        
+            // Offset for columns of a particular series from the start of a clustered cloumn.
+            var dx = (columnWidth * seriesIdx) - (columnWidth / 2 * cri.seriesRendererInfos.Length);
 
-            // Draw from zero base line, if it exists.
-            if (y0 < 0 && yMax >= 0)
-              y0 = 0;
-
-            // y0 should always be lower than y1, i. e. draw column from bottom to top.
-            if (y1 < 0 && y1 < y0)
+            foreach (ColumnRendererInfo column in sri.pointRendererInfos)
             {
-              double y = y0;
-              y0 = y1;
-              y1 = y;
+                if (column.point != null)
+                {
+                    var x0 = x + dx;
+                    var x1 = x + dx + columnWidth;
+                    var y0 = yMin;
+                    var y1 = column.point.Value;
+
+                    // Draw from zero base line, if it exists.
+                    if (y0 < 0 && yMax >= 0)
+                        y0 = 0;
+
+                    // y0 should always be lower than y1, i. e. draw column from bottom to top.
+                    if (y1 < 0 && y1 < y0)
+                    {
+                        var y = y0;
+                        y0 = y1;
+                        y1 = y;
+                    }
+
+                    points[0].X = x0; // upper left
+                    points[0].Y = y1;
+                    points[1].X = x1; // lower right
+                    points[1].Y = y0;
+
+                    cri.plotAreaRendererInfo.matrix.TransformPoints(points);
+
+                    column.Rect = new XRect(points[0].X,
+                        points[0].Y,
+                        points[1].X - points[0].X,
+                        points[1].Y - points[0].Y);
+                }
+                x++; // Next clustered column.
             }
-
-            points[0].X = x0; // upper left
-            points[0].Y = y1;
-            points[1].X = x1; // lower right
-            points[1].Y = y0;
-
-            cri.plotAreaRendererInfo.matrix.TransformPoints(points);
-
-            column.Rect = new XRect(points[0].X,
-                                    points[0].Y,
-                                    points[1].X - points[0].X,
-                                    points[1].Y - points[0].Y);
-          }
-          x++; // Next clustered column.
+            seriesIdx++;
         }
-        seriesIdx++;
-      }
     }
 
     /// <summary>
@@ -123,7 +121,6 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected override bool IsDataInside(double yMin, double yMax, double yValue)
     {
-      return yValue <= yMax && yValue >= yMin;
+        return yValue <= yMax && yValue >= yMin;
     }
-  }
 }

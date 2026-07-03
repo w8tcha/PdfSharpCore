@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,26 +25,20 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Collections;
-using PdfSharpCore.Drawing;
-using MigraDocCore.DocumentObjectModel;
+namespace MigraDocCore.Rendering;
 
-namespace MigraDocCore.Rendering
+/// <summary>
+/// Abstract base class for formatting information received by calling Format() on a renderer.
+/// </summary>
+internal abstract class FormatInfo
 {
-  /// <summary>
-  /// Abstract base class for formatting information received by calling Format() on a renderer.
-  /// </summary>
-  internal abstract class FormatInfo
-  {
     /// <summary>
     /// Indicates that the formatted object is starting.
     /// </summary>
     internal abstract bool IsStarting
     {
-      get;
+        get;
     }
 
     /// <summary>
@@ -53,7 +46,7 @@ namespace MigraDocCore.Rendering
     /// </summary>
     internal abstract bool IsEnding
     {
-      get;
+        get;
     }
 
     /// <summary>
@@ -61,7 +54,7 @@ namespace MigraDocCore.Rendering
     /// </summary>
     internal abstract bool IsComplete
     {
-      get;
+        get;
     }
 
     /// <summary>
@@ -69,7 +62,7 @@ namespace MigraDocCore.Rendering
     /// </summary>
     internal abstract bool StartingIsComplete
     {
-      get;
+        get;
     }
 
     /// <summary>
@@ -77,14 +70,11 @@ namespace MigraDocCore.Rendering
     /// </summary>
     internal abstract bool EndingIsComplete
     {
-      get;
+        get;
     }
 
     internal abstract bool IsEmpty
     {
-      get;
+        get;
     }
-  }
-
-
 }

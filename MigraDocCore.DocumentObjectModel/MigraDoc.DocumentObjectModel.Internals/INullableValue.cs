@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,25 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.ComponentModel;
-using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
-using System.Reflection;
+namespace MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+/// <summary>
+/// Interface for simple nullable values like NInt, NString etc.
+/// </summary>
+internal interface INullableValue
 {
-  /// <summary>
-  /// Interface for simple nullable values like NInt, NString etc.
-  /// </summary>
-  internal interface INullableValue
-  {
     object GetValue();
     void SetValue(object value);
     void SetNull();
     bool IsNull { get;}
-  }
 }

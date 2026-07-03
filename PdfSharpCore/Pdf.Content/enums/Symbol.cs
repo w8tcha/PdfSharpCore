@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,31 +24,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf.Content
+namespace PdfSharpCore.Pdf.Content;
+
+/// <summary>
+/// Terminal symbols recognized by PDF content stream lexer.
+/// </summary>
+public enum CSymbol
 {
-    /// <summary>
-    /// Terminal symbols recognized by PDF content stream lexer.
-    /// </summary>
-    public enum CSymbol
-    {
 #pragma warning disable 1591
-        None,
-        Comment,
-        Integer,
-        Real,
-        /*Boolean?,*/
-        String,
-        HexString,
-        UnicodeString,
-        UnicodeHexString,
-        Name,
-        Operator,
-        BeginArray,
-        EndArray,
-        Dictionary,  // HACK: << ... >> is scanned as string literal.
-        Eof,
-        Error = -1,
-    }
+    None,
+    Comment,
+    Integer,
+    Real,
+    /*Boolean?,*/
+    String,
+    HexString,
+    UnicodeString,
+    UnicodeHexString,
+    Name,
+    Operator,
+    BeginArray,
+    EndArray,
+    Dictionary,  // HACK: << ... >> is scanned as string literal.
+    Eof,
+    Error = -1
 }

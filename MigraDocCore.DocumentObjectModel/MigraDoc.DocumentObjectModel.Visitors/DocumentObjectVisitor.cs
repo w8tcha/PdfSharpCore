@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,21 +27,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using MigraDocCore.DocumentObjectModel.IO;
 using MigraDocCore.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Shapes.Charts;
 using MigraDocCore.DocumentObjectModel.Tables;
 
-namespace MigraDocCore.DocumentObjectModel.Visitors
+namespace MigraDocCore.DocumentObjectModel.Visitors;
+
+/// <summary>
+/// Represents the base visitor for the DocumentObject.
+/// </summary>
+public abstract class DocumentObjectVisitor
 {
-  /// <summary>
-  /// Represents the base visitor for the DocumentObject.
-  /// </summary>
-  public abstract class DocumentObjectVisitor
-  {
 
     public abstract void Visit(DocumentObject documentObject);
 
@@ -87,5 +83,4 @@ namespace MigraDocCore.DocumentObjectModel.Visitors
     internal virtual void VisitRow(Row row) { }
     internal virtual void VisitRows(Rows rows) { }
     internal virtual void VisitTable(Table table) { }
-  }
 }

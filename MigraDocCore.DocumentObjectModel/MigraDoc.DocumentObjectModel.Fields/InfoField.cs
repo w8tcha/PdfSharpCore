@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,21 +27,19 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
+
 using MigraDocCore.DocumentObjectModel.Internals;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Resources;
 
-namespace MigraDocCore.DocumentObjectModel.Fields
+namespace MigraDocCore.DocumentObjectModel.Fields;
+
+/// <summary>
+/// InfoField is used to reference one of the DocumentInfo fields in the document.
+/// </summary>
+public class InfoField : DocumentObject
 {
-  /// <summary>
-  /// InfoField is used to reference one of the DocumentInfo fields in the document.
-  /// </summary>
-  public class InfoField : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the InfoField class.
     /// </summary>
@@ -55,46 +52,42 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     internal InfoField(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new InfoField Clone()
     {
-      return (InfoField)DeepCopy();
+        return (InfoField)DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the name of the information to be shown in the field.
     /// </summary>
     public string Name
     {
-      get { return this.name.Value; }
-      set
-      {
-        if (IsValidName(value))
-          this.name.Value = value;
-        else
-          throw new ArgumentException(DomSR.InvalidInfoFieldName(value));
-      }
+        get => this.name.Value;
+        set
+        {
+            if (IsValidName(value))
+                this.name.Value = value;
+            else
+                throw new ArgumentException(DomSR.InvalidInfoFieldName(value));
+        }
     }
     [DV]
     internal NString name = NString.NullValue;
-    #endregion
 
     /// <summary>
     /// Determines whether the name is a valid InfoFieldType.
     /// </summary>
     private bool IsValidName(string name)
     {
-      foreach (string validName in validNames)
-      {
-        if (String.Compare(validName, name, true) == 0)
-          return true;
-      }
-      return false;
+        foreach (var validName in validNames)
+        {
+            if (String.Compare(validName, name, true) == 0)
+                return true;
+        }
+        return false;
     }
     private static string[] validNames = Enum.GetNames(typeof(InfoFieldType));
 
@@ -103,20 +96,20 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     public override bool IsNull()
     {
-      return false;
+        return false;
     }
-    #region Internal
+
     /// <summary>
     /// Converts InfoField into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      string str = "\\field(Info)";
-      if (this.Name == "")
-        throw new InvalidOperationException(DomSR.MissingObligatoryProperty("Name", "InfoField"));
-      str += "[Name = \"" + this.Name + "\"]";
+        var str = "\\field(Info)";
+        if (this.Name == "")
+            throw new InvalidOperationException(DomSR.MissingObligatoryProperty("Name", "InfoField"));
+        str += "[Name = \"" + this.Name + "\"]";
 
-      serializer.Write(str);
+        serializer.Write(str);
     }
 
     /// <summary>
@@ -124,14 +117,12 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(InfoField));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(InfoField));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,7 +24,6 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 #if GDI
 using System.Drawing;
@@ -39,18 +37,17 @@ using System.Windows.Media;
 using Windows.UI.Xaml.Media;
 #endif
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Provides access to the internal data structures of XGraphicsPath.
+/// This class prevents the public interface from pollution with internal functions.
+/// </summary>
+public sealed class XGraphicsPathInternals
 {
-    /// <summary>
-    /// Provides access to the internal data structures of XGraphicsPath.
-    /// This class prevents the public interface from pollution with internal functions.
-    /// </summary>
-    public sealed class XGraphicsPathInternals
+    internal XGraphicsPathInternals(XGraphicsPath path)
     {
-        internal XGraphicsPathInternals(XGraphicsPath path)
-        {
-            _path = path;
-        }
-        XGraphicsPath _path;
+        _path = path;
     }
+    XGraphicsPath _path;
 }

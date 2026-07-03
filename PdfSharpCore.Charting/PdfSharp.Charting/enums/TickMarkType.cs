@@ -27,15 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Determines the position where the Tickmarks will be rendered.
+/// </summary>
+public enum TickMarkType
 {
-  /// <summary>
-  /// Determines the position where the Tickmarks will be rendered.
-  /// </summary>
-  public enum TickMarkType
-  {
     /// <summary>
     /// Tickmarks are not rendered.
     /// </summary>
@@ -55,5 +53,4 @@ namespace PdfSharpCore.Charting
     /// Tickmarks are rendered inside and outside the plot area.
     /// </summary>
     Cross
-  }
 }

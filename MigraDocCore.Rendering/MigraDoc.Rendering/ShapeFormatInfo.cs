@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,57 +25,35 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.Rendering;
 
-namespace MigraDocCore.Rendering
+/// <summary>
+/// Format information for all shapes.
+/// </summary>
+internal class ShapeFormatInfo : FormatInfo
 {
-  /// <summary>
-  /// Format information for all shapes.
-  /// </summary>
-  internal class ShapeFormatInfo : FormatInfo
-  {
     internal ShapeFormatInfo()
     {
     }
 
-    internal override bool IsStarting
-    {
-      get { return this.fits; }
-    }
+    internal override bool IsStarting => this.fits;
 
-    internal override bool IsEnding
-    {
-      get { return this.fits; }
-    }
+    internal override bool IsEnding => this.fits;
 
-    internal override bool IsComplete
-    {
-      get { return this.fits; }
-    }
+    internal override bool IsComplete => this.fits;
 
     /// <summary>
     /// Indicates that the starting of the element is completed
     /// </summary>
-    internal override bool StartingIsComplete
-    {
-      get { return this.fits; }
-    }
+    internal override bool StartingIsComplete => this.fits;
 
     /// <summary>
     /// Indicates that the ending of the element is completed
     /// </summary>
-    internal override bool EndingIsComplete
-    {
-      get { return this.fits; }
-    }
+    internal override bool EndingIsComplete => this.fits;
 
-    internal override bool IsEmpty
-    {
-      get { return !this.fits; }
-    }
+    internal override bool IsEmpty => !this.fits;
 
     internal bool fits;
-  }
 }

@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,91 +24,88 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Internal;
 using System;
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using System.Text;
 
-namespace PdfSharpCore.Fonts.OpenType
+namespace PdfSharpCore.Fonts.OpenType;
+
+/// <summary>
+/// Global table of all glyph typefaces.
+/// </summary>
+internal class GlyphTypefaceCache
 {
-    /// <summary>
-    /// Global table of all glyph typefaces.
-    /// </summary>
-    internal class GlyphTypefaceCache
+    GlyphTypefaceCache()
     {
-        GlyphTypefaceCache()
-        {
-            _glyphTypefacesByKey = new ConcurrentDictionary<string, XGlyphTypeface>();
-        }
-
-        public static bool TryGetGlyphTypeface(string key, out XGlyphTypeface glyphTypeface)
-        {
-            try
-            {
-                Lock.EnterFontFactory();
-                bool result = Singleton._glyphTypefacesByKey.TryGetValue(key, out glyphTypeface);
-                return result;
-            }
-            finally { Lock.ExitFontFactory(); }
-        }
-
-        public static void AddGlyphTypeface(XGlyphTypeface glyphTypeface)
-        {
-            try
-            {
-                Lock.EnterFontFactory();
-                GlyphTypefaceCache cache = Singleton;
-                cache._glyphTypefacesByKey.TryAdd(glyphTypeface.Key, glyphTypeface);
-            }
-            finally { Lock.ExitFontFactory(); }
-        }
-
-        /// <summary>
-        /// Gets the singleton.
-        /// </summary>
-        static GlyphTypefaceCache Singleton
-        {
-            get
-            {
-                // ReSharper disable once InvertIf
-                if (_singleton == null)
-                {
-                    try
-                    {
-                        Lock.EnterFontFactory();
-                        if (_singleton == null)
-                            _singleton = new GlyphTypefaceCache();
-                    }
-                    finally { Lock.ExitFontFactory(); }
-                }
-                return _singleton;
-            }
-        }
-        static volatile GlyphTypefaceCache _singleton;
-
-        internal static string GetCacheState()
-        {
-            StringBuilder state = new StringBuilder();
-            state.Append("====================\n");
-            state.Append("Glyph typefaces by name\n");
-            var familyKeys = Singleton._glyphTypefacesByKey.Keys;
-            int count = familyKeys.Count;
-            string[] keys = new string[count];
-            familyKeys.CopyTo(keys, 0);
-            Array.Sort(keys, StringComparer.OrdinalIgnoreCase);
-            foreach (string key in keys)
-                state.AppendFormat("  {0}: {1}\n", key, Singleton._glyphTypefacesByKey[key].DebuggerDisplay);
-            state.Append("\n");
-            return state.ToString();
-        }
-
-        /// <summary>
-        /// Maps typeface key to glyph typeface.
-        /// </summary>
-        readonly ConcurrentDictionary<string, XGlyphTypeface> _glyphTypefacesByKey;
+        _glyphTypefacesByKey = new ConcurrentDictionary<string, XGlyphTypeface>();
     }
+
+    public static bool TryGetGlyphTypeface(string key, out XGlyphTypeface glyphTypeface)
+    {
+        try
+        {
+            Lock.EnterFontFactory();
+            var result = Singleton._glyphTypefacesByKey.TryGetValue(key, out glyphTypeface);
+            return result;
+        }
+        finally { Lock.ExitFontFactory(); }
+    }
+
+    public static void AddGlyphTypeface(XGlyphTypeface glyphTypeface)
+    {
+        try
+        {
+            Lock.EnterFontFactory();
+            var cache = Singleton;
+            cache._glyphTypefacesByKey.TryAdd(glyphTypeface.Key, glyphTypeface);
+        }
+        finally { Lock.ExitFontFactory(); }
+    }
+
+    /// <summary>
+    /// Gets the singleton.
+    /// </summary>
+    static GlyphTypefaceCache Singleton
+    {
+        get
+        {
+            // ReSharper disable once InvertIf
+            if (_singleton == null)
+            {
+                try
+                {
+                    Lock.EnterFontFactory();
+                    if (_singleton == null)
+                        _singleton = new GlyphTypefaceCache();
+                }
+                finally { Lock.ExitFontFactory(); }
+            }
+            return _singleton;
+        }
+    }
+    static volatile GlyphTypefaceCache _singleton;
+
+    internal static string GetCacheState()
+    {
+        var state = new StringBuilder();
+        state.Append("====================\n");
+        state.Append("Glyph typefaces by name\n");
+        var familyKeys = Singleton._glyphTypefacesByKey.Keys;
+        var count = familyKeys.Count;
+        var keys = new string[count];
+        familyKeys.CopyTo(keys, 0);
+        Array.Sort(keys, StringComparer.OrdinalIgnoreCase);
+        foreach (var key in keys)
+            state.AppendFormat("  {0}: {1}\n", key, Singleton._glyphTypefacesByKey[key].DebuggerDisplay);
+        state.Append("\n");
+        return state.ToString();
+    }
+
+    /// <summary>
+    /// Maps typeface key to glyph typeface.
+    /// </summary>
+    readonly ConcurrentDictionary<string, XGlyphTypeface> _glyphTypefacesByKey;
 }

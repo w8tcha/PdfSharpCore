@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,55 +27,42 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
-using System.Reflection;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+namespace MigraDocCore.DocumentObjectModel.Internals;
+
+/// <summary>
+/// A collection that manages ValueDescriptors.
+/// </summary>
+public class ValueDescriptorCollection : IEnumerable
 {
-  /// <summary>
-  /// A collection that manages ValueDescriptors.
-  /// </summary>
-  public class ValueDescriptorCollection : IEnumerable
-  {
     /// <summary>
     /// Gets the count of ValueDescriptors.
     /// </summary>
-    public int Count
-    {
-      get { return this.arrayList.Count; }
-    }
+    public int Count => this.arrayList.Count;
 
     /// <summary>
     /// Adds the specified ValueDescriptor.
     /// </summary>
     public int Add(ValueDescriptor vd)
     {
-      this.hashTable.Add(vd.ValueName, vd);
-      return this.arrayList.Add(vd);
+        this.hashTable.Add(vd.ValueName, vd);
+        return this.arrayList.Add(vd);
     }
 
     /// <summary>
     /// Gets the <see cref="MigraDoc.DocumentObjectModel.Internals.ValueDescriptor"/> at the specified index.
     /// </summary>
     /// <value></value>
-    public ValueDescriptor this[int index]
-    {
-      get { return this.arrayList[index] as ValueDescriptor; }
-    }
+    public ValueDescriptor this[int index] => this.arrayList[index] as ValueDescriptor;
 
     /// <summary>
     /// Gets the <see cref="MigraDoc.DocumentObjectModel.Internals.ValueDescriptor"/> with the specified name.
     /// </summary>
     /// <value></value>
-    public ValueDescriptor this[string name]
-    {
-      get { return this.hashTable[name] as ValueDescriptor; }
-    }
+    public ValueDescriptor this[string name] => this.hashTable[name] as ValueDescriptor;
 
     /// <summary>
     /// Returns an enumerator that iterates through a collection.
@@ -86,10 +72,9 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </returns>
     public IEnumerator GetEnumerator()
     {
-      return this.arrayList.GetEnumerator();
+        return this.arrayList.GetEnumerator();
     }
 
-    ArrayList arrayList = new ArrayList();
-    Hashtable hashTable = new Hashtable(StringComparer.InvariantCultureIgnoreCase);
-  }
+    ArrayList arrayList = new();
+    Hashtable hashTable = new(StringComparer.InvariantCultureIgnoreCase);
 }

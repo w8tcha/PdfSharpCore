@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Determines the alignment of the tab.
+/// </summary>
+public enum TabAlignment
 {
-  /// <summary>
-  /// Determines the alignment of the tab.
-  /// </summary>
-  public enum TabAlignment
-  {
     /// <summary>
     /// Tab will be left aligned.
     /// </summary>
@@ -57,9 +53,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// <summary>
     /// Positioned at the last dot or comma.
     /// </summary>
-    Decimal,
+    Decimal
 
     //Bar     = 4,  // MigraDoc 2.0
     //List    = 6,  // MigraDoc 2.0
-  }
 }

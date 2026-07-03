@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using MigraDocCore.DocumentObjectModel.IO;
 using MigraDocCore.DocumentObjectModel.Internals;
 using MigraDocCore.DocumentObjectModel.Tables;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents the title of an axis.
+/// </summary>
+public class AxisTitle : ChartObject
 {
-  /// <summary>
-  /// Represents the title of an axis.
-  /// </summary>
-  public class AxisTitle : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the AxisTitle class.
     /// </summary>
@@ -54,13 +50,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal AxisTitle(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new AxisTitle Clone()
     {
-      return (AxisTitle)DeepCopy();
+        return (AxisTitle)DeepCopy();
     }
 
     /// <summary>
@@ -68,24 +63,22 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     protected override object DeepCopy()
     {
-      AxisTitle axisTitle = (AxisTitle)base.DeepCopy();
-      if (axisTitle.font != null)
-      {
-        axisTitle.font = axisTitle.font.Clone();
-        axisTitle.font.parent = axisTitle;
-      }
-      return axisTitle;
+        var axisTitle = (AxisTitle)base.DeepCopy();
+        if (axisTitle.font != null)
+        {
+            axisTitle.font = axisTitle.font.Clone();
+            axisTitle.font.parent = axisTitle;
+        }
+        return axisTitle;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the style name of the axis.
     /// </summary>
     public string Style
     {
-      get { return this.style.Value; }
-      set { this.style.Value = value; }
+        get => this.style.Value;
+        set => this.style.Value = value;
     }
     [DV]
     internal NString style = NString.NullValue;
@@ -95,8 +88,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public string Caption
     {
-      get { return this.caption.Value; }
-      set { this.caption.Value = value; }
+        get => this.caption.Value;
+        set => this.caption.Value = value;
     }
     [DV]
     internal NString caption = NString.NullValue;
@@ -106,18 +99,18 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Font Font
     {
-      get
-      {
-        if (this.font == null)
-          this.font = new Font(this);
+        get
+        {
+            if (this.font == null)
+                this.font = new Font(this);
 
-        return this.font;
-      }
-      set
-      {
-        SetParent(value);
-        this.font = value;
-      }
+            return this.font;
+        }
+        set
+        {
+            SetParent(value);
+            this.font = value;
+        }
     }
     [DV]
     internal Font font;
@@ -127,8 +120,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Unit Orientation
     {
-      get { return this.orientation; }
-      set { this.orientation = value; }
+        get => this.orientation;
+        set => this.orientation = value;
     }
     [DV]
     internal Unit orientation = Unit.NullValue;
@@ -138,8 +131,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public HorizontalAlignment Alignment
     {
-      get { return (HorizontalAlignment)this.alignment.Value; }
-      set { this.alignment.Value = (int)value; }
+        get => (HorizontalAlignment)this.alignment.Value;
+        set => this.alignment.Value = (int)value;
     }
     [DV(Type = typeof(HorizontalAlignment))]
     internal NEnum alignment = NEnum.NullValue(typeof(HorizontalAlignment));
@@ -149,40 +142,38 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public VerticalAlignment VerticalAlignment
     {
-      get { return (VerticalAlignment)this.verticalAlignment.Value; }
-      set { this.verticalAlignment.Value = (int)value; }
+        get => (VerticalAlignment)this.verticalAlignment.Value;
+        set => this.verticalAlignment.Value = (int)value;
     }
     [DV(Type = typeof(VerticalAlignment))]
     internal NEnum verticalAlignment = NEnum.NullValue(typeof(VerticalAlignment));
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts AxisTitle into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int pos = serializer.BeginContent("Title");
+        var pos = serializer.BeginContent("Title");
 
-      if (!this.style.IsNull)
-        serializer.WriteSimpleAttribute("Style", this.Style);
+        if (!this.style.IsNull)
+            serializer.WriteSimpleAttribute("Style", this.Style);
 
-      if (!this.IsNull("Font"))
-        this.font.Serialize(serializer);
+        if (!this.IsNull("Font"))
+            this.font.Serialize(serializer);
 
-      if (!this.orientation.IsNull)
-        serializer.WriteSimpleAttribute("Orientation", this.Orientation);
+        if (!this.orientation.IsNull)
+            serializer.WriteSimpleAttribute("Orientation", this.Orientation);
 
-      if (!this.alignment.IsNull)
-        serializer.WriteSimpleAttribute("Alignment", this.Alignment);
+        if (!this.alignment.IsNull)
+            serializer.WriteSimpleAttribute("Alignment", this.Alignment);
 
-      if (!this.verticalAlignment.IsNull)
-        serializer.WriteSimpleAttribute("VerticalAlignment", this.VerticalAlignment);
+        if (!this.verticalAlignment.IsNull)
+            serializer.WriteSimpleAttribute("VerticalAlignment", this.VerticalAlignment);
 
-      if (!this.caption.IsNull)
-        serializer.WriteSimpleAttribute("Caption", this.Caption);
+        if (!this.caption.IsNull)
+            serializer.WriteSimpleAttribute("Caption", this.Caption);
 
-      serializer.EndContent();
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -190,14 +181,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(AxisTitle));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(AxisTitle));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

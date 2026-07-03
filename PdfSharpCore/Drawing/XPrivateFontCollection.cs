@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,47 +24,43 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System.Collections.Generic;
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+///<summary>
+/// Makes fonts that are not installed on the system available within the current application domain.<br/>
+/// In Silverlight required for all fonts used in PDF documents.
+/// </summary>
+public sealed class XPrivateFontCollection
 {
-    ///<summary>
-    /// Makes fonts that are not installed on the system available within the current application domain.<br/>
-    /// In Silverlight required for all fonts used in PDF documents.
+    // This one is global and can only grow. It is not possible to remove fonts that have been added.
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="XPrivateFontCollection"/> class.
     /// </summary>
-    public sealed class XPrivateFontCollection
+    XPrivateFontCollection()
     {
-        // This one is global and can only grow. It is not possible to remove fonts that have been added.
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XPrivateFontCollection"/> class.
-        /// </summary>
-        XPrivateFontCollection()
-        {
-            // HACK: Use one global PrivateFontCollection in GDI+
-        }
-
-        /// <summary>
-        /// Gets the global font collection.
-        /// </summary>
-        internal static XPrivateFontCollection Singleton
-        {
-            get { return _singleton; }
-        }
-        internal static XPrivateFontCollection _singleton = new XPrivateFontCollection();
-
-        static string MakeKey(string familyName, XFontStyle style)
-        {
-            return MakeKey(familyName, (style & XFontStyle.Bold) != 0, (style & XFontStyle.Italic) != 0);
-        }
-
-        static string MakeKey(string familyName, bool bold, bool italic)
-        {
-            return familyName + "#" + (bold ? "b" : "") + (italic ? "i" : "");
-        }
-
-        readonly Dictionary<string, XGlyphTypeface> _typefaces = new Dictionary<string, XGlyphTypeface>();
+        // HACK: Use one global PrivateFontCollection in GDI+
     }
+
+    /// <summary>
+    /// Gets the global font collection.
+    /// </summary>
+    internal static XPrivateFontCollection Singleton => _singleton;
+
+    internal static XPrivateFontCollection _singleton = new();
+
+    static string MakeKey(string familyName, XFontStyle style)
+    {
+        return MakeKey(familyName, (style & XFontStyle.Bold) != 0, (style & XFontStyle.Italic) != 0);
+    }
+
+    static string MakeKey(string familyName, bool bold, bool italic)
+    {
+        return familyName + "#" + (bold ? "b" : "") + (italic ? "i" : "");
+    }
+
+    readonly Dictionary<string, XGlyphTypeface> _typefaces = new();
 }

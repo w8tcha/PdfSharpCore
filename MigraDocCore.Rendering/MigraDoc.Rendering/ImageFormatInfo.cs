@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,37 +25,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using PdfSharpCore.Drawing;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes;
+
 using static MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Shapes.ImageSource;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Formatting information for an image.
+/// </summary>
+internal class ImageFormatInfo : ShapeFormatInfo
 {
-    /// <summary>
-    /// Formatting information for an image.
-    /// </summary>
-    internal class ImageFormatInfo : ShapeFormatInfo
+    internal ImageFormatInfo()
     {
-        internal ImageFormatInfo()
-        {
-        }
-
-        internal int CropX;
-        internal int CropY;
-        internal int CropWidth;
-        internal int CropHeight;
-        internal XUnit Width;
-        internal XUnit Height;
-
-        internal ImageFailure Failure
-        {
-            get;
-            set;
-        }
-
-        internal IImageSource ImageSource { get; set; }
     }
+
+    internal int CropX;
+    internal int CropY;
+    internal int CropWidth;
+    internal int CropHeight;
+    internal XUnit Width;
+    internal XUnit Height;
+
+    internal ImageFailure Failure
+    {
+        get;
+        set;
+    }
+
+    internal IImageSource ImageSource { get; set; }
 }

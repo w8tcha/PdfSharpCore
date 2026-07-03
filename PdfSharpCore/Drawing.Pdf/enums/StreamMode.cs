@@ -1,5 +1,4 @@
-﻿#region PDFsharp - A .NET library for processing PDF
-//
+﻿//
 // Authors:
 //   Stefan Lange
 //
@@ -25,23 +24,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing.Pdf
+namespace PdfSharpCore.Drawing.Pdf;
+
+/// <summary>
+/// Indicates whether we are within a BT/ET block.
+/// </summary>
+enum StreamMode
 {
     /// <summary>
-    /// Indicates whether we are within a BT/ET block.
+    /// Graphic mode. This is default.
     /// </summary>
-    enum StreamMode
-    {
-        /// <summary>
-        /// Graphic mode. This is default.
-        /// </summary>
-        Graphic,
+    Graphic,
 
-        /// <summary>
-        /// Text mode.
-        /// </summary>
-        Text,
-    }
+    /// <summary>
+    /// Text mode.
+    /// </summary>
+    Text
 }

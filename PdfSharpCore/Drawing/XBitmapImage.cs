@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,31 +24,29 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Defines a pixel based bitmap image.
+/// </summary>
+public sealed class XBitmapImage : XBitmapSource
 {
+    // TODO: Move code from XImage to this class.
+
     /// <summary>
-    /// Defines a pixel based bitmap image.
+    /// Initializes a new instance of the <see cref="XBitmapImage"/> class.
     /// </summary>
-    public sealed class XBitmapImage : XBitmapSource
+    internal XBitmapImage(int width, int height)
     {
-        // TODO: Move code from XImage to this class.
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XBitmapImage"/> class.
-        /// </summary>
-        internal XBitmapImage(int width, int height)
-        {
-        }
-
-        /// <summary>
-        /// Creates a default 24 bit ARGB bitmap with the specified pixel size.
-        /// </summary>
-        public static XBitmapSource CreateBitmap(int width, int height)
-        {
-            // Create a default 24 bit ARGB bitmap.
-            return new XBitmapImage(width, height);
-        }
+    /// <summary>
+    /// Creates a default 24 bit ARGB bitmap with the specified pixel size.
+    /// </summary>
+    public static XBitmapSource CreateBitmap(int width, int height)
+    {
+        // Create a default 24 bit ARGB bitmap.
+        return new XBitmapImage(width, height);
     }
 }

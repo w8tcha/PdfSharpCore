@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,57 +27,48 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
 using System.Collections;
 
-namespace MigraDocCore.DocumentObjectModel.IO
+namespace MigraDocCore.DocumentObjectModel.IO;
+
+/// <summary>
+/// Used to collect errors reported by the DDL parser.
+/// </summary>
+public class DdlReaderErrors : IEnumerable
 {
-  /// <summary>
-  /// Used to collect errors reported by the DDL parser.
-  /// </summary>
-  public class DdlReaderErrors : IEnumerable
-  {
     /// <summary>
     /// Adds the specified DdlReaderError at the end of the error list.
     /// </summary>
     public void AddError(DdlReaderError error)
     {
-      this.errors.Add(error);
+        this.errors.Add(error);
     }
 
     /// <summary>
     /// Gets the DdlReaderError at the specified position.
     /// </summary>
-    public DdlReaderError this[int index]
-    {
-      get { return (DdlReaderError)this.errors[index]; }
-    }
+    public DdlReaderError this[int index] => (DdlReaderError)this.errors[index];
 
     /// <summary>
     /// Gets the number of messages that are errors.
     /// </summary>
     public int ErrorCount
     {
-      get
-      {
-        int count = 0;
-        for (int idx = 0; idx < this.errors.Count; idx++)
-          if (((DdlReaderError)this.errors[idx]).ErrorLevel == DdlErrorLevel.Error)
-            count++;
-        return count;
-      }
+        get
+        {
+            var count = 0;
+            for (var idx = 0; idx < this.errors.Count; idx++)
+                if (((DdlReaderError)this.errors[idx]).ErrorLevel == DdlErrorLevel.Error)
+                    count++;
+            return count;
+        }
     }
 
-    private ArrayList errors = new ArrayList();
+    private ArrayList errors = new();
 
     public IEnumerator GetEnumerator()
     {
-      return this.errors.GetEnumerator();
+        return this.errors.GetEnumerator();
     }
-  }
 }

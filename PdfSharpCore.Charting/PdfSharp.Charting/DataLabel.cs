@@ -29,15 +29,14 @@
 
 using System;
 using System.ComponentModel;
-using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Represents a DataLabel of a Series
+/// </summary>
+public class DataLabel : DocumentObject
 {
-  /// <summary>
-  /// Represents a DataLabel of a Series
-  /// </summary>
-  public class DataLabel : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the DataLabel class.
     /// </summary>
@@ -56,7 +55,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new DataLabel Clone()
     {
-      return (DataLabel)DeepCopy();
+        return (DataLabel)DeepCopy();
     }
 
     /// <summary>
@@ -64,13 +63,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      DataLabel dataLabel = (DataLabel)base.DeepCopy();
-      if (dataLabel.font != null)
-      {
-        dataLabel.font = dataLabel.font.Clone();
-        dataLabel.font.parent = dataLabel;
-      }
-      return dataLabel;
+        var dataLabel = (DataLabel)base.DeepCopy();
+        if (dataLabel.font != null)
+        {
+            dataLabel.font = dataLabel.font.Clone();
+            dataLabel.font.parent = dataLabel;
+        }
+        return dataLabel;
     }
     #endregion
 
@@ -80,8 +79,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public string Format
     {
-      get {return this.format;}
-      set {this.format = value;}
+        get => this.format;
+        set => this.format = value;
     }
     internal string format = String.Empty;
 
@@ -90,13 +89,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Font Font
     {
-      get
-      {
-        if (this.font == null)
-          this.font = new Font(this);
+        get
+        {
+            if (this.font == null)
+                this.font = new Font(this);
 
-        return this.font;
-      }
+            return this.font;
+        }
     }    
     internal Font font;
 
@@ -105,15 +104,15 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public DataLabelPosition Position
     {
-      get {return (DataLabelPosition)this.position;}
-      set
-      {
-        if (!Enum.IsDefined(typeof(DataLabelPosition), value))
-          throw new InvalidEnumArgumentException("value", (int)value, typeof(DataLabelPosition));
+        get => (DataLabelPosition)this.position;
+        set
+        {
+            if (!Enum.IsDefined(typeof(DataLabelPosition), value))
+                throw new InvalidEnumArgumentException("value", (int)value, typeof(DataLabelPosition));
 
-        this.position = value;
-        this.positionInitialized = true;
-      }
+            this.position = value;
+            this.positionInitialized = true;
+        }
     }
     internal DataLabelPosition position;
     internal bool positionInitialized;
@@ -123,18 +122,17 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public DataLabelType Type
     {
-      get {return (DataLabelType)this.type;}
-      set
-      {
-        if (!Enum.IsDefined(typeof(DataLabelType), value))
-          throw new InvalidEnumArgumentException("value", (int)value, typeof(DataLabelType));
+        get => (DataLabelType)this.type;
+        set
+        {
+            if (!Enum.IsDefined(typeof(DataLabelType), value))
+                throw new InvalidEnumArgumentException("value", (int)value, typeof(DataLabelType));
 
-        this.type = value;
-        this.typeInitialized = true;
-      }
+            this.type = value;
+            this.typeInitialized = true;
+        }
     }
     internal DataLabelType type;
     internal bool typeInitialized;
     #endregion
-  }
 }

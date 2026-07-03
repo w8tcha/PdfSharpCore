@@ -27,16 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// The collection of data series.
+/// </summary>
+public class SeriesCollection : DocumentObjectCollection
 {
-  /// <summary>
-  /// The collection of data series.
-  /// </summary>
-  public class SeriesCollection : DocumentObjectCollection
-  {
     /// <summary>
     /// Initializes a new instance of the SeriesCollection class.
     /// </summary>
@@ -52,10 +49,7 @@ namespace PdfSharpCore.Charting
     /// <summary>
     /// Gets a series by it's index.
     /// </summary>
-    public new Series this[int index]
-    {
-      get {return base[index] as Series;}
-    }
+    public new Series this[int index] => base[index] as Series;
 
     #region Methods
     /// <summary>
@@ -63,7 +57,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new SeriesCollection Clone()
     {
-      return (SeriesCollection)DeepCopy();
+        return (SeriesCollection)DeepCopy();
     }
 
     /// <summary>
@@ -71,12 +65,11 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Series AddSeries()
     {
-      Series series = new Series();
-      // Initialize chart type for each new series.
-      series.chartType = ((Chart)this.parent).type;
-      Add(series);
-      return series;
+        var series = new Series();
+        // Initialize chart type for each new series.
+        series.chartType = ((Chart)this.parent).type;
+        Add(series);
+        return series;
     }
     #endregion
-  }
 }

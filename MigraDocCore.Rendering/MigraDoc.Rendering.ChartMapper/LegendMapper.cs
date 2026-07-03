@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   David Stephensen (mailto:David.Stephensen@PdfSharpCore.com)
@@ -26,99 +25,96 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using PdfSharpCore.Charting;
 
-namespace MigraDocCore.Rendering.ChartMapper
+namespace MigraDocCore.Rendering.ChartMapper;
+
+internal class LegendMapper
 {
-  internal class LegendMapper
-  {
     private LegendMapper()
     {
     }
 
     void MapObject(Chart chart, DocumentObjectModel.Shapes.Charts.Chart domChart)
     {
-      DocumentObjectModel.Shapes.Charts.Legend domLegend = null;
-      DocumentObjectModel.Shapes.Charts.TextArea textArea = null;
+        DocumentObjectModel.Shapes.Charts.Legend domLegend = null;
+        DocumentObjectModel.Shapes.Charts.TextArea textArea = null;
 
-      foreach (DocumentObjectModel.DocumentObject domObj in domChart.BottomArea.Elements)
-      {
-        if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+        foreach (DocumentObjectModel.DocumentObject domObj in domChart.BottomArea.Elements)
         {
-          chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Bottom;
-          domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
-          textArea = domChart.BottomArea;
+            if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+            {
+                chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Bottom;
+                domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
+                textArea = domChart.BottomArea;
+            }
         }
-      }
 
-      foreach (DocumentObjectModel.DocumentObject domObj in domChart.RightArea.Elements)
-      {
-        if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+        foreach (DocumentObjectModel.DocumentObject domObj in domChart.RightArea.Elements)
         {
-          chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Right;
-          domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
-          textArea = domChart.RightArea;
+            if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+            {
+                chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Right;
+                domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
+                textArea = domChart.RightArea;
+            }
         }
-      }
 
-      foreach (DocumentObjectModel.DocumentObject domObj in domChart.LeftArea.Elements)
-      {
-        if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+        foreach (DocumentObjectModel.DocumentObject domObj in domChart.LeftArea.Elements)
         {
-          chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Left;
-          domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
-          textArea = domChart.LeftArea;
+            if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+            {
+                chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Left;
+                domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
+                textArea = domChart.LeftArea;
+            }
         }
-      }
 
-      foreach (DocumentObjectModel.DocumentObject domObj in domChart.TopArea.Elements)
-      {
-        if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+        foreach (DocumentObjectModel.DocumentObject domObj in domChart.TopArea.Elements)
         {
-          chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Top;
-          domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
-          textArea = domChart.TopArea;
+            if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+            {
+                chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Top;
+                domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
+                textArea = domChart.TopArea;
+            }
         }
-      }
 
-      foreach (DocumentObjectModel.DocumentObject domObj in domChart.HeaderArea.Elements)
-      {
-        if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+        foreach (DocumentObjectModel.DocumentObject domObj in domChart.HeaderArea.Elements)
         {
-          chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Top;
-          domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
-          textArea = domChart.HeaderArea;
+            if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+            {
+                chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Top;
+                domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
+                textArea = domChart.HeaderArea;
+            }
         }
-      }
 
-      foreach (DocumentObjectModel.DocumentObject domObj in domChart.FooterArea.Elements)
-      {
-        if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+        foreach (DocumentObjectModel.DocumentObject domObj in domChart.FooterArea.Elements)
         {
-          chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Bottom;
-          domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
-          textArea = domChart.FooterArea;
+            if (domObj is DocumentObjectModel.Shapes.Charts.Legend)
+            {
+                chart.Legend.Docking = PdfSharpCore.Charting.DockingType.Bottom;
+                domLegend = domObj as DocumentObjectModel.Shapes.Charts.Legend;
+                textArea = domChart.FooterArea;
+            }
         }
-      }
 
-      if (domLegend != null)
-      {
-        if (!domLegend.IsNull("LineFormat"))
-          LineFormatMapper.Map(chart.Legend.LineFormat, domLegend.LineFormat);
-        if (!textArea.IsNull("Style"))
-          FontMapper.Map(chart.Legend.Font, textArea.Document, textArea.Style);
-        if (!domLegend.IsNull("Format.Font"))
-          FontMapper.Map(chart.Legend.Font, domLegend.Format.Font);
-      }
+        if (domLegend != null)
+        {
+            if (!domLegend.IsNull("LineFormat"))
+                LineFormatMapper.Map(chart.Legend.LineFormat, domLegend.LineFormat);
+            if (!textArea.IsNull("Style"))
+                FontMapper.Map(chart.Legend.Font, textArea.Document, textArea.Style);
+            if (!domLegend.IsNull("Format.Font"))
+                FontMapper.Map(chart.Legend.Font, domLegend.Format.Font);
+        }
     }
 
     internal static void Map(Chart chart, DocumentObjectModel.Shapes.Charts.Chart domChart)
     {
-      LegendMapper mapper = new LegendMapper();
-      mapper.MapObject(chart, domChart);
+        var mapper = new LegendMapper();
+        mapper.MapObject(chart, domChart);
     }
-  }
 }

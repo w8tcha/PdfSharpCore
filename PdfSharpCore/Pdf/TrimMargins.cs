@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,92 +24,87 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// Represents trim margins added to the page.
+/// </summary>
+[DebuggerDisplay("(Left={left.Millimeter}mm, Right={right.Millimeter}mm, Top={top.Millimeter}mm, Bottom={bottom.Millimeter}mm)")]
+public sealed class TrimMargins
 {
+    ///// <summary>
+    ///// Clones this instance.
+    ///// </summary>
+    //public TrimMargins Clone()
+    //{
+    //  TrimMargins trimMargins = new TrimMargins();
+    //  trimMargins.left = left;
+    //  trimMargins.top = top;
+    //  trimMargins.right = right;
+    //  trimMargins.bottom = bottom;
+    //  return trimMargins;
+    //}
+
     /// <summary>
-    /// Represents trim margins added to the page.
+    /// Sets all four crop margins simultaneously.
     /// </summary>
-    [DebuggerDisplay("(Left={left.Millimeter}mm, Right={right.Millimeter}mm, Top={top.Millimeter}mm, Bottom={bottom.Millimeter}mm)")]
-    public sealed class TrimMargins
+    public XUnit All
     {
-        ///// <summary>
-        ///// Clones this instance.
-        ///// </summary>
-        //public TrimMargins Clone()
-        //{
-        //  TrimMargins trimMargins = new TrimMargins();
-        //  trimMargins.left = left;
-        //  trimMargins.top = top;
-        //  trimMargins.right = right;
-        //  trimMargins.bottom = bottom;
-        //  return trimMargins;
-        //}
-
-        /// <summary>
-        /// Sets all four crop margins simultaneously.
-        /// </summary>
-        public XUnit All
+        set
         {
-            set
-            {
-                _left = value;
-                _right = value;
-                _top = value;
-                _bottom = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the left crop margin.
-        /// </summary>
-        public XUnit Left
-        {
-            get { return _left; }
-            set { _left = value; }
-        }
-        XUnit _left;
-
-        /// <summary>
-        /// Gets or sets the right crop margin.
-        /// </summary>
-        public XUnit Right
-        {
-            get { return _right; }
-            set { _right = value; }
-        }
-        XUnit _right;
-
-        /// <summary>
-        /// Gets or sets the top crop margin.
-        /// </summary>
-        public XUnit Top
-        {
-            get { return _top; }
-            set { _top = value; }
-        }
-        XUnit _top;
-
-        /// <summary>
-        /// Gets or sets the bottom crop margin.
-        /// </summary>
-        public XUnit Bottom
-        {
-            get { return _bottom; }
-            set { _bottom = value; }
-        }
-        XUnit _bottom;
-
-        /// <summary>
-        /// Gets a value indicating whether this instance has at least one margin with a value other than zero.
-        /// </summary>
-        public bool AreSet
-        {
-            get { return _left.Value != 0 || _right.Value != 0 || _top.Value != 0 || _bottom.Value != 0; }
+            _left = value;
+            _right = value;
+            _top = value;
+            _bottom = value;
         }
     }
+
+    /// <summary>
+    /// Gets or sets the left crop margin.
+    /// </summary>
+    public XUnit Left
+    {
+        get => _left;
+        set => _left = value;
+    }
+    XUnit _left;
+
+    /// <summary>
+    /// Gets or sets the right crop margin.
+    /// </summary>
+    public XUnit Right
+    {
+        get => _right;
+        set => _right = value;
+    }
+    XUnit _right;
+
+    /// <summary>
+    /// Gets or sets the top crop margin.
+    /// </summary>
+    public XUnit Top
+    {
+        get => _top;
+        set => _top = value;
+    }
+    XUnit _top;
+
+    /// <summary>
+    /// Gets or sets the bottom crop margin.
+    /// </summary>
+    public XUnit Bottom
+    {
+        get => _bottom;
+        set => _bottom = value;
+    }
+    XUnit _bottom;
+
+    /// <summary>
+    /// Gets a value indicating whether this instance has at least one margin with a value other than zero.
+    /// </summary>
+    public bool AreSet => _left.Value != 0 || _right.Value != 0 || _top.Value != 0 || _bottom.Value != 0;
 }

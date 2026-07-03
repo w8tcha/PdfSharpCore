@@ -27,17 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Represents the collection of the values in a data series.
+/// </summary>
+public class SeriesElements : DocumentObjectCollection
 {
-  /// <summary>
-  /// Represents the collection of the values in a data series.
-  /// </summary>
-  public class SeriesElements : DocumentObjectCollection
-  {
     /// <summary>
     /// Initializes a new instance of the SeriesElements class.
     /// </summary>
@@ -53,10 +49,7 @@ namespace PdfSharpCore.Charting
     /// <summary>
     /// Gets a point by it's index.
     /// </summary>
-    public new Point this[int index]
-    {
-      get {return (Point)base[index];}
-    }
+    public new Point this[int index] => (Point)base[index];
 
     #region Methods
     /// <summary>
@@ -64,7 +57,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new SeriesElements Clone()
     {
-      return (SeriesElements)DeepCopy();
+        return (SeriesElements)DeepCopy();
     }
 
     /// <summary>
@@ -72,7 +65,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public void AddBlank()
     {
-      base.Add((DocumentObject)null);
+        base.Add((DocumentObject)null);
     }
 
     /// <summary>
@@ -80,9 +73,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Point Add(double value)
     {
-      Point point = new Point(value);
-      Add(point);
-      return point;
+        var point = new Point(value);
+        Add(point);
+        return point;
     }
 
     /// <summary>
@@ -90,9 +83,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public void Add(params double[] values)
     {
-      foreach (double val in values)
-        this.Add(val);
+        foreach (var val in values)
+            this.Add(val);
     }
     #endregion
-  }
 }

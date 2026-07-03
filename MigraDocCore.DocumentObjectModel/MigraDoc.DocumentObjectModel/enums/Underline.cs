@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,24 +27,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Specifies the underline type for the font.
+/// </summary>
+public enum Underline
 {
-  /// <summary>
-  /// Specifies the underline type for the font.
-  /// </summary>
-  public enum Underline
-  {
     None,
     Single,
     Words,
     Dotted,
     Dash,
     DotDash,
-    DotDotDash,
+    DotDotDash
 
     /* --- unsupported ---
       Double          = 3,
@@ -60,5 +56,4 @@ namespace MigraDocCore.DocumentObjectModel
       DashLongHeavy   = 55,
       WavyDouble      = 43
     */
-  }
 }

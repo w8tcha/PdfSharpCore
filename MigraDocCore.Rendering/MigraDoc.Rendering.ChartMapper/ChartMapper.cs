@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   David Stephensen (mailto:David.Stephensen@PdfSharpCore.com)
@@ -26,19 +25,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using PdfSharpCore.Charting;
 using PdfSharpCore.Drawing;
 
-namespace MigraDocCore.Rendering.ChartMapper
+namespace MigraDocCore.Rendering.ChartMapper;
+
+/// <summary>
+/// Maps charts from the DocumentObjectModel to charts from Pdf.Charting.
+/// </summary>
+public class ChartMapper
 {
-  /// <summary>
-  /// Maps charts from the DocumentObjectModel to charts from Pdf.Charting.
-  /// </summary>
-  public class ChartMapper
-  {
     /// <summary>
     /// Initializes a new instance of the chart mapper object.
     /// </summary>
@@ -48,37 +45,37 @@ namespace MigraDocCore.Rendering.ChartMapper
 
     private ChartFrame MapObject(DocumentObjectModel.Shapes.Charts.Chart domChart)
     {
-      ChartFrame chartFrame = new ChartFrame();
-      chartFrame.Size = new XSize(domChart.Width.Point, domChart.Height.Point);
-      chartFrame.Location = new XPoint(domChart.Left.Position.Point, domChart.Top.Position.Point);
+        var chartFrame = new ChartFrame();
+        chartFrame.Size = new XSize(domChart.Width.Point, domChart.Height.Point);
+        chartFrame.Location = new XPoint(domChart.Left.Position.Point, domChart.Top.Position.Point);
 
-      Chart chart = new Chart((ChartType)domChart.Type);
+        var chart = new Chart((ChartType)domChart.Type);
 
-      if (!domChart.IsNull("XAxis"))
-        AxisMapper.Map(chart.XAxis, domChart.XAxis);
-      if (!domChart.IsNull("YAxis"))
-        AxisMapper.Map(chart.YAxis, domChart.YAxis);
+        if (!domChart.IsNull("XAxis"))
+            AxisMapper.Map(chart.XAxis, domChart.XAxis);
+        if (!domChart.IsNull("YAxis"))
+            AxisMapper.Map(chart.YAxis, domChart.YAxis);
 
-      PlotAreaMapper.Map(chart.PlotArea, domChart.PlotArea);
+        PlotAreaMapper.Map(chart.PlotArea, domChart.PlotArea);
 
-      SeriesCollectionMapper.Map(chart.SeriesCollection, domChart.SeriesCollection);
+        SeriesCollectionMapper.Map(chart.SeriesCollection, domChart.SeriesCollection);
 
-      LegendMapper.Map(chart, domChart);
+        LegendMapper.Map(chart, domChart);
 
-      chart.DisplayBlanksAs = (BlankType)domChart.DisplayBlanksAs;
-      chart.HasDataLabel = domChart.HasDataLabel;
-      if (!domChart.IsNull("DataLabel"))
-        DataLabelMapper.Map(chart.DataLabel, domChart.DataLabel);
+        chart.DisplayBlanksAs = (BlankType)domChart.DisplayBlanksAs;
+        chart.HasDataLabel = domChart.HasDataLabel;
+        if (!domChart.IsNull("DataLabel"))
+            DataLabelMapper.Map(chart.DataLabel, domChart.DataLabel);
 
-      if (!domChart.IsNull("Style"))
-        FontMapper.Map(chart.Font, domChart.Document, domChart.Style);
-      if (!domChart.IsNull("Format.Font"))
-        FontMapper.Map(chart.Font, domChart.Format.Font);
-      if (!domChart.IsNull("XValues"))
-        XValuesMapper.Map(chart.XValues, domChart.XValues);
+        if (!domChart.IsNull("Style"))
+            FontMapper.Map(chart.Font, domChart.Document, domChart.Style);
+        if (!domChart.IsNull("Format.Font"))
+            FontMapper.Map(chart.Font, domChart.Format.Font);
+        if (!domChart.IsNull("XValues"))
+            XValuesMapper.Map(chart.XValues, domChart.XValues);
 
-      chartFrame.Add(chart);
-      return chartFrame;
+        chartFrame.Add(chart);
+        return chartFrame;
     }
 
     /// <summary>
@@ -88,8 +85,7 @@ namespace MigraDocCore.Rendering.ChartMapper
     /// <returns></returns>
     public static ChartFrame Map(DocumentObjectModel.Shapes.Charts.Chart domChart)
     {
-      ChartMapper mapper = new ChartMapper();
-      return mapper.MapObject(domChart);
+        var mapper = new ChartMapper();
+        return mapper.MapObject(domChart);
     }
-  }
 }

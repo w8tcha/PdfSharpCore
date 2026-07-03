@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,43 +24,41 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Specifies how different clipping regions can be combined.
+/// </summary>
+public enum XCombineMode  // Same values as System.Drawing.Drawing2D.CombineMode.
 {
     /// <summary>
-    /// Specifies how different clipping regions can be combined.
+    /// One clipping region is replaced by another.
     /// </summary>
-    public enum XCombineMode  // Same values as System.Drawing.Drawing2D.CombineMode.
-    {
-        /// <summary>
-        /// One clipping region is replaced by another.
-        /// </summary>
-        Replace = 0,
+    Replace = 0,
 
-        /// <summary>
-        /// Two clipping regions are combined by taking their intersection.
-        /// </summary>
-        Intersect = 1,
+    /// <summary>
+    /// Two clipping regions are combined by taking their intersection.
+    /// </summary>
+    Intersect = 1,
 
-        /// <summary>
-        /// Not yet implemented in PdfSharpCore.
-        /// </summary>
-        Union = 2,
+    /// <summary>
+    /// Not yet implemented in PdfSharpCore.
+    /// </summary>
+    Union = 2,
 
-        /// <summary>
-        /// Not yet implemented in PdfSharpCore.
-        /// </summary>
-        Xor = 3,
+    /// <summary>
+    /// Not yet implemented in PdfSharpCore.
+    /// </summary>
+    Xor = 3,
 
-        /// <summary>
-        /// Not yet implemented in PdfSharpCore.
-        /// </summary>
-        Exclude = 4,
+    /// <summary>
+    /// Not yet implemented in PdfSharpCore.
+    /// </summary>
+    Exclude = 4,
 
-        /// <summary>
-        /// Not yet implemented in PdfSharpCore.
-        /// </summary>
-        Complement = 5,
-    }
+    /// <summary>
+    /// Not yet implemented in PdfSharpCore.
+    /// </summary>
+    Complement = 5
 }

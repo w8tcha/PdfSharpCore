@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Specifies the alignment of a paragraph.
+/// </summary>
+public enum ParagraphAlignment
 {
-  /// <summary>
-  /// Specifies the alignment of a paragraph.
-  /// </summary>
-  public enum ParagraphAlignment
-  {
     Left,
     Center,
     Right,
-    Justify,
-  }
+    Justify
 }

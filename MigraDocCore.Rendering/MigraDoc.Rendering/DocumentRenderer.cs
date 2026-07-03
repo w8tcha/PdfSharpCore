@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,346 +25,338 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using System.Collections;
-using System.IO;
+
 using MigraDocCore.DocumentObjectModel;
-using PdfSharpCore;
+
 using PdfSharpCore.Pdf;
-using PdfSharpCore.Pdf.Advanced;
 using PdfSharpCore.Drawing;
 using MigraDocCore.DocumentObjectModel.Visitors;
 using MigraDocCore.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Tables;
 using MigraDocCore.Rendering.MigraDoc.Rendering.Resources;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Provides methods to render the document or single parts of it to a XGraphics object.
+/// </summary>
+/// <remarks>
+/// One prepared instance of this class can serve to render several output formats.
+/// </remarks>
+public class DocumentRenderer
 {
     /// <summary>
-    /// Provides methods to render the document or single parts of it to a XGraphics object.
+    /// Initializes a new instance of the DocumentRenderer class.
     /// </summary>
-    /// <remarks>
-    /// One prepared instance of this class can serve to render several output formats.
-    /// </remarks>
-    public class DocumentRenderer
+    /// <param name="document">The migradoc document to render.</param>
+    public DocumentRenderer(Document document)
     {
-        /// <summary>
-        /// Initializes a new instance of the DocumentRenderer class.
-        /// </summary>
-        /// <param name="document">The migradoc document to render.</param>
-        public DocumentRenderer(Document document)
+        this.document = document;
+    }
+
+    /// <summary>
+    /// Prepares this instance for rendering.
+    /// </summary>
+    public void PrepareDocument()
+    {
+        var visitor = new PdfFlattenVisitor();
+        visitor.Visit(this.document);
+        this.previousListNumbers = new Hashtable(3);
+        this.previousListNumbers[ListType.NumberList1] = 0;
+        this.previousListNumbers[ListType.NumberList2] = 0;
+        this.previousListNumbers[ListType.NumberList3] = 0;
+        this.formattedDocument = new FormattedDocument(this.document, this);
+        //REM: Size should not be necessary in this case.
+        var gfx = XGraphics.CreateMeasureContext(new XSize(2000, 2000), XGraphicsUnit.Point, XPageDirection.Downwards);
+        //      this.previousListNumber = int.MinValue;
+        //gfx.MUH = this.unicode;
+        //gfx.MFEH = this.fontEmbedding;
+
+        this.previousListInfo = null;
+        this.formattedDocument.Format(gfx);
+    }
+
+    /// <summary>
+    /// Occurs while the document is being prepared (can be used to show a progress bar).
+    /// </summary>
+    public event PrepareDocumentProgressEventHandler PrepareDocumentProgress;
+
+    /// <summary>
+    /// Allows applications to display a progress indicator while PrepareDocument() is being executed.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="maximum"></param>
+    internal virtual void OnPrepareDocumentProgress(int value, int maximum)
+    {
+        if (PrepareDocumentProgress != null)
         {
-            this.document = document;
+            // Invokes the delegates. 
+            var e = new PrepareDocumentProgressEventArgs(value, maximum);
+            PrepareDocumentProgress(this, e);
         }
+    }
 
-        /// <summary>
-        /// Prepares this instance for rendering.
-        /// </summary>
-        public void PrepareDocument()
+    /// <summary>
+    /// Gets a value indicating whether this instance supports PrepareDocumentProgress.
+    /// </summary>
+    public bool HasPrepareDocumentProgress => PrepareDocumentProgress != null;
+
+    /// <summary>
+    /// Gets the formatted document of this instance.
+    /// </summary>
+    public FormattedDocument FormattedDocument => this.formattedDocument;
+
+    internal FormattedDocument formattedDocument;
+
+    /// <summary>
+    /// Renders a MigraDoc document to the specified graphics object.
+    /// </summary>
+    public void RenderPage(XGraphics gfx, int page)
+    {
+        RenderPage(gfx, page, PageRenderOptions.All);
+    }
+
+    /// <summary>
+    /// Renders a MigraDoc document to the specified graphics object.
+    /// </summary>
+    public void RenderPage(XGraphics gfx, int page, PageRenderOptions options)
+    {
+        if (this.formattedDocument.IsEmptyPage(page))
+            return;
+
+        var fieldInfos = this.formattedDocument.GetFieldInfos(page);
+
+        if (this.printDate != DateTime.MinValue)
+            fieldInfos.date = this.printDate;
+        else
+            fieldInfos.date = DateTime.Now;
+
+        if ((options & PageRenderOptions.RenderHeader) == PageRenderOptions.RenderHeader)
+            RenderHeader(gfx, page);
+        if ((options & PageRenderOptions.RenderFooter) == PageRenderOptions.RenderFooter)
+            RenderFooter(gfx, page);
+
+        if ((options & PageRenderOptions.RenderContent) == PageRenderOptions.RenderContent)
         {
-            PdfFlattenVisitor visitor = new PdfFlattenVisitor();
-            visitor.Visit(this.document);
-            this.previousListNumbers = new Hashtable(3);
-            this.previousListNumbers[ListType.NumberList1] = 0;
-            this.previousListNumbers[ListType.NumberList2] = 0;
-            this.previousListNumbers[ListType.NumberList3] = 0;
-            this.formattedDocument = new FormattedDocument(this.document, this);
-            //REM: Size should not be necessary in this case.
-            XGraphics gfx = XGraphics.CreateMeasureContext(new XSize(2000, 2000), XGraphicsUnit.Point, XPageDirection.Downwards);
-            //      this.previousListNumber = int.MinValue;
-            //gfx.MUH = this.unicode;
-            //gfx.MFEH = this.fontEmbedding;
-
-            this.previousListInfo = null;
-            this.formattedDocument.Format(gfx);
-        }
-
-        /// <summary>
-        /// Occurs while the document is being prepared (can be used to show a progress bar).
-        /// </summary>
-        public event PrepareDocumentProgressEventHandler PrepareDocumentProgress;
-
-        /// <summary>
-        /// Allows applications to display a progress indicator while PrepareDocument() is being executed.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="maximum"></param>
-        internal virtual void OnPrepareDocumentProgress(int value, int maximum)
-        {
-            if (PrepareDocumentProgress != null)
+            var renderInfos = this.formattedDocument.GetRenderInfos(page);
+            //foreach (RenderInfo renderInfo in renderInfos)
+            var count = renderInfos.Length;
+            for (var idx = 0; idx < count; idx++)
             {
-                // Invokes the delegates. 
-                PrepareDocumentProgressEventArgs e = new PrepareDocumentProgressEventArgs(value, maximum);
-                PrepareDocumentProgress(this, e);
+                var renderInfo = renderInfos[idx];
+                var renderer = Renderer.Create(gfx, this, renderInfo, fieldInfos);
+                renderer.Render();
             }
         }
+    }
 
-        /// <summary>
-        /// Gets a value indicating whether this instance supports PrepareDocumentProgress.
-        /// </summary>
-        public bool HasPrepareDocumentProgress
+    /// <summary>
+    /// Gets the document objects that get rendered on the specified page.
+    /// </summary>
+    public DocumentObject[] GetDocumentObjectsFromPage(int page)
+    {
+        var renderInfos = this.formattedDocument.GetRenderInfos(page);
+        var count = renderInfos != null ? renderInfos.Length : 0;
+        var documentObjects = new DocumentObject[count];
+        for (var idx = 0; idx < count; idx++)
+            documentObjects[idx] = renderInfos[idx].DocumentObject;
+        return documentObjects;
+    }
+
+    /// <summary>
+    /// Gets the render information for document objects that get rendered on the specified page.
+    /// </summary>
+    public RenderInfo[] GetRenderInfoFromPage(int page)
+    {
+        return this.formattedDocument.GetRenderInfos(page);
+    }
+
+    /// <summary>
+    /// Renders a single object to the specified graphics object at the given point.
+    /// </summary>
+    /// <param name="graphics">The graphics object to render on.</param>
+    /// <param name="xPosition">The left position of the rendered object.</param>
+    /// <param name="yPosition">The top position of the rendered object.</param>
+    /// <param name="width">The width.</param>
+    /// <param name="documentObject">The document object to render. Can be paragraph, table, or shape.</param>
+    /// <remarks>This function is still in an experimental state.</remarks>
+    public void RenderObject(XGraphics graphics, XUnit xPosition, XUnit yPosition, XUnit width, DocumentObject documentObject)
+    {
+        if (graphics == null)
+            throw new ArgumentNullException("graphics");
+
+        if (documentObject == null)
+            throw new ArgumentNullException("documentObject");
+
+        if (!(documentObject is Shape) && !(documentObject is Table) &&
+            !(documentObject is Paragraph))
+            throw new ArgumentException(AppResources.ObjectNotRenderable, "documentObject");
+
+        var renderer = Renderer.Create(graphics, this, documentObject, null);
+        renderer.Format(new Rectangle(xPosition, yPosition, width, double.MaxValue), null);
+
+        var renderInfo = renderer.RenderInfo;
+        renderInfo.LayoutInfo.ContentArea.X = xPosition;
+        renderInfo.LayoutInfo.ContentArea.Y = yPosition;
+
+        renderer = Renderer.Create(graphics, this, renderer.RenderInfo, null);
+        renderer.Render();
+    }
+
+    /// <summary>
+    /// Gets or sets the working directory for rendering.
+    /// </summary>
+    public string WorkingDirectory
+    {
+        get => this.workingDirectory;
+        set => this.workingDirectory = value;
+    }
+    string workingDirectory;
+
+    private void RenderHeader(XGraphics graphics, int page)
+    {
+        var formattedHeader = this.formattedDocument.GetFormattedHeader(page);
+        if (formattedHeader == null)
+            return;
+
+        var headerArea = this.formattedDocument.GetHeaderArea(page);
+        var renderInfos = formattedHeader.GetRenderInfos();
+        var fieldInfos = this.formattedDocument.GetFieldInfos(page);
+        foreach (var renderInfo in renderInfos)
         {
-            get { return PrepareDocumentProgress != null; }
-        }
-
-        /// <summary>
-        /// Gets the formatted document of this instance.
-        /// </summary>
-        public FormattedDocument FormattedDocument
-        {
-            get { return this.formattedDocument; }
-        }
-        internal FormattedDocument formattedDocument;
-
-        /// <summary>
-        /// Renders a MigraDoc document to the specified graphics object.
-        /// </summary>
-        public void RenderPage(XGraphics gfx, int page)
-        {
-            RenderPage(gfx, page, PageRenderOptions.All);
-        }
-
-        /// <summary>
-        /// Renders a MigraDoc document to the specified graphics object.
-        /// </summary>
-        public void RenderPage(XGraphics gfx, int page, PageRenderOptions options)
-        {
-            if (this.formattedDocument.IsEmptyPage(page))
-                return;
-
-            FieldInfos fieldInfos = this.formattedDocument.GetFieldInfos(page);
-
-            if (this.printDate != DateTime.MinValue)
-                fieldInfos.date = this.printDate;
-            else
-                fieldInfos.date = DateTime.Now;
-
-            if ((options & PageRenderOptions.RenderHeader) == PageRenderOptions.RenderHeader)
-                RenderHeader(gfx, page);
-            if ((options & PageRenderOptions.RenderFooter) == PageRenderOptions.RenderFooter)
-                RenderFooter(gfx, page);
-
-            if ((options & PageRenderOptions.RenderContent) == PageRenderOptions.RenderContent)
-            {
-                RenderInfo[] renderInfos = this.formattedDocument.GetRenderInfos(page);
-                //foreach (RenderInfo renderInfo in renderInfos)
-                int count = renderInfos.Length;
-                for (int idx = 0; idx < count; idx++)
-                {
-                    RenderInfo renderInfo = renderInfos[idx];
-                    Renderer renderer = Renderer.Create(gfx, this, renderInfo, fieldInfos);
-                    renderer.Render();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the document objects that get rendered on the specified page.
-        /// </summary>
-        public DocumentObject[] GetDocumentObjectsFromPage(int page)
-        {
-            RenderInfo[] renderInfos = this.formattedDocument.GetRenderInfos(page);
-            int count = renderInfos != null ? renderInfos.Length : 0;
-            DocumentObject[] documentObjects = new DocumentObject[count];
-            for (int idx = 0; idx < count; idx++)
-                documentObjects[idx] = renderInfos[idx].DocumentObject;
-            return documentObjects;
-        }
-
-        /// <summary>
-        /// Gets the render information for document objects that get rendered on the specified page.
-        /// </summary>
-        public RenderInfo[] GetRenderInfoFromPage(int page)
-        {
-            return this.formattedDocument.GetRenderInfos(page);
-        }
-
-        /// <summary>
-        /// Renders a single object to the specified graphics object at the given point.
-        /// </summary>
-        /// <param name="graphics">The graphics object to render on.</param>
-        /// <param name="xPosition">The left position of the rendered object.</param>
-        /// <param name="yPosition">The top position of the rendered object.</param>
-        /// <param name="width">The width.</param>
-        /// <param name="documentObject">The document object to render. Can be paragraph, table, or shape.</param>
-        /// <remarks>This function is still in an experimental state.</remarks>
-        public void RenderObject(XGraphics graphics, XUnit xPosition, XUnit yPosition, XUnit width, DocumentObject documentObject)
-        {
-            if (graphics == null)
-                throw new ArgumentNullException("graphics");
-
-            if (documentObject == null)
-                throw new ArgumentNullException("documentObject");
-
-            if (!(documentObject is Shape) && !(documentObject is Table) &&
-                !(documentObject is Paragraph))
-                throw new ArgumentException(AppResources.ObjectNotRenderable, "documentObject");
-
-            Renderer renderer = Renderer.Create(graphics, this, documentObject, null);
-            renderer.Format(new Rectangle(xPosition, yPosition, width, double.MaxValue), null);
-
-            RenderInfo renderInfo = renderer.RenderInfo;
-            renderInfo.LayoutInfo.ContentArea.X = xPosition;
-            renderInfo.LayoutInfo.ContentArea.Y = yPosition;
-
-            renderer = Renderer.Create(graphics, this, renderer.RenderInfo, null);
+            var renderer = Renderer.Create(graphics, this, renderInfo, fieldInfos);
             renderer.Render();
         }
+    }
 
-        /// <summary>
-        /// Gets or sets the working directory for rendering.
-        /// </summary>
-        public string WorkingDirectory
+    private void RenderFooter(XGraphics graphics, int page)
+    {
+        var formattedFooter = this.formattedDocument.GetFormattedFooter(page);
+        if (formattedFooter == null)
+            return;
+
+        var footerArea = this.formattedDocument.GetFooterArea(page);
+        var renderInfos = formattedFooter.GetRenderInfos();
+        XUnit topY = footerArea.Y + footerArea.Height - RenderInfo.GetTotalHeight(renderInfos);
+
+        var fieldInfos = this.formattedDocument.GetFieldInfos(page);
+        foreach (var renderInfo in renderInfos)
         {
-            get { return this.workingDirectory; }
-            set { this.workingDirectory = value; }
+            var renderer = Renderer.Create(graphics, this, renderInfo, fieldInfos);
+            var savedY = renderer.RenderInfo.LayoutInfo.ContentArea.Y;
+            renderer.RenderInfo.LayoutInfo.ContentArea.Y = topY;
+            renderer.Render();
+            renderer.RenderInfo.LayoutInfo.ContentArea.Y = savedY;
         }
-        string workingDirectory;
+    }
 
-        private void RenderHeader(XGraphics graphics, int page)
+    internal void AddOutline(int level, string title, PdfPage destinationPage)
+    {
+        if (level < 1 || destinationPage == null)
+            return;
+
+        var document = destinationPage.Owner;
+
+        if (document == null)
+            return;
+
+        var outlines = document.Outlines;
+        while (--level > 0)
         {
-            FormattedHeaderFooter formattedHeader = this.formattedDocument.GetFormattedHeader(page);
-            if (formattedHeader == null)
-                return;
-
-            Rectangle headerArea = this.formattedDocument.GetHeaderArea(page);
-            RenderInfo[] renderInfos = formattedHeader.GetRenderInfos();
-            FieldInfos fieldInfos = this.formattedDocument.GetFieldInfos(page);
-            foreach (RenderInfo renderInfo in renderInfos)
+            var count = outlines.Count;
+            if (count == 0)
             {
-                Renderer renderer = Renderer.Create(graphics, this, renderInfo, fieldInfos);
-                renderer.Render();
+                // You cannot add empty bookmarks to PDF. So we use blank here.
+                var outline = outlines.Add(" ", destinationPage, true);
+                outlines = outline.Outlines;
             }
+            else
+                outlines = outlines[count - 1].Outlines;
         }
+        outlines.Add(title, destinationPage, true);
+    }
 
-        private void RenderFooter(XGraphics graphics, int page)
+    internal int NextListNumber(ListInfo listInfo)
+    {
+        var listType = listInfo.ListType;
+        var isNumberList = listType == ListType.NumberList1 ||
+                           listType == ListType.NumberList2 ||
+                           listType == ListType.NumberList3;
+
+        var listNumber = int.MinValue;
+        if (listInfo == this.previousListInfo)
         {
-            FormattedHeaderFooter formattedFooter = this.formattedDocument.GetFormattedFooter(page);
-            if (formattedFooter == null)
-                return;
-
-            Rectangle footerArea = this.formattedDocument.GetFooterArea(page);
-            RenderInfo[] renderInfos = formattedFooter.GetRenderInfos();
-            XUnit topY = footerArea.Y + footerArea.Height - RenderInfo.GetTotalHeight(renderInfos);
-
-            FieldInfos fieldInfos = this.formattedDocument.GetFieldInfos(page);
-            foreach (RenderInfo renderInfo in renderInfos)
-            {
-                Renderer renderer = Renderer.Create(graphics, this, renderInfo, fieldInfos);
-                XUnit savedY = renderer.RenderInfo.LayoutInfo.ContentArea.Y;
-                renderer.RenderInfo.LayoutInfo.ContentArea.Y = topY;
-                renderer.Render();
-                renderer.RenderInfo.LayoutInfo.ContentArea.Y = savedY;
-            }
-        }
-
-        internal void AddOutline(int level, string title, PdfPage destinationPage)
-        {
-            if (level < 1 || destinationPage == null)
-                return;
-
-            PdfDocument document = destinationPage.Owner;
-
-            if (document == null)
-                return;
-
-            PdfOutlineCollection outlines = document.Outlines;
-            while (--level > 0)
-            {
-                int count = outlines.Count;
-                if (count == 0)
-                {
-                    // You cannot add empty bookmarks to PDF. So we use blank here.
-                    PdfOutline outline = outlines.Add(" ", destinationPage, true);
-                    outlines = outline.Outlines;
-                }
-                else
-                    outlines = outlines[count - 1].Outlines;
-            }
-            outlines.Add(title, destinationPage, true);
-        }
-
-        internal int NextListNumber(ListInfo listInfo)
-        {
-            ListType listType = listInfo.ListType;
-            bool isNumberList = listType == ListType.NumberList1 ||
-              listType == ListType.NumberList2 ||
-              listType == ListType.NumberList3;
-
-            int listNumber = int.MinValue;
-            if (listInfo == this.previousListInfo)
-            {
-                if (isNumberList)
-                    return (int)this.previousListNumbers[listType];
-                return listNumber;
-            }
-
-            //bool listTypeChanged = this.previousListInfo == null || this.previousListInfo.ListType != listType;
-
             if (isNumberList)
-            {
-                listNumber = 1;
-                if (/*!listTypeChanged &&*/ (listInfo.IsNull("ContinuePreviousList") || listInfo.ContinuePreviousList))
-                    listNumber = (int)this.previousListNumbers[listType] + 1;
-
-                this.previousListNumbers[listType] = listNumber;
-            }
-            //      else
-            //        listNumber = int.MinValue;
-
-            this.previousListInfo = listInfo;
+                return (int)this.previousListNumbers[listType];
             return listNumber;
         }
-        ListInfo previousListInfo;
-        Hashtable previousListNumbers;
-        private Document document;
-        internal DateTime printDate = DateTime.MinValue;
 
-        /// <summary>
-        /// Arguments for the PrepareDocumentProgressEvent which is called while a document is being prepared (you can use this to display a progress bar).
-        /// </summary>
-        public class PrepareDocumentProgressEventArgs : EventArgs
+        //bool listTypeChanged = this.previousListInfo == null || this.previousListInfo.ListType != listType;
+
+        if (isNumberList)
         {
-            /// <summary>
-            /// Indicates the current step reached in document preparation.
-            /// </summary>
-            public int Value;
-            /// <summary>
-            /// Indicates the final step in document preparation. The quitient of Value and Maximum can be used to calculate a percentage (e. g. for use in a progress bar).
-            /// </summary>
-            public int Maximum;
+            listNumber = 1;
+            if (/*!listTypeChanged &&*/ (listInfo.IsNull("ContinuePreviousList") || listInfo.ContinuePreviousList))
+                listNumber = (int)this.previousListNumbers[listType] + 1;
 
-            /// <summary>
-            /// Initializes a new instance of the <see cref="PrepareDocumentProgressEventArgs"/> class.
-            /// </summary>
-            /// <param name="value">The current step in document preparation.</param>
-            /// <param name="maximum">The latest step in document preparation.</param>
-            public PrepareDocumentProgressEventArgs(int value, int maximum)
-            {
-                this.Value = value;
-                this.Maximum = maximum;
-            }
+            this.previousListNumbers[listType] = listNumber;
         }
+        //      else
+        //        listNumber = int.MinValue;
 
-        /// <summary>
-        /// The event handler that is being called for the PrepareDocumentProgressEvent event.
-        /// </summary>
-        public delegate void PrepareDocumentProgressEventHandler(object sender, PrepareDocumentProgressEventArgs e);
-
-        internal int ProgressMaximum;
-        internal int ProgressCompleted;
-
-        /// <summary>
-        /// Gets or sets the private fonts of the document.
-        /// </summary>
-        public XPrivateFontCollection PrivateFonts
-        {
-            get { return this.privateFonts; }
-            set { this.privateFonts = value; }
-        }
-        //[DV]
-        internal XPrivateFontCollection privateFonts;
+        this.previousListInfo = listInfo;
+        return listNumber;
     }
+    ListInfo previousListInfo;
+    Hashtable previousListNumbers;
+    private Document document;
+    internal DateTime printDate = DateTime.MinValue;
+
+    /// <summary>
+    /// Arguments for the PrepareDocumentProgressEvent which is called while a document is being prepared (you can use this to display a progress bar).
+    /// </summary>
+    public class PrepareDocumentProgressEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Indicates the current step reached in document preparation.
+        /// </summary>
+        public int Value;
+        /// <summary>
+        /// Indicates the final step in document preparation. The quitient of Value and Maximum can be used to calculate a percentage (e. g. for use in a progress bar).
+        /// </summary>
+        public int Maximum;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrepareDocumentProgressEventArgs"/> class.
+        /// </summary>
+        /// <param name="value">The current step in document preparation.</param>
+        /// <param name="maximum">The latest step in document preparation.</param>
+        public PrepareDocumentProgressEventArgs(int value, int maximum)
+        {
+            this.Value = value;
+            this.Maximum = maximum;
+        }
+    }
+
+    /// <summary>
+    /// The event handler that is being called for the PrepareDocumentProgressEvent event.
+    /// </summary>
+    public delegate void PrepareDocumentProgressEventHandler(object sender, PrepareDocumentProgressEventArgs e);
+
+    internal int ProgressMaximum;
+    internal int ProgressCompleted;
+
+    /// <summary>
+    /// Gets or sets the private fonts of the document.
+    /// </summary>
+    public XPrivateFontCollection PrivateFonts
+    {
+        get => this.privateFonts;
+        set => this.privateFonts = value;
+    }
+    //[DV]
+    internal XPrivateFontCollection privateFonts;
 }

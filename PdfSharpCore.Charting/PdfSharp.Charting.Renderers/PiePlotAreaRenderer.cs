@@ -27,22 +27,19 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting.Renderers;
 
-namespace PdfSharpCore.Charting.Renderers
+/// <summary>
+/// Represents the base for all pie plot area renderer.
+/// </summary>
+internal abstract class PiePlotAreaRenderer : PlotAreaRenderer
 {
-  /// <summary>
-  /// Represents the base for all pie plot area renderer.
-  /// </summary>
-  internal abstract class PiePlotAreaRenderer : PlotAreaRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the PiePlotAreaRenderer class
     /// with the specified renderer parameters.
     /// </summary>
     internal PiePlotAreaRenderer(RendererParameters parms)
-      : base(parms)
+        : base(parms)
     { }
 
     /// <summary>
@@ -50,7 +47,7 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Format()
     {
-      CalcSectors();
+        CalcSectors();
     }
 
     /// <summary>
@@ -58,38 +55,37 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      XRect plotAreaRect = cri.plotAreaRendererInfo.Rect;
-      if (plotAreaRect.IsEmpty)
-        return;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var plotAreaRect = cri.plotAreaRendererInfo.Rect;
+        if (plotAreaRect.IsEmpty)
+            return;
 
-      if (cri.seriesRendererInfos.Length == 0)
-        return;
+        if (cri.seriesRendererInfos.Length == 0)
+            return;
 
-      XGraphics gfx = this.rendererParms.Graphics;
-      XGraphicsState state = gfx.Save();
+        var gfx = this.rendererParms.Graphics;
+        var state = gfx.Save();
 
-      // Draw sectors.
-      SeriesRendererInfo sri = cri.seriesRendererInfos[0];
-      foreach (SectorRendererInfo sector in sri.pointRendererInfos)
-      {
-        if (!double.IsNaN(sector.StartAngle) && !double.IsNaN(sector.SweepAngle))
-          gfx.DrawPie(sector.FillFormat, sector.Rect, sector.StartAngle, sector.SweepAngle);
-      }
+        // Draw sectors.
+        var sri = cri.seriesRendererInfos[0];
+        foreach (SectorRendererInfo sector in sri.pointRendererInfos)
+        {
+            if (!double.IsNaN(sector.StartAngle) && !double.IsNaN(sector.SweepAngle))
+                gfx.DrawPie(sector.FillFormat, sector.Rect, sector.StartAngle, sector.SweepAngle);
+        }
 
-      // Draw border of the sectors.
-      foreach (SectorRendererInfo sector in sri.pointRendererInfos)
-      {
-        if (!double.IsNaN(sector.StartAngle) && !double.IsNaN(sector.SweepAngle))
-          gfx.DrawPie(sector.LineFormat, sector.Rect, sector.StartAngle, sector.SweepAngle);
-      }
+        // Draw border of the sectors.
+        foreach (SectorRendererInfo sector in sri.pointRendererInfos)
+        {
+            if (!double.IsNaN(sector.StartAngle) && !double.IsNaN(sector.SweepAngle))
+                gfx.DrawPie(sector.LineFormat, sector.Rect, sector.StartAngle, sector.SweepAngle);
+        }
 
-      gfx.Restore(state);
+        gfx.Restore(state);
     }
 
     /// <summary>
     /// Calculates the specific positions for each sector.
     /// </summary>
     protected abstract void CalcSectors();
-  }
 }

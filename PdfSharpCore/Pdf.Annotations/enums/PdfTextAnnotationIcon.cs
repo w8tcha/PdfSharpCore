@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,53 +24,51 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf.Annotations
+namespace PdfSharpCore.Pdf.Annotations;
+
+/// <summary>
+/// Specifies the pre-defined icon names of text annotations.
+/// </summary>
+public enum PdfTextAnnotationIcon
 {
     /// <summary>
-    /// Specifies the pre-defined icon names of text annotations.
+    /// A pre-defined annotation icon.
     /// </summary>
-    public enum PdfTextAnnotationIcon
-    {
-        /// <summary>
-        /// A pre-defined annotation icon.
-        /// </summary>
-        NoIcon,
+    NoIcon,
 
-        /// <summary>
-        /// A pre-defined annotation icon.
-        /// </summary>
-        Comment,
+    /// <summary>
+    /// A pre-defined annotation icon.
+    /// </summary>
+    Comment,
 
-        /// <summary>
-        /// A pre-defined annotation icon.
-        /// </summary>
-        Help,
+    /// <summary>
+    /// A pre-defined annotation icon.
+    /// </summary>
+    Help,
 
-        /// <summary>
-        /// A pre-defined annotation icon.
-        /// </summary>
-        Insert,
+    /// <summary>
+    /// A pre-defined annotation icon.
+    /// </summary>
+    Insert,
 
-        /// <summary>
-        /// A pre-defined annotation icon.
-        /// </summary>
-        Key,
+    /// <summary>
+    /// A pre-defined annotation icon.
+    /// </summary>
+    Key,
 
-        /// <summary>
-        /// A pre-defined annotation icon.
-        /// </summary>
-        NewParagraph,
+    /// <summary>
+    /// A pre-defined annotation icon.
+    /// </summary>
+    NewParagraph,
 
-        /// <summary>
-        /// A pre-defined annotation icon.
-        /// </summary>
-        Note,
+    /// <summary>
+    /// A pre-defined annotation icon.
+    /// </summary>
+    Note,
 
-        /// <summary>
-        /// A pre-defined annotation icon.
-        /// </summary>
-        Paragraph,
-    }
+    /// <summary>
+    /// A pre-defined annotation icon.
+    /// </summary>
+    Paragraph
 }

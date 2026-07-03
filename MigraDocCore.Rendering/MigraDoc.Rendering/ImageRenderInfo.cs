@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,30 +25,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.Rendering;
 
-namespace MigraDocCore.Rendering
+/// <summary>
+/// Represents rendering information for images.
+/// </summary>
+internal class ImageRenderInfo : ShapeRenderInfo
 {
-  /// <summary>
-  /// Represents rendering information for images.
-  /// </summary>
-  internal class ImageRenderInfo : ShapeRenderInfo
-  {
     public ImageRenderInfo()
     {
     }
 
     internal override FormatInfo FormatInfo
     {
-      get
-      {
-        if (this.formatInfo == null)
-          this.formatInfo = new ImageFormatInfo();
-        return this.formatInfo;
-      }
+        get
+        {
+            if (this.formatInfo == null)
+                this.formatInfo = new ImageFormatInfo();
+            return this.formatInfo;
+        }
     }
     ImageFormatInfo formatInfo;
-  }
 }

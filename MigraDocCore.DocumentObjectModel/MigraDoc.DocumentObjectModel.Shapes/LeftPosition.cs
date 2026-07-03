@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,28 +27,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using MigraDocCore.DocumentObjectModel.Internals;
-using MigraDocCore.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Resources;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes
+namespace MigraDocCore.DocumentObjectModel.Shapes;
+
+/// <summary>
+/// Represents the left position in a shape.
+/// </summary>
+public struct LeftPosition : INullableValue
 {
-  /// <summary>
-  /// Represents the left position in a shape.
-  /// </summary>
-  public struct LeftPosition : INullableValue
-  {
     /// <summary>
     /// Initializes a new instance of the LeftPosition class from Unit.
     /// </summary>
     private LeftPosition(Unit value)
     {
-      this.shapePosition = ShapePosition.Undefined;
-      this.position = value;
-      this.notNull = !value.IsNull;
+        this.shapePosition = ShapePosition.Undefined;
+        this.position = value;
+        this.notNull = !value.IsNull;
     }
 
     /// <summary>
@@ -57,12 +54,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     private LeftPosition(ShapePosition value)
     {
-      if (!(value == ShapePosition.Undefined || IsValid(value)))
-        throw new ArgumentException(AppResources.InvalidEnumForLeftPosition);
+        if (!(value == ShapePosition.Undefined || IsValid(value)))
+            throw new ArgumentException(AppResources.InvalidEnumForLeftPosition);
 
-      this.shapePosition = value;
-      this.position = Unit.NullValue;
-      this.notNull = (value != ShapePosition.Undefined);
+        this.shapePosition = value;
+        this.position = Unit.NullValue;
+        this.notNull = (value != ShapePosition.Undefined);
     }
 
     /// <summary>
@@ -70,11 +67,11 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     private void SetFromEnum(ShapePosition shapePosition)
     {
-      if (!IsValid(shapePosition))
-        throw new ArgumentException(AppResources.InvalidEnumForLeftPosition);
+        if (!IsValid(shapePosition))
+            throw new ArgumentException(AppResources.InvalidEnumForLeftPosition);
 
-      this.shapePosition = shapePosition;
-      this.position = Unit.NullValue;
+        this.shapePosition = shapePosition;
+        this.position = Unit.NullValue;
     }
 
     /// <summary>
@@ -82,8 +79,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     private void SetFromUnit(Unit unit)
     {
-      this.shapePosition = ShapePosition.Undefined;
-      this.position = unit;
+        this.shapePosition = ShapePosition.Undefined;
+        this.position = unit;
     }
 
     /// <summary>
@@ -91,19 +88,19 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     void INullableValue.SetValue(object value)
     {
-      //REVIEW KlPo4KlPo: Code-Verdopplung in TopPostion/LeftPosition
-      if (value == null)
-        throw new ArgumentNullException("value");
+        //REVIEW KlPo4KlPo: Code-Verdopplung in TopPostion/LeftPosition
+        if (value == null)
+            throw new ArgumentNullException("value");
 
-      if (value is ShapePosition)
-        SetFromEnum((ShapePosition)value);
+        if (value is ShapePosition)
+            SetFromEnum((ShapePosition)value);
 
-      else if (value is string && Enum.IsDefined(typeof(ShapePosition), value))
-        SetFromEnum((ShapePosition)Enum.Parse(typeof(ShapePosition), (string)value));
-      else
-        SetFromUnit(value.ToString());
+        else if (value is string && Enum.IsDefined(typeof(ShapePosition), value))
+            SetFromEnum((ShapePosition)Enum.Parse(typeof(ShapePosition), (string)value));
+        else
+            SetFromUnit(value.ToString());
 
-      this.notNull = true;
+        this.notNull = true;
     }
 
     /// <summary>
@@ -111,10 +108,10 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     object INullableValue.GetValue()
     {
-      if (this.shapePosition == ShapePosition.Undefined)
-        return this.position;
+        if (this.shapePosition == ShapePosition.Undefined)
+            return this.position;
 
-      return this.shapePosition;
+        return this.shapePosition;
     }
 
     /// <summary>
@@ -122,32 +119,24 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     void INullableValue.SetNull()
     {
-      this = new LeftPosition();
+        this = new LeftPosition();
     }
 
     /// <summary>
     /// Determines whether this instance is null (not set).
     /// </summary>
-    bool INullableValue.IsNull
-    {
-      get { return !this.notNull; }
-    }
+    bool INullableValue.IsNull => !this.notNull;
 
     /// <summary>
     /// Gets the value of the position in unit.
     /// </summary>
-    public Unit Position
-    {
-      get { return this.position; }
-    }
+    public Unit Position => this.position;
 
     /// <summary>
     /// Gets the value of the position.
     /// </summary>
-    public ShapePosition ShapePosition
-    {
-      get { return this.shapePosition; }
-    }
+    public ShapePosition ShapePosition => this.shapePosition;
+
     internal ShapePosition shapePosition;
     internal Unit position;
     private bool notNull;
@@ -157,11 +146,11 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     private static bool IsValid(ShapePosition shapePosition)
     {
-      return shapePosition == ShapePosition.Left ||
-             shapePosition == ShapePosition.Center ||
-             shapePosition == ShapePosition.Right ||
-             shapePosition == ShapePosition.Inside ||
-             shapePosition == ShapePosition.Outside;
+        return shapePosition == ShapePosition.Left ||
+               shapePosition == ShapePosition.Center ||
+               shapePosition == ShapePosition.Right ||
+               shapePosition == ShapePosition.Inside ||
+               shapePosition == ShapePosition.Outside;
     }
 
     /// <summary>
@@ -169,7 +158,7 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public static implicit operator LeftPosition(ShapePosition value)
     {
-      return new LeftPosition(value);
+        return new LeftPosition(value);
     }
 
     /// <summary>
@@ -177,7 +166,7 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public static implicit operator LeftPosition(Unit value)
     {
-      return new LeftPosition(value);
+        return new LeftPosition(value);
     }
 
     /// <summary>
@@ -186,8 +175,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public static implicit operator LeftPosition(string value)
     {
-      Unit unit = value;
-      return new LeftPosition(unit);
+        Unit unit = value;
+        return new LeftPosition(unit);
     }
 
     /// <summary>
@@ -196,8 +185,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public static implicit operator LeftPosition(double value)
     {
-      Unit unit = value;
-      return new LeftPosition(unit);
+        Unit unit = value;
+        return new LeftPosition(unit);
     }
 
     /// <summary>
@@ -206,8 +195,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public static implicit operator LeftPosition(int value)
     {
-      Unit unit = value;
-      return new LeftPosition(unit);
+        Unit unit = value;
+        return new LeftPosition(unit);
     }
 
     /// <summary>
@@ -215,33 +204,30 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public static LeftPosition Parse(string value)
     {
-      if (value == null || value.Length == 0)
-        throw new ArgumentNullException("value");
+        if (value == null || value.Length == 0)
+            throw new ArgumentNullException("value");
 
-      value = value.Trim();
-      char ch = value[0];
-      if (ch == '+' || ch == '-' || Char.IsNumber(ch))
-        return Unit.Parse(value);
-      else
-        return (ShapePosition)Enum.Parse(typeof(ShapePosition), value, true);
+        value = value.Trim();
+        var ch = value[0];
+        if (ch == '+' || ch == '-' || Char.IsNumber(ch))
+            return Unit.Parse(value);
+        else
+            return (ShapePosition)Enum.Parse(typeof(ShapePosition), value, true);
     }
 
-    #region Internal
     /// <summary>
     /// Converts LeftPosition into DDL.
     /// </summary>  
     internal void Serialize(Serializer serializer)
     {
-      if (this.shapePosition == ShapePosition.Undefined)
-        serializer.WriteSimpleAttribute("Left", this.Position);
-      else
-        serializer.WriteSimpleAttribute("Left", this.ShapePosition);
+        if (this.shapePosition == ShapePosition.Undefined)
+            serializer.WriteSimpleAttribute("Left", this.Position);
+        else
+            serializer.WriteSimpleAttribute("Left", this.ShapePosition);
     }
-    #endregion
 
     /// <summary>
     /// Returns the unitialized LeftPosition object.
     /// </summary>
-    internal static readonly LeftPosition NullValue = new LeftPosition();
-  }
+    internal static readonly LeftPosition NullValue = new();
 }

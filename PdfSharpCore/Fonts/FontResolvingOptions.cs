@@ -1,5 +1,4 @@
-﻿#region PDFsharp - A .NET library for processing PDF
-//
+﻿//
 // Authors:
 //   Stefan Lange
 //
@@ -25,58 +24,41 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Fonts
+namespace PdfSharpCore.Fonts;
+
+/// <summary>
+/// Parameters that affect font selection.
+/// </summary>
+class FontResolvingOptions
 {
-    /// <summary>
-    /// Parameters that affect font selection.
-    /// </summary>
-    class FontResolvingOptions
+    public FontResolvingOptions(XFontStyle fontStyle)
     {
-        public FontResolvingOptions(XFontStyle fontStyle)
-        {
-            FontStyle = fontStyle;
-        }
-
-        public FontResolvingOptions(XFontStyle fontStyle, XStyleSimulations styleSimulations)
-        {
-            FontStyle = fontStyle;
-            OverrideStyleSimulations = true;
-            StyleSimulations = styleSimulations;
-        }
-
-        public bool IsBold
-        {
-            get { return (FontStyle & XFontStyle.Bold) == XFontStyle.Bold; }
-        }
-
-        public bool IsItalic
-        {
-            get { return (FontStyle & XFontStyle.Italic) == XFontStyle.Italic; }
-        }
-
-        public bool IsBoldItalic
-        {
-            get { return (FontStyle & XFontStyle.BoldItalic) == XFontStyle.BoldItalic; }
-        }
-
-        public bool MustSimulateBold
-        {
-            get { return (StyleSimulations & XStyleSimulations.BoldSimulation) == XStyleSimulations.BoldSimulation; }
-        }
-
-        public bool MustSimulateItalic
-        {
-            get { return (StyleSimulations & XStyleSimulations.ItalicSimulation) == XStyleSimulations.ItalicSimulation; }
-        }
-
-        public XFontStyle FontStyle;
-
-        public bool OverrideStyleSimulations;
-
-        public XStyleSimulations StyleSimulations;
+        FontStyle = fontStyle;
     }
+
+    public FontResolvingOptions(XFontStyle fontStyle, XStyleSimulations styleSimulations)
+    {
+        FontStyle = fontStyle;
+        OverrideStyleSimulations = true;
+        StyleSimulations = styleSimulations;
+    }
+
+    public bool IsBold => (FontStyle & XFontStyle.Bold) == XFontStyle.Bold;
+
+    public bool IsItalic => (FontStyle & XFontStyle.Italic) == XFontStyle.Italic;
+
+    public bool IsBoldItalic => (FontStyle & XFontStyle.BoldItalic) == XFontStyle.BoldItalic;
+
+    public bool MustSimulateBold => (StyleSimulations & XStyleSimulations.BoldSimulation) == XStyleSimulations.BoldSimulation;
+
+    public bool MustSimulateItalic => (StyleSimulations & XStyleSimulations.ItalicSimulation) == XStyleSimulations.ItalicSimulation;
+
+    public XFontStyle FontStyle;
+
+    public bool OverrideStyleSimulations;
+
+    public XStyleSimulations StyleSimulations;
 }

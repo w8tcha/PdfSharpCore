@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,15 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Internal color names.
+/// </summary>
+enum ColorName : uint
 {
-  /// <summary>
-  /// Internal color names.
-  /// </summary>
-  enum ColorName : uint
-  {
     AliceBlue = 0xFFF0F8FF,
     AntiqueWhite = 0xFFFAEBD7,
     Aqua = 0xFF00FFFF,
@@ -178,5 +176,4 @@ namespace MigraDocCore.DocumentObjectModel
     WhiteSmoke = 0xFFF5F5F5,
     Yellow = 0xFFFFFF00,
     YellowGreen = 0xFF9ACD32
-  }
 }

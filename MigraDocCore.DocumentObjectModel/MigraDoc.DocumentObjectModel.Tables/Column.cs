@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,21 +27,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
-using MigraDocCore.DocumentObjectModel.IO;
+
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Tables
+namespace MigraDocCore.DocumentObjectModel.Tables;
+
+/// <summary>
+/// Represents a column of a table.
+/// </summary>
+public class Column : DocumentObject
 {
-  /// <summary>
-  /// Represents a column of a table.
-  /// </summary>
-  public class Column : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the Column class.
     /// </summary>
@@ -55,13 +51,12 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     internal Column(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new Column Clone()
     {
-      return (Column)DeepCopy();
+        return (Column)DeepCopy();
     }
 
     /// <summary>
@@ -69,42 +64,40 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     protected override object DeepCopy()
     {
-      Column column = (Column)base.DeepCopy();
-      if (column.format != null)
-      {
-        column.format = column.format.Clone();
-        column.format.parent = column;
-      }
-      if (column.borders != null)
-      {
-        column.borders = column.borders.Clone();
-        column.borders.parent = column;
-      }
-      if (column.shading != null)
-      {
-        column.shading = column.shading.Clone();
-        column.shading.parent = column;
-      }
-      return column;
+        var column = (Column)base.DeepCopy();
+        if (column.format != null)
+        {
+            column.format = column.format.Clone();
+            column.format.parent = column;
+        }
+        if (column.borders != null)
+        {
+            column.borders = column.borders.Clone();
+            column.borders.parent = column;
+        }
+        if (column.shading != null)
+        {
+            column.shading = column.shading.Clone();
+            column.shading.parent = column;
+        }
+        return column;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets the table the Column belongs to.
     /// </summary>
     public Table Table
     {
-      get
-      {
-        if (this.table == null)
+        get
         {
-          Columns clms = this.Parent as Columns;
-          if (clms != null)
-            this.table = clms.Parent as Table;
+            if (this.table == null)
+            {
+                var clms = this.Parent as Columns;
+                if (clms != null)
+                    this.table = clms.Parent as Table;
+            }
+            return this.table;
         }
-        return this.table;
-      }
     }
     Table table;
 
@@ -113,19 +106,19 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public int Index
     {
-      get
-      {
-        if (!index.HasValue)
+        get
         {
-          Columns clms = (Columns)Parent;
-          // One for all and all for one.
-          for (int i = 0; i < clms.Count; ++i)
-          {
-            clms[i].index = i;
-          }
+            if (!index.HasValue)
+            {
+                var clms = (Columns)Parent;
+                // One for all and all for one.
+                for (var i = 0; i < clms.Count; ++i)
+                {
+                    clms[i].index = i;
+                }
+            }
+            return index ?? 0;
         }
-        return index ?? 0;
-      }
     }
     [DV]
     internal int? index;
@@ -133,22 +126,17 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// <summary>
     /// Gets a cell by its row index. The first cell has index 0.
     /// </summary>
-    public Cell this[int index]
-    {
-      get
-      {
+    public Cell this[int index] =>
         //Check.ArgumentOutOfRange(index >= 0 && index < table.Rows.Count, "index");
-        return Table.Rows[index][this.index ?? 0];
-      }
-    }
+        Table.Rows[index][this.index ?? 0];
 
     /// <summary>
     /// Sets or gets the default style name for all cells of the column.
     /// </summary>
     public string Style
     {
-      get { return this.style.Value; }
-      set { this.style.Value = value; }
+        get => this.style.Value;
+        set => this.style.Value = value;
     }
     [DV]
     internal NString style = NString.NullValue;
@@ -158,18 +146,18 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public ParagraphFormat Format
     {
-      get
-      {
-        if (this.format == null)
-          this.format = new ParagraphFormat(this);
+        get
+        {
+            if (this.format == null)
+                this.format = new ParagraphFormat(this);
 
-        return this.format;
-      }
-      set
-      {
-        SetParent(value);
-        this.format = value;
-      }
+            return this.format;
+        }
+        set
+        {
+            SetParent(value);
+            this.format = value;
+        }
     }
     [DV]
     internal ParagraphFormat format;
@@ -179,8 +167,8 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public Unit Width
     {
-      get { return this.width; }
-      set { this.width = value; }
+        get => this.width;
+        set => this.width = value;
     }
     [DV]
     internal Unit width = Unit.NullValue;
@@ -190,8 +178,8 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public Unit LeftPadding
     {
-      get { return this.leftPadding; }
-      set { this.leftPadding = value; }
+        get => this.leftPadding;
+        set => this.leftPadding = value;
     }
     [DV]
     internal Unit leftPadding = Unit.NullValue;
@@ -201,8 +189,8 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public Unit RightPadding
     {
-      get { return this.rightPadding; }
-      set { this.rightPadding = value; }
+        get => this.rightPadding;
+        set => this.rightPadding = value;
     }
     [DV]
     internal Unit rightPadding = Unit.NullValue;
@@ -212,18 +200,18 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public Borders Borders
     {
-      get
-      {
-        if (this.borders == null)
-          this.borders = new Borders(this);
+        get
+        {
+            if (this.borders == null)
+                this.borders = new Borders(this);
 
-        return this.borders;
-      }
-      set
-      {
-        SetParent(value);
-        this.borders = value;
-      }
+            return this.borders;
+        }
+        set
+        {
+            SetParent(value);
+            this.borders = value;
+        }
     }
     [DV]
     internal Borders borders;
@@ -234,8 +222,8 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public int KeepWith
     {
-      get { return this.keepWith ?? 0; }
-      set { this.keepWith = value; }
+        get => this.keepWith ?? 0;
+        set => this.keepWith = value;
     }
     [DV]
     internal int? keepWith;
@@ -245,8 +233,8 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public bool HeadingFormat
     {
-      get { return this.headingFormat.Value; }
-      set { this.headingFormat.Value = value; }
+        get => this.headingFormat.Value;
+        set => this.headingFormat.Value = value;
     }
     [DV]
     internal NBool headingFormat = NBool.NullValue;
@@ -256,18 +244,18 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public Shading Shading
     {
-      get
-      {
-        if (this.shading == null)
-          this.shading = new Shading(this);
+        get
+        {
+            if (this.shading == null)
+                this.shading = new Shading(this);
 
-        return this.shading;
-      }
-      set
-      {
-        SetParent(value);
-        this.shading = value;
-      }
+            return this.shading;
+        }
+        set
+        {
+            SetParent(value);
+            this.shading = value;
+        }
     }
     [DV]
     internal Shading shading;
@@ -277,54 +265,52 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public string Comment
     {
-      get { return this.comment.Value; }
-      set { this.comment.Value = value; }
+        get => this.comment.Value;
+        set => this.comment.Value = value;
     }
     [DV]
     internal NString comment = NString.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts Column into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      serializer.WriteComment(this.comment.Value);
-      serializer.WriteLine("\\column");
+        serializer.WriteComment(this.comment.Value);
+        serializer.WriteLine("\\column");
 
-      int pos = serializer.BeginAttributes();
+        var pos = serializer.BeginAttributes();
 
-      if (this.style.Value != String.Empty)
-        serializer.WriteSimpleAttribute("Style", this.Style);
+        if (this.style.Value != String.Empty)
+            serializer.WriteSimpleAttribute("Style", this.Style);
 
-      if (!this.IsNull("Format"))
-        this.format.Serialize(serializer, "Format", null);
+        if (!this.IsNull("Format"))
+            this.format.Serialize(serializer, "Format", null);
 
-      if (!this.headingFormat.IsNull)
-        serializer.WriteSimpleAttribute("HeadingFormat", HeadingFormat);
+        if (!this.headingFormat.IsNull)
+            serializer.WriteSimpleAttribute("HeadingFormat", HeadingFormat);
 
-      if (!this.leftPadding.IsNull)
-        serializer.WriteSimpleAttribute("LeftPadding", LeftPadding);
+        if (!this.leftPadding.IsNull)
+            serializer.WriteSimpleAttribute("LeftPadding", LeftPadding);
 
-      if (!this.rightPadding.IsNull)
-        serializer.WriteSimpleAttribute("RightPadding", RightPadding);
+        if (!this.rightPadding.IsNull)
+            serializer.WriteSimpleAttribute("RightPadding", RightPadding);
 
-      if (!this.width.IsNull)
-        serializer.WriteSimpleAttribute("Width", this.Width);
+        if (!this.width.IsNull)
+            serializer.WriteSimpleAttribute("Width", this.Width);
 
-      if (this.keepWith.HasValue)
-        serializer.WriteSimpleAttribute("KeepWith", this.KeepWith);
+        if (this.keepWith.HasValue)
+            serializer.WriteSimpleAttribute("KeepWith", this.KeepWith);
 
-      if (!this.IsNull("Borders"))
-        this.borders.Serialize(serializer, null);
+        if (!this.IsNull("Borders"))
+            this.borders.Serialize(serializer, null);
 
-      if (!this.IsNull("Shading"))
-        this.shading.Serialize(serializer);
+        if (!this.IsNull("Shading"))
+            this.shading.Serialize(serializer);
 
-      serializer.EndAttributes(pos);
+        serializer.EndAttributes(pos);
 
-      // columns has no content
+        // columns has no content
     }
 
     /// <summary>
@@ -332,14 +318,12 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(Column));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(Column));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

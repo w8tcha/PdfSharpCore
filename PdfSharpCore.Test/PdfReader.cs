@@ -1,24 +1,23 @@
 ﻿using System.IO;
 using System.Reflection;
-using PdfSharpCore.Pdf;
+
 using PdfSharpCore.Pdf.IO;
-using Xunit;
+using NUnit.Framework;
 
-namespace PdfSharpCore.Test
+namespace PdfSharpCore.Test;
+
+public class PdfReader
 {
-    public class PdfReader
+    [Test]
+    public void Should_beAbleToReadExistingPdf_When_inputIsStream()
     {
-        [Fact]
-        public void Should_beAbleToReadExistingPdf_When_inputIsStream()
-        {
-            var root = Path.GetDirectoryName(GetType().GetTypeInfo().Assembly.Location);
-            var existingPdfPath = Path.Combine(root, "Assets", "FamilyTree.pdf");
+        var root = Path.GetDirectoryName(GetType().GetTypeInfo().Assembly.Location);
+        var existingPdfPath = Path.Combine(root, "Assets", "FamilyTree.pdf");
 
-            var fs = File.OpenRead(existingPdfPath);
-            PdfDocument inputDocument = Pdf.IO.PdfReader.Open(fs, PdfDocumentOpenMode.Import);
-            fs.Dispose();
+        var fs = File.OpenRead(existingPdfPath);
+        var inputDocument = Pdf.IO.PdfReader.Open(fs, PdfDocumentOpenMode.Import);
+        fs.Dispose();
 
-            Assert.True(true);
-        }
+        Assert.True(true);
     }
 }

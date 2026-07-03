@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,15 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Determines the format of the footnote number.
+/// </summary>
+public enum FootnoteNumberStyle
 {
-  /// <summary>
-  /// Determines the format of the footnote number.
-  /// </summary>
-  public enum FootnoteNumberStyle
-  {
     /// <summary>
     /// Numbering like: 1, 2, 3, 4.
     /// </summary>
@@ -61,5 +59,4 @@ namespace MigraDocCore.DocumentObjectModel
     /// Upper case roman numbers: I, II, III, IV.
     /// </summary>
     UppercaseRoman
-  }
 }

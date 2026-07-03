@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,67 +25,64 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Field information used to fill fields when rendering or formatting.
+/// </summary>
+internal class FieldInfos
 {
-  /// <summary>
-  /// Field information used to fill fields when rendering or formatting.
-  /// </summary>
-  internal class FieldInfos
-  {
     internal FieldInfos(Dictionary<string, BookmarkInfo> bookmarks)
     {
-      this.bookmarks = bookmarks;
+        this.bookmarks = bookmarks;
     }
 
     internal struct BookmarkInfo
     {
-      internal BookmarkInfo(int physicalPageNumber, int displayPageNumber)
-      {
-        this.displayPageNumber = physicalPageNumber;
-        this.shownPageNumber = displayPageNumber;
-      }
+        internal BookmarkInfo(int physicalPageNumber, int displayPageNumber)
+        {
+            this.displayPageNumber = physicalPageNumber;
+            this.shownPageNumber = displayPageNumber;
+        }
 
-      internal int displayPageNumber;
-      internal int shownPageNumber;
+        internal int displayPageNumber;
+        internal int shownPageNumber;
     }
 
     internal void AddBookmark(string name)
     {
-      if (this.pyhsicalPageNr <= 0)
-        return;
+        if (this.pyhsicalPageNr <= 0)
+            return;
 
-      if (this.bookmarks.ContainsKey(name))
-        this.bookmarks.Remove(name);
+        if (this.bookmarks.ContainsKey(name))
+            this.bookmarks.Remove(name);
 
-      if (this.pyhsicalPageNr > 0)
-        this.bookmarks.Add(name, new BookmarkInfo(this.pyhsicalPageNr, this.displayPageNr));
+        if (this.pyhsicalPageNr > 0)
+            this.bookmarks.Add(name, new BookmarkInfo(this.pyhsicalPageNr, this.displayPageNr));
     }
 
     internal int GetShownPageNumber(string bookmarkName)
     {
-      if (this.bookmarks.ContainsKey(bookmarkName))
-      {
-        BookmarkInfo bi = this.bookmarks[bookmarkName];
-        return bi.shownPageNumber;
-      }
-      return -1;
+        if (this.bookmarks.ContainsKey(bookmarkName))
+        {
+            var bi = this.bookmarks[bookmarkName];
+            return bi.shownPageNumber;
+        }
+        return -1;
     }
 
     internal int GetPhysicalPageNumber(string bookmarkName)
     {
-      if (this.bookmarks.ContainsKey(bookmarkName))
-      {
-        BookmarkInfo bi = this.bookmarks[bookmarkName];
-        return bi.displayPageNumber;
-      }
-      return -1;
+        if (this.bookmarks.ContainsKey(bookmarkName))
+        {
+            var bi = this.bookmarks[bookmarkName];
+            return bi.displayPageNumber;
+        }
+        return -1;
     }
 
     Dictionary<string, BookmarkInfo> bookmarks;
@@ -96,5 +92,4 @@ namespace MigraDocCore.Rendering
     internal int sectionPages;
     internal int numPages;
     internal DateTime date;
-  }
 }

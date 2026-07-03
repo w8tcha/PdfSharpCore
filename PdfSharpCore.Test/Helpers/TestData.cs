@@ -1,9 +1,9 @@
-﻿namespace PdfSharpCore.Test.Helpers
+﻿namespace PdfSharpCore.Test.Helpers;
+
+public static class TestData
 {
-    public static class TestData
-    {
-        public static string LoremIpsumText =
-            @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non sapien leo. Aliquam elementum volutpat lacus, sit amet aliquet est volutpat at. Nam eleifend vehicula bibendum. Sed lacinia velit ex, id auctor tellus varius a. Vivamus cursus ut nulla quis pretium. Nunc accumsan felis nec tortor fermentum iaculis. Vivamus non lacus ullamcorper, porta justo ut, dictum nibh. Cras scelerisque in risus vitae hendrerit. Duis venenatis felis in lacinia vestibulum. Proin mauris ex, efficitur nec tincidunt in, imperdiet eget risus. Nulla porttitor mollis pellentesque. Fusce pretium ut odio et imperdiet.
+    public static string LoremIpsumText =
+        @"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non sapien leo. Aliquam elementum volutpat lacus, sit amet aliquet est volutpat at. Nam eleifend vehicula bibendum. Sed lacinia velit ex, id auctor tellus varius a. Vivamus cursus ut nulla quis pretium. Nunc accumsan felis nec tortor fermentum iaculis. Vivamus non lacus ullamcorper, porta justo ut, dictum nibh. Cras scelerisque in risus vitae hendrerit. Duis venenatis felis in lacinia vestibulum. Proin mauris ex, efficitur nec tincidunt in, imperdiet eget risus. Nulla porttitor mollis pellentesque. Fusce pretium ut odio et imperdiet.
 
 Vivamus euismod velit id massa mollis, quis congue metus faucibus. Donec ante enim, vehicula a cursus ut, porta vel dui. Proin porta faucibus dolor non consequat. Mauris aliquam, leo a interdum pretium, tellus nisi semper libero, at suscipit dui mi bibendum turpis. Phasellus tempor mauris a eleifend placerat. Fusce in velit ut lectus sagittis varius. Etiam vulputate, libero sit amet posuere posuere, orci nunc ultricies velit, non porttitor dui ante feugiat purus. Ut semper congue lacinia. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed facilisis ante at sapien dignissim, ut volutpat elit dictum. Morbi nulla ante, laoreet non vulputate et, facilisis ut lectus. Mauris mollis mi nec venenatis congue. Fusce efficitur vitae massa non vehicula. Fusce euismod molestie posuere. Nunc facilisis ipsum nec justo scelerisque, nec cursus diam gravida.
 
@@ -18,5 +18,4 @@ Duis ullamcorper tellus ac mattis vestibulum. Integer nibh nunc, commodo sit ame
 Donec sollicitudin efficitur sapien iaculis fringilla. Donec rutrum sagittis dolor, at auctor turpis finibus et. Aliquam et dictum risus. Praesent viverra efficitur congue. Suspendisse condimentum posuere risus, id dignissim enim viverra ut. Aliquam eleifend nisl eu dolor luctus, nec rhoncus nisi porta. Donec ut lacinia risus. Curabitur bibendum lacus consequat sem consequat euismod. Donec auctor cursus ante quis rutrum. Aliquam mattis eget libero non porta.
 
 Maecenas mollis sollicitudin felis at imperdiet. Duis dignissim purus quis interdum mattis. Nam sit amet quam quis enim hendrerit tincidunt. Aliquam euismod metus justo, non lobortis risus vehicula in. Pellentesque tempus, leo at placerat interdum, diam lectus gravida purus, id placerat justo quam nec mauris. Ut ullamcorper commodo dui in pretium. Suspendisse luctus mauris lacinia neque faucibus sollicitudin. Pellentesque ut ipsum metus. Quisque rutrum, risus eget feugiat vestibulum, enim nisl ornare risus, sit amet interdum arcu lacus at turpis. Mauris nec tristique massa. Curabitur diam urna, dapibus eget lorem porta, venenatis mattis justo. Sed eleifend accumsan lectus, id tempor metus semper in.";
-    }
 }

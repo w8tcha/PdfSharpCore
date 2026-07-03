@@ -1,5 +1,4 @@
-﻿#region MigraDoc - Creating Documents on the Fly
-//
+﻿//
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -28,46 +27,44 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Deals with image file names, searches along the image path, checks if images exist etc.
+/// </summary>
+public class ImageHelper
 {
-  /// <summary>
-  /// Deals with image file names, searches along the image path, checks if images exist etc.
-  /// </summary>
-  public class ImageHelper
-  {
     /// <summary>
     /// Gets the first existing image from the subfolders.
     /// </summary>
     public static string GetImageName(string root, string filename, string imagePath)
     {
-      try
-      {
-        List<string> subfolders = new List<string>(imagePath.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-        subfolders.Add("");
-
-        foreach (string subfolder in subfolders)
+        try
         {
-          string fullname = System.IO.Path.Combine(System.IO.Path.Combine(root, subfolder), filename);
-          int pageNumber;
-          string realFile = ExtractPageNumber(fullname, out pageNumber);
+            var subfolders = new List<string>(imagePath.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+            subfolders.Add("");
 
-          if (System.IO.File.Exists(realFile))
-            return fullname;
+            foreach (var subfolder in subfolders)
+            {
+                var fullname = System.IO.Path.Combine(System.IO.Path.Combine(root, subfolder), filename);
+                int pageNumber;
+                var realFile = ExtractPageNumber(fullname, out pageNumber);
+
+                if (System.IO.File.Exists(realFile))
+                    return fullname;
+            }
         }
-      }
-      catch (Exception ex)
-      {
-        Debug.Assert(false, "Should never occur with properly formatted Wiki texts. " + ex);
-        //throw;
-      }
-      return null;
+        catch (Exception ex)
+        {
+            Debug.Assert(false, "Should never occur with properly formatted Wiki texts. " + ex);
+            //throw;
+        }
+        return null;
     }
 
     /// <summary>
@@ -75,21 +72,21 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public static bool InSubfolder(string root, string filename, string imagePath, string referenceFilename)
     {
-      List<string> subfolders = new List<string>(imagePath.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
-      subfolders.Add("");
+        var subfolders = new List<string>(imagePath.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+        subfolders.Add("");
 
-      foreach (string subfolder in subfolders)
-      {
-        string fullname = System.IO.Path.Combine(System.IO.Path.Combine(root, subfolder), filename);
-        int pageNumber;
-        string realFile = ExtractPageNumber(fullname, out pageNumber);
-        if (System.IO.File.Exists(realFile))
+        foreach (var subfolder in subfolders)
         {
-          if (fullname == referenceFilename)
-            return true;
+            var fullname = System.IO.Path.Combine(System.IO.Path.Combine(root, subfolder), filename);
+            int pageNumber;
+            var realFile = ExtractPageNumber(fullname, out pageNumber);
+            if (System.IO.File.Exists(realFile))
+            {
+                if (fullname == referenceFilename)
+                    return true;
+            }
         }
-      }
-      return false;
+        return false;
     }
 
     /// <summary>
@@ -98,36 +95,35 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public static string ExtractPageNumber(string path, out int pageNumber)
     {
-      // Note: duplicated from class XPdfForm
-      if (path == null)
-        throw new ArgumentNullException("path");
+        // Note: duplicated from class XPdfForm
+        if (path == null)
+            throw new ArgumentNullException("path");
 
-      pageNumber = 0;
-      int length = path.Length;
-      if (length != 0)
-      {
-        length--;
-        if (Char.IsDigit(path, length))
+        pageNumber = 0;
+        var length = path.Length;
+        if (length != 0)
         {
-          while (Char.IsDigit(path, length) && length >= 0)
             length--;
-          if (length > 0 && path[length] == '#')
-          {
-            // must have at least one dot left of colon to distinguish from e.g. '#123'
-            if (path.IndexOf('.') != -1)
+            if (Char.IsDigit(path, length))
             {
-              pageNumber = Int32.Parse(path.Substring(length + 1));
-              path = path.Substring(0, length);
+                while (Char.IsDigit(path, length) && length >= 0)
+                    length--;
+                if (length > 0 && path[length] == '#')
+                {
+                    // must have at least one dot left of colon to distinguish from e.g. '#123'
+                    if (path.IndexOf('.') != -1)
+                    {
+                        pageNumber = Int32.Parse(path.Substring(length + 1));
+                        path = path.Substring(0, length);
+                    }
+                }
             }
-          }
         }
-      }
-      return path;
+        return path;
     }
 
-        internal static string GetImageName(string filePath, object name, string imagePath)
-        {
-            throw new NotImplementedException();
-        }
+    internal static string GetImageName(string filePath, object name, string imagePath)
+    {
+        throw new NotImplementedException();
     }
 }

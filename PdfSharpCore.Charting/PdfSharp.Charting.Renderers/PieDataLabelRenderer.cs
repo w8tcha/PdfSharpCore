@@ -30,13 +30,13 @@
 using System;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a data label renderer for pie charts.
+/// </summary>
+internal class PieDataLabelRenderer : DataLabelRenderer
 {
-  /// <summary>
-  /// Represents a data label renderer for pie charts.
-  /// </summary>
-  internal class PieDataLabelRenderer : DataLabelRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the PieDataLabelRenderer class with the
     /// specified renderer parameters.
@@ -50,38 +50,38 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Format()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      if (cri.seriesRendererInfos.Length == 0)
-        return;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        if (cri.seriesRendererInfos.Length == 0)
+            return;
 
-      SeriesRendererInfo sri = cri.seriesRendererInfos[0];
-      if (sri.dataLabelRendererInfo == null)
-        return;
+        var sri = cri.seriesRendererInfos[0];
+        if (sri.dataLabelRendererInfo == null)
+            return;
 
-      double sumValues = sri.SumOfPoints;
-      XGraphics gfx = this.rendererParms.Graphics;
+        var sumValues = sri.SumOfPoints;
+        var gfx = this.rendererParms.Graphics;
 
-      sri.dataLabelRendererInfo.Entries = new DataLabelEntryRendererInfo[sri.pointRendererInfos.Length];
-      int index = 0;
-      foreach (SectorRendererInfo sector in sri.pointRendererInfos)
-      {
-        DataLabelEntryRendererInfo dleri = new DataLabelEntryRendererInfo();
-        if (sri.dataLabelRendererInfo.Type != DataLabelType.None)
+        sri.dataLabelRendererInfo.Entries = new DataLabelEntryRendererInfo[sri.pointRendererInfos.Length];
+        var index = 0;
+        foreach (SectorRendererInfo sector in sri.pointRendererInfos)
         {
-          if (sri.dataLabelRendererInfo.Type == DataLabelType.Percent)
-          {
-            double percent = 100 / (sumValues / Math.Abs(sector.point.value));
-            dleri.Text = percent.ToString(sri.dataLabelRendererInfo.Format) + "%";
-          }
-          else if (sri.dataLabelRendererInfo.Type == DataLabelType.Value)
-            dleri.Text = sector.point.value.ToString(sri.dataLabelRendererInfo.Format);
+            var dleri = new DataLabelEntryRendererInfo();
+            if (sri.dataLabelRendererInfo.Type != DataLabelType.None)
+            {
+                if (sri.dataLabelRendererInfo.Type == DataLabelType.Percent)
+                {
+                    var percent = 100 / (sumValues / Math.Abs(sector.point.value));
+                    dleri.Text = percent.ToString(sri.dataLabelRendererInfo.Format) + "%";
+                }
+                else if (sri.dataLabelRendererInfo.Type == DataLabelType.Value)
+                    dleri.Text = sector.point.value.ToString(sri.dataLabelRendererInfo.Format);
 
-          if (dleri.Text.Length > 0)
-            dleri.Size = gfx.MeasureString(dleri.Text, sri.dataLabelRendererInfo.Font);
+                if (dleri.Text.Length > 0)
+                    dleri.Size = gfx.MeasureString(dleri.Text, sri.dataLabelRendererInfo.Font);
+            }
+
+            sri.dataLabelRendererInfo.Entries[index++] = dleri;
         }
-
-        sri.dataLabelRendererInfo.Entries[index++] = dleri;
-      }
     }
 
     /// <summary>
@@ -89,27 +89,27 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      if (cri.seriesRendererInfos.Length == 0)
-        return;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        if (cri.seriesRendererInfos.Length == 0)
+            return;
 
-      SeriesRendererInfo sri = cri.seriesRendererInfos[0];
-      if (sri.dataLabelRendererInfo == null)
-        return;
+        var sri = cri.seriesRendererInfos[0];
+        if (sri.dataLabelRendererInfo == null)
+            return;
 
-      if (sri != null)
-      {
-        XGraphics gfx = this.rendererParms.Graphics;
-        XFont font = sri.dataLabelRendererInfo.Font;
-        XBrush fontColor = sri.dataLabelRendererInfo.FontColor;
-        XStringFormat format = XStringFormats.Center;
-        format.LineAlignment = XLineAlignment.Center;
-        foreach (DataLabelEntryRendererInfo dataLabel in sri.dataLabelRendererInfo.Entries)
+        if (sri != null)
         {
-          if (dataLabel.Text != null)
-            gfx.DrawString(dataLabel.Text, font, fontColor, dataLabel.Rect, format);
+            var gfx = this.rendererParms.Graphics;
+            var font = sri.dataLabelRendererInfo.Font;
+            var fontColor = sri.dataLabelRendererInfo.FontColor;
+            var format = XStringFormats.Center;
+            format.LineAlignment = XLineAlignment.Center;
+            foreach (var dataLabel in sri.dataLabelRendererInfo.Entries)
+            {
+                if (dataLabel.Text != null)
+                    gfx.DrawString(dataLabel.Text, font, fontColor, dataLabel.Rect, format);
+            }
         }
-      }
     }
 
     /// <summary>
@@ -117,69 +117,68 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void CalcPositions()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      XGraphics gfx = this.rendererParms.Graphics;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var gfx = this.rendererParms.Graphics;
 
-      if (cri.seriesRendererInfos.Length > 0)
-      {
-        SeriesRendererInfo sri = cri.seriesRendererInfos[0];
-        if (sri != null && sri.dataLabelRendererInfo != null)
+        if (cri.seriesRendererInfos.Length > 0)
         {
-          int sectorIndex = 0;
-          foreach (SectorRendererInfo sector in sri.pointRendererInfos)
-          {
-            // Determine output rectangle
-            double midAngle = sector.StartAngle + sector.SweepAngle / 2;
-            double radMidAngle = midAngle / 180 * Math.PI;
-            XPoint origin = new XPoint(sector.Rect.X + sector.Rect.Width / 2,
-              sector.Rect.Y + sector.Rect.Height / 2);
-            double radius = sector.Rect.Width / 2;
-            double halfradius = radius / 2;
-
-            DataLabelEntryRendererInfo dleri = sri.dataLabelRendererInfo.Entries[sectorIndex++];
-            switch (sri.dataLabelRendererInfo.Position)
+            var sri = cri.seriesRendererInfos[0];
+            if (sri != null && sri.dataLabelRendererInfo != null)
             {
-              case DataLabelPosition.OutsideEnd:
-                // Outer border of the circle.
-                dleri.X = origin.X + (radius * Math.Cos(radMidAngle));
-                dleri.Y = origin.Y + (radius * Math.Sin(radMidAngle));
-                if (dleri.X < origin.X)
-                  dleri.X -= dleri.Width;
-                if (dleri.Y < origin.Y)
-                  dleri.Y -= dleri.Height;
-                break;
+                var sectorIndex = 0;
+                foreach (SectorRendererInfo sector in sri.pointRendererInfos)
+                {
+                    // Determine output rectangle
+                    var midAngle = sector.StartAngle + sector.SweepAngle / 2;
+                    var radMidAngle = midAngle / 180 * Math.PI;
+                    var origin = new XPoint(sector.Rect.X + sector.Rect.Width / 2,
+                        sector.Rect.Y + sector.Rect.Height / 2);
+                    var radius = sector.Rect.Width / 2;
+                    var halfradius = radius / 2;
 
-              case DataLabelPosition.InsideEnd:
-                // Inner border of the circle.
-                dleri.X = origin.X + (radius * Math.Cos(radMidAngle));
-                dleri.Y = origin.Y + (radius * Math.Sin(radMidAngle));
-                if (dleri.X > origin.X)
-                  dleri.X -= dleri.Width;
-                if (dleri.Y > origin.Y)
-                  dleri.Y -= dleri.Height;
-                break;
+                    var dleri = sri.dataLabelRendererInfo.Entries[sectorIndex++];
+                    switch (sri.dataLabelRendererInfo.Position)
+                    {
+                        case DataLabelPosition.OutsideEnd:
+                            // Outer border of the circle.
+                            dleri.X = origin.X + (radius * Math.Cos(radMidAngle));
+                            dleri.Y = origin.Y + (radius * Math.Sin(radMidAngle));
+                            if (dleri.X < origin.X)
+                                dleri.X -= dleri.Width;
+                            if (dleri.Y < origin.Y)
+                                dleri.Y -= dleri.Height;
+                            break;
 
-              case DataLabelPosition.Center:
-                // Centered
-                dleri.X = origin.X + (halfradius * Math.Cos(radMidAngle));
-                dleri.Y = origin.Y + (halfradius * Math.Sin(radMidAngle));
-                dleri.X -= dleri.Width / 2;
-                dleri.Y -= dleri.Height / 2;
-                break;
+                        case DataLabelPosition.InsideEnd:
+                            // Inner border of the circle.
+                            dleri.X = origin.X + (radius * Math.Cos(radMidAngle));
+                            dleri.Y = origin.Y + (radius * Math.Sin(radMidAngle));
+                            if (dleri.X > origin.X)
+                                dleri.X -= dleri.Width;
+                            if (dleri.Y > origin.Y)
+                                dleri.Y -= dleri.Height;
+                            break;
 
-              case DataLabelPosition.InsideBase:
-                // Aligned at the base/center of the circle
-                dleri.X = origin.X;
-                dleri.Y = origin.Y;
-                if (dleri.X < origin.X)
-                  dleri.X -= dleri.Width;
-                if (dleri.Y < origin.Y)
-                  dleri.Y -= dleri.Height;
-                break;
+                        case DataLabelPosition.Center:
+                            // Centered
+                            dleri.X = origin.X + (halfradius * Math.Cos(radMidAngle));
+                            dleri.Y = origin.Y + (halfradius * Math.Sin(radMidAngle));
+                            dleri.X -= dleri.Width / 2;
+                            dleri.Y -= dleri.Height / 2;
+                            break;
+
+                        case DataLabelPosition.InsideBase:
+                            // Aligned at the base/center of the circle
+                            dleri.X = origin.X;
+                            dleri.Y = origin.Y;
+                            if (dleri.X < origin.X)
+                                dleri.X -= dleri.Width;
+                            if (dleri.Y < origin.Y)
+                                dleri.Y -= dleri.Height;
+                            break;
+                    }
+                }
             }
-          }
         }
-      }
     }
-  }
 }

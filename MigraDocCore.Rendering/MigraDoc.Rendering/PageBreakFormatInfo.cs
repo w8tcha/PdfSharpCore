@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,49 +25,27 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.Rendering;
 
-namespace MigraDocCore.Rendering
+/// <summary>
+/// Formatting information for a page break.
+/// </summary>
+internal class PageBreakFormatInfo : FormatInfo
 {
-  /// <summary>
-  /// Formatting information for a page break.
-  /// </summary>
-  internal class PageBreakFormatInfo : FormatInfo
-  {
     //internal PageBreakFormatInfo()
     //{
     //}
 
-    internal override bool EndingIsComplete
-    {
-      get { return true; }
-    }
+    internal override bool EndingIsComplete => true;
 
-    internal override bool IsComplete
-    {
-      get { return true; }
-    }
+    internal override bool IsComplete => true;
 
-    internal override bool IsEmpty
-    {
-      get { return false; }
-    }
+    internal override bool IsEmpty => false;
 
-    internal override bool IsEnding
-    {
-      get { return true; }
-    }
+    internal override bool IsEnding => true;
 
-    internal override bool IsStarting
-    {
-      get { return true; }
-    }
+    internal override bool IsStarting => true;
 
-    internal override bool StartingIsComplete
-    {
-      get { return true; }
-    }
-  }
+    internal override bool StartingIsComplete => true;
 }

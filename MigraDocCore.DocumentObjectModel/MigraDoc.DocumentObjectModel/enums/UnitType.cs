@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,16 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Specifies the measure of an Unit object.
+/// </summary>
+public enum UnitType
 {
-
-  /// <summary>
-  /// Specifies the measure of an Unit object.
-  /// </summary>
-  public enum UnitType
-  {
     /// <summary>
     /// Measure is in points. A point represents 1/72 of an inch. 
     /// </summary>
@@ -67,6 +64,5 @@ namespace MigraDocCore.DocumentObjectModel
     /// <summary>
     /// Measure is in picas. A pica represents 12 points, i.e. 6 pica are one inch.
     /// </summary>
-    Pica = 4,
-  }
+    Pica = 4
 }

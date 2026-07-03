@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+/// <summary>
+/// Represents a nullable double value.
+/// </summary>
+internal struct NDouble : INullableValue
 {
-  /// <summary>
-  /// Represents a nullable double value.
-  /// </summary>
-  internal struct NDouble : INullableValue
-  {
     public NDouble(double value)
     {
-      this.val = value;
+        this.val = value;
     }
 
     /// <summary>
@@ -49,8 +45,8 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     public double Value
     {
-      get { return double.IsNaN(this.val) ? 0 : this.val; }
-      set { this.val = value; }
+        get => double.IsNaN(this.val) ? 0 : this.val;
+        set => this.val = value;
     }
 
     /// <summary>
@@ -58,7 +54,7 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     object INullableValue.GetValue()
     {
-      return this.Value;
+        return this.Value;
     }
 
     /// <summary>
@@ -66,7 +62,7 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     void INullableValue.SetValue(object value)
     {
-      this.val = (double)value;
+        this.val = (double)value;
     }
 
     /// <summary>
@@ -75,49 +71,45 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     public void SetNull()
     {
-      this.val = double.NaN;
+        this.val = double.NaN;
     }
 
     /// <summary>
     /// Determines whether this instance is null (not set).
     /// </summary>
-    public bool IsNull
-    {
-      get { return double.IsNaN(this.val); }
-    }
+    public bool IsNull => double.IsNaN(this.val);
 
     /// <summary>
     /// Returns a value indicating whether this instance is equal to the specified object.
     /// </summary>
     public override bool Equals(object value)
     {
-      if (value is NDouble)
-        return this == (NDouble)value;
-      return false;
+        if (value is NDouble)
+            return this == (NDouble)value;
+        return false;
     }
 
     public override int GetHashCode()
     {
-      return this.val.GetHashCode();
+        return this.val.GetHashCode();
     }
 
     public static bool operator ==(NDouble l, NDouble r)
     {
-      if (l.IsNull)
-        return r.IsNull;
-      else if (r.IsNull)
-        return false;
-      else
-        return l.Value == r.Value;
+        if (l.IsNull)
+            return r.IsNull;
+        else if (r.IsNull)
+            return false;
+        else
+            return l.Value == r.Value;
     }
 
     public static bool operator !=(NDouble l, NDouble r)
     {
-      return !(l == r);
+        return !(l == r);
     }
 
-    public static readonly NDouble NullValue = new NDouble(double.NaN);
+    public static readonly NDouble NullValue = new(double.NaN);
 
     double val;
-  }
 }

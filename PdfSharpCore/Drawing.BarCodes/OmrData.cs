@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Klaus Potzesny
@@ -25,10 +24,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing.BarCodes
-{
+namespace PdfSharpCore.Drawing.BarCodes;
 #if true_
     /// <summary>
     /// Represents the data coded within the OMR code.
@@ -127,4 +124,3 @@ namespace PdfSharpCore.Drawing.BarCodes
         bool marksInitialized = false;
     }
 #endif
-}

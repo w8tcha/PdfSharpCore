@@ -27,21 +27,18 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting.Renderers;
 
-namespace PdfSharpCore.Charting.Renderers
+/// <summary>
+/// Base class for all renderers used to draw gridlines.
+/// </summary>
+internal abstract class GridlinesRenderer : Renderer
 {
-  /// <summary>
-  /// Base class for all renderers used to draw gridlines.
-  /// </summary>
-  internal abstract class GridlinesRenderer : Renderer
-  {
     /// <summary>
     /// Initializes a new instance of the GridlinesRenderer class with the specified renderer parameters.
     /// </summary>
     internal GridlinesRenderer(RendererParameters parms)
-      : base(parms)
+        : base(parms)
     {
     }
-  }
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+/// <summary>
+/// Represents a nullable integer value.
+/// </summary>
+internal struct NInt : INullableValue
 {
-  /// <summary>
-  /// Represents a nullable integer value.
-  /// </summary>
-  internal struct NInt : INullableValue
-  {
     public NInt(int val)
     {
-      this.val = val;
+        this.val = val;
     }
 
     /// <summary>
@@ -49,8 +45,8 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     public int Value
     {
-      get { return this.val != int.MinValue ? this.val : 0; }
-      set { this.val = value; }
+        get => this.val != int.MinValue ? this.val : 0;
+        set => this.val = value;
     }
 
     /// <summary>
@@ -58,7 +54,7 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     object INullableValue.GetValue()
     {
-      return this.Value;
+        return this.Value;
     }
 
     /// <summary>
@@ -66,7 +62,7 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     void INullableValue.SetValue(object value)
     {
-      this.val = (int)value;
+        this.val = (int)value;
     }
 
     /// <summary>
@@ -75,25 +71,22 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     public void SetNull()
     {
-      this.val = int.MinValue;
+        this.val = int.MinValue;
     }
 
     /// <summary>
     /// Determines whether this instance is null (not set).
     /// </summary>
-    public bool IsNull
-    {
-      get { return this.val == int.MinValue; }
-    }
+    public bool IsNull => this.val == int.MinValue;
 
     public static implicit operator NInt(int val)
     {
-      return new NInt(val);
+        return new NInt(val);
     }
 
     public static implicit operator int(NInt val)
     {
-      return val.Value;
+        return val.Value;
     }
 
     /// <summary>
@@ -101,33 +94,32 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     public override bool Equals(object value)
     {
-      if (value is NInt)
-        return this == (NInt)value;
-      return false;
+        if (value is NInt)
+            return this == (NInt)value;
+        return false;
     }
 
     public override int GetHashCode()
     {
-      return this.val.GetHashCode();
+        return this.val.GetHashCode();
     }
 
     public static bool operator ==(NInt l, NInt r)
     {
-      if (l.IsNull)
-        return r.IsNull;
-      else if (r.IsNull)
-        return false;
-      else
-        return l.Value == r.Value;
+        if (l.IsNull)
+            return r.IsNull;
+        else if (r.IsNull)
+            return false;
+        else
+            return l.Value == r.Value;
     }
 
     public static bool operator !=(NInt l, NInt r)
     {
-      return !(l == r);
+        return !(l == r);
     }
 
-    public static readonly NInt NullValue = new NInt(int.MinValue);
+    public static readonly NInt NullValue = new(int.MinValue);
 
     int val;
-  }
 }

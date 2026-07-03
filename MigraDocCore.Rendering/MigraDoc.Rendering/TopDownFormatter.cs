@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,20 +25,19 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using System.Collections;
 using MigraDocCore.DocumentObjectModel;
 using PdfSharpCore.Drawing;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Formats a series of document elements from top to bottom.
+/// </summary>
+internal class TopDownFormatter
 {
-  /// <summary>
-  /// Formats a series of document elements from top to bottom.
-  /// </summary>
-  internal class TopDownFormatter
-  {
     /// <summary>
     /// Returns the max of the given Margins, if both are positive or 0, the sum otherwise.
     /// </summary>
@@ -55,9 +53,9 @@ namespace MigraDocCore.Rendering
     }
     internal TopDownFormatter(IAreaProvider areaProvider, DocumentRenderer documentRenderer, DocumentElements elements)
     {
-      this.documentRenderer = documentRenderer;
-      this.areaProvider = areaProvider;
-      this.elements = elements;
+        this.documentRenderer = documentRenderer;
+        this.areaProvider = areaProvider;
+        this.elements = elements;
     }
     IAreaProvider areaProvider;
 
@@ -70,150 +68,150 @@ namespace MigraDocCore.Rendering
     /// <param name="topLevel">if set to <c>true</c> formats the object is on top level.</param>
     public void FormatOnAreas(XGraphics gfx, bool topLevel)
     {
-      this.gfx = gfx;
-      XUnit prevBottomMargin = 0;
-      XUnit yPos = prevBottomMargin;
-      RenderInfo prevRenderInfo = null;
-      FormatInfo prevFormatInfo = null;
-      ArrayList renderInfos = new ArrayList();
-      bool ready = this.elements.Count == 0;
-      bool isFirstOnPage = true;
-      Area area = this.areaProvider.GetNextArea();
-      XUnit maxHeight = area.Height;
-      if (ready)
-      {
-        this.areaProvider.StoreRenderInfos(renderInfos);
-        return;
-      }
-      int idx = 0;
-      while (!ready && area != null)
-      {
-        DocumentObject docObj = this.elements[idx];
-        Renderer renderer = Renderer.Create(gfx, this.documentRenderer, docObj, this.areaProvider.AreaFieldInfos);
-        if (renderer != null) // "Slightly hacked" for legends: see below
-          renderer.MaxElementHeight = maxHeight;
-
-        if (topLevel && this.documentRenderer.HasPrepareDocumentProgress)
+        this.gfx = gfx;
+        XUnit prevBottomMargin = 0;
+        var yPos = prevBottomMargin;
+        RenderInfo prevRenderInfo = null;
+        FormatInfo prevFormatInfo = null;
+        var renderInfos = new ArrayList();
+        var ready = this.elements.Count == 0;
+        var isFirstOnPage = true;
+        var area = this.areaProvider.GetNextArea();
+        var maxHeight = area.Height;
+        if (ready)
         {
-          this.documentRenderer.OnPrepareDocumentProgress(this.documentRenderer.ProgressCompleted + idx + 1,
-            this.documentRenderer.ProgressMaximum);
-        }
-
-        // "Slightly hacked" for legends: they are rendered as part of the chart.
-        // So they are skipped here.
-        if (renderer == null)
-        {
-          ready = idx == this.elements.Count - 1;
-          if (ready)
             this.areaProvider.StoreRenderInfos(renderInfos);
-          ++idx;
-          continue;
+            return;
         }
-        ///////////////////////////////////////////
-        if (prevFormatInfo == null)
+        var idx = 0;
+        while (!ready && area != null)
         {
-          LayoutInfo initialLayoutInfo = renderer.InitialLayoutInfo;
-          XUnit distance = prevBottomMargin;
-          if (initialLayoutInfo.VerticalReference == VerticalReference.PreviousElement && 
-              initialLayoutInfo.Floating != Floating.None) //Added KlPo 12.07.07
-            distance = MarginMax(initialLayoutInfo.MarginTop, distance);
+            var docObj = this.elements[idx];
+            var renderer = Renderer.Create(gfx, this.documentRenderer, docObj, this.areaProvider.AreaFieldInfos);
+            if (renderer != null) // "Slightly hacked" for legends: see below
+                renderer.MaxElementHeight = maxHeight;
 
-          area = area.Lower(distance);
-        }
-        renderer.Format(area, prevFormatInfo);
-        this.areaProvider.PositionHorizontally(renderer.RenderInfo.LayoutInfo);
-        bool pagebreakBefore = this.areaProvider.IsAreaBreakBefore(renderer.RenderInfo.LayoutInfo) && !isFirstOnPage;
-        pagebreakBefore = pagebreakBefore || !isFirstOnPage && IsForcedAreaBreak(idx, renderer, area);
-
-        if (!pagebreakBefore && renderer.RenderInfo.FormatInfo.IsEnding)
-        {
-          if (PreviousRendererNeedsRemoveEnding(prevRenderInfo, renderer.RenderInfo, area))
-          {
-            prevRenderInfo.RemoveEnding();
-            renderer = Renderer.Create(gfx, this.documentRenderer, docObj, this.areaProvider.AreaFieldInfos);
-            renderer.MaxElementHeight = maxHeight;
-            renderer.Format(area, prevRenderInfo.FormatInfo);
-          }
-          else if (NeedsEndingOnNextArea(idx, renderer, area, isFirstOnPage))
-          {
-            renderer.RenderInfo.RemoveEnding();
-            prevRenderInfo = FinishPage(renderer.RenderInfo, pagebreakBefore, ref renderInfos);
-            if (prevRenderInfo != null)
-              prevFormatInfo = prevRenderInfo.FormatInfo;
-            else
+            if (topLevel && this.documentRenderer.HasPrepareDocumentProgress)
             {
-              prevFormatInfo = null;
-              isFirstOnPage = true;
+                this.documentRenderer.OnPrepareDocumentProgress(this.documentRenderer.ProgressCompleted + idx + 1,
+                    this.documentRenderer.ProgressMaximum);
             }
-            prevBottomMargin = 0;
-            area = this.areaProvider.GetNextArea();
-            maxHeight = area.Height;
-          }
-          else
-          {
-            renderInfos.Add(renderer.RenderInfo);
-            isFirstOnPage = false;
-            areaProvider.PositionVertically(renderer.RenderInfo.LayoutInfo);
-            if (renderer.RenderInfo.LayoutInfo.VerticalReference == VerticalReference.PreviousElement
-                && renderer.RenderInfo.LayoutInfo.Floating != Floating.None)//Added KlPo 12.07.07
+
+            // "Slightly hacked" for legends: they are rendered as part of the chart.
+            // So they are skipped here.
+            if (renderer == null)
             {
-              prevBottomMargin = renderer.RenderInfo.LayoutInfo.MarginBottom;
-              if (renderer.RenderInfo.LayoutInfo.Floating != Floating.None)
-                area = area.Lower(renderer.RenderInfo.LayoutInfo.ContentArea.Height);
+                ready = idx == this.elements.Count - 1;
+                if (ready)
+                    this.areaProvider.StoreRenderInfos(renderInfos);
+                ++idx;
+                continue;
             }
-            else
-              prevBottomMargin = 0;
+            ///////////////////////////////////////////
+            if (prevFormatInfo == null)
+            {
+                var initialLayoutInfo = renderer.InitialLayoutInfo;
+                var distance = prevBottomMargin;
+                if (initialLayoutInfo.VerticalReference == VerticalReference.PreviousElement && 
+                    initialLayoutInfo.Floating != Floating.None) //Added KlPo 12.07.07
+                    distance = MarginMax(initialLayoutInfo.MarginTop, distance);
 
-            prevFormatInfo = null;
-            prevRenderInfo = null;
-
-            ++idx;
-          }
-        }
-        else
-        {
-          if (renderer.RenderInfo.FormatInfo.IsEmpty && isFirstOnPage)
-          {
-            area = area.Unite(new Rectangle(area.X, area.Y, area.Width, double.MaxValue));
-            
-            renderer = Renderer.Create(gfx, this.documentRenderer, docObj, this.areaProvider.AreaFieldInfos);
-            renderer.MaxElementHeight = maxHeight;
+                area = area.Lower(distance);
+            }
             renderer.Format(area, prevFormatInfo);
-            prevFormatInfo = null;
-
-            //Added KlPo 12.07.07
             this.areaProvider.PositionHorizontally(renderer.RenderInfo.LayoutInfo);
-            this.areaProvider.PositionVertically(renderer.RenderInfo.LayoutInfo);
-            //Added End
-            ready = idx == this.elements.Count - 1;
+            var pagebreakBefore = this.areaProvider.IsAreaBreakBefore(renderer.RenderInfo.LayoutInfo) && !isFirstOnPage;
+            pagebreakBefore = pagebreakBefore || !isFirstOnPage && IsForcedAreaBreak(idx, renderer, area);
 
-            ++idx;
-          }
-          prevRenderInfo = FinishPage(renderer.RenderInfo, pagebreakBefore, ref renderInfos);
-          if (prevRenderInfo != null)
-            prevFormatInfo = prevRenderInfo.FormatInfo;
-          else
-          {
-            prevFormatInfo = null;
-          }
-          isFirstOnPage = true;
-          prevBottomMargin = 0;
+            if (!pagebreakBefore && renderer.RenderInfo.FormatInfo.IsEnding)
+            {
+                if (PreviousRendererNeedsRemoveEnding(prevRenderInfo, renderer.RenderInfo, area))
+                {
+                    prevRenderInfo.RemoveEnding();
+                    renderer = Renderer.Create(gfx, this.documentRenderer, docObj, this.areaProvider.AreaFieldInfos);
+                    renderer.MaxElementHeight = maxHeight;
+                    renderer.Format(area, prevRenderInfo.FormatInfo);
+                }
+                else if (NeedsEndingOnNextArea(idx, renderer, area, isFirstOnPage))
+                {
+                    renderer.RenderInfo.RemoveEnding();
+                    prevRenderInfo = FinishPage(renderer.RenderInfo, pagebreakBefore, ref renderInfos);
+                    if (prevRenderInfo != null)
+                        prevFormatInfo = prevRenderInfo.FormatInfo;
+                    else
+                    {
+                        prevFormatInfo = null;
+                        isFirstOnPage = true;
+                    }
+                    prevBottomMargin = 0;
+                    area = this.areaProvider.GetNextArea();
+                    maxHeight = area.Height;
+                }
+                else
+                {
+                    renderInfos.Add(renderer.RenderInfo);
+                    isFirstOnPage = false;
+                    areaProvider.PositionVertically(renderer.RenderInfo.LayoutInfo);
+                    if (renderer.RenderInfo.LayoutInfo.VerticalReference == VerticalReference.PreviousElement
+                        && renderer.RenderInfo.LayoutInfo.Floating != Floating.None)//Added KlPo 12.07.07
+                    {
+                        prevBottomMargin = renderer.RenderInfo.LayoutInfo.MarginBottom;
+                        if (renderer.RenderInfo.LayoutInfo.Floating != Floating.None)
+                            area = area.Lower(renderer.RenderInfo.LayoutInfo.ContentArea.Height);
+                    }
+                    else
+                        prevBottomMargin = 0;
+
+                    prevFormatInfo = null;
+                    prevRenderInfo = null;
+
+                    ++idx;
+                }
+            }
+            else
+            {
+                if (renderer.RenderInfo.FormatInfo.IsEmpty && isFirstOnPage)
+                {
+                    area = area.Unite(new Rectangle(area.X, area.Y, area.Width, double.MaxValue));
+            
+                    renderer = Renderer.Create(gfx, this.documentRenderer, docObj, this.areaProvider.AreaFieldInfos);
+                    renderer.MaxElementHeight = maxHeight;
+                    renderer.Format(area, prevFormatInfo);
+                    prevFormatInfo = null;
+
+                    //Added KlPo 12.07.07
+                    this.areaProvider.PositionHorizontally(renderer.RenderInfo.LayoutInfo);
+                    this.areaProvider.PositionVertically(renderer.RenderInfo.LayoutInfo);
+                    //Added End
+                    ready = idx == this.elements.Count - 1;
+
+                    ++idx;
+                }
+                prevRenderInfo = FinishPage(renderer.RenderInfo, pagebreakBefore, ref renderInfos);
+                if (prevRenderInfo != null)
+                    prevFormatInfo = prevRenderInfo.FormatInfo;
+                else
+                {
+                    prevFormatInfo = null;
+                }
+                isFirstOnPage = true;
+                prevBottomMargin = 0;
 #if false
           area = this.areaProvider.GetNextArea();
 #else
-          if (!ready)  //!!!newTHHO 19.01.2007: korrekt? oder GetNextArea immer ausführen???
-          {
-            area = this.areaProvider.GetNextArea();
-            maxHeight = area.Height;
-          }
+                if (!ready)  //!!!newTHHO 19.01.2007: korrekt? oder GetNextArea immer ausführen???
+                {
+                    area = this.areaProvider.GetNextArea();
+                    maxHeight = area.Height;
+                }
 #endif
+            }
+            if (idx == this.elements.Count && !ready)
+            {
+                this.areaProvider.StoreRenderInfos(renderInfos);
+                ready = true;
+            }
         }
-        if (idx == this.elements.Count && !ready)
-        {
-          this.areaProvider.StoreRenderInfos(renderInfos);
-          ready = true;
-        }
-      }
     }
 
     /// <summary>
@@ -227,21 +225,21 @@ namespace MigraDocCore.Rendering
     /// </returns>
     RenderInfo FinishPage(RenderInfo lastRenderInfo, bool pagebreakBefore, ref ArrayList renderInfos)
     {
-      RenderInfo prevRenderInfo;
-      if (lastRenderInfo.FormatInfo.IsEmpty || pagebreakBefore)
-      {
-        prevRenderInfo = null;
-      }
-      else
-      {
-        prevRenderInfo = lastRenderInfo;
-        renderInfos.Add(lastRenderInfo);
-        if (lastRenderInfo.FormatInfo.IsEnding)
-          prevRenderInfo = null;
-      }
-      this.areaProvider.StoreRenderInfos(renderInfos);
-      renderInfos = new ArrayList();
-      return prevRenderInfo;
+        RenderInfo prevRenderInfo;
+        if (lastRenderInfo.FormatInfo.IsEmpty || pagebreakBefore)
+        {
+            prevRenderInfo = null;
+        }
+        else
+        {
+            prevRenderInfo = lastRenderInfo;
+            renderInfos.Add(lastRenderInfo);
+            if (lastRenderInfo.FormatInfo.IsEnding)
+                prevRenderInfo = null;
+        }
+        this.areaProvider.StoreRenderInfos(renderInfos);
+        renderInfos = new ArrayList();
+        return prevRenderInfo;
     }
 
     /// <summary>
@@ -252,21 +250,21 @@ namespace MigraDocCore.Rendering
     /// <param name="remainingArea">The remaining area.</param>
     bool IsForcedAreaBreak(int idx, Renderer renderer, Area remainingArea)
     {
-      FormatInfo formatInfo = renderer.RenderInfo.FormatInfo;
-      LayoutInfo layoutInfo = renderer.RenderInfo.LayoutInfo;
+        var formatInfo = renderer.RenderInfo.FormatInfo;
+        var layoutInfo = renderer.RenderInfo.LayoutInfo;
 
-      if (formatInfo.IsStarting && !formatInfo.StartingIsComplete)
-        return true;
+        if (formatInfo.IsStarting && !formatInfo.StartingIsComplete)
+            return true;
 
-      if (layoutInfo.KeepTogether && !formatInfo.IsComplete)
-        return true;
+        if (layoutInfo.KeepTogether && !formatInfo.IsComplete)
+            return true;
 
-      if (layoutInfo.KeepTogether && layoutInfo.KeepWithNext)
-      {
-        Area area = remainingArea.Lower(layoutInfo.ContentArea.Height);
-        return NextElementsDontFit(idx, area, layoutInfo.MarginBottom);
-      }
-      return false;
+        if (layoutInfo.KeepTogether && layoutInfo.KeepWithNext)
+        {
+            var area = remainingArea.Lower(layoutInfo.ContentArea.Height);
+            return NextElementsDontFit(idx, area, layoutInfo.MarginBottom);
+        }
+        return false;
     }
 
     /// <summary>
@@ -277,19 +275,19 @@ namespace MigraDocCore.Rendering
     /// <param name="remainingArea">The remaining area.</param>
     bool PreviousRendererNeedsRemoveEnding(RenderInfo prevRenderInfo, RenderInfo succedingRenderInfo, Area remainingArea)
     {
-      if (prevRenderInfo == null)
-        return false;
-      LayoutInfo layoutInfo = succedingRenderInfo.LayoutInfo;
-      FormatInfo formatInfo = succedingRenderInfo.FormatInfo;
-      LayoutInfo prevLayoutInfo = prevRenderInfo.LayoutInfo;
-      if (formatInfo.IsEnding && !formatInfo.EndingIsComplete)
-      {
-        Area area = this.areaProvider.ProbeNextArea();
-        if (area.Height > prevLayoutInfo.TrailingHeight + layoutInfo.TrailingHeight + Renderer.Tolerance)
-          return true;
-      }
+        if (prevRenderInfo == null)
+            return false;
+        var layoutInfo = succedingRenderInfo.LayoutInfo;
+        var formatInfo = succedingRenderInfo.FormatInfo;
+        var prevLayoutInfo = prevRenderInfo.LayoutInfo;
+        if (formatInfo.IsEnding && !formatInfo.EndingIsComplete)
+        {
+            var area = this.areaProvider.ProbeNextArea();
+            if (area.Height > prevLayoutInfo.TrailingHeight + layoutInfo.TrailingHeight + Renderer.Tolerance)
+                return true;
+        }
 
-      return false;
+        return false;
     }
 
     /// <summary>
@@ -298,67 +296,66 @@ namespace MigraDocCore.Rendering
     internal static readonly int MaxCombineElements = 10;
     bool NextElementsDontFit(int idx, Area remainingArea, XUnit previousMarginBottom)
     {
-      XUnit elementDistance = previousMarginBottom;
-      Area area = remainingArea;
-      for (int index = idx + 1; index < this.elements.Count; ++index)
-      {
-        // Never combine more than MaxCombineElements elements
-        if (index - idx > MaxCombineElements)
-          return false;
+        var elementDistance = previousMarginBottom;
+        var area = remainingArea;
+        for (var index = idx + 1; index < this.elements.Count; ++index)
+        {
+            // Never combine more than MaxCombineElements elements
+            if (index - idx > MaxCombineElements)
+                return false;
 
-        DocumentObject obj = this.elements[index];
-        Renderer currRenderer = Renderer.Create(this.gfx, this.documentRenderer, obj, this.areaProvider.AreaFieldInfos);
-        elementDistance = MarginMax(elementDistance, currRenderer.InitialLayoutInfo.MarginTop);
-        area = area.Lower(elementDistance);
+            var obj = this.elements[index];
+            var currRenderer = Renderer.Create(this.gfx, this.documentRenderer, obj, this.areaProvider.AreaFieldInfos);
+            elementDistance = MarginMax(elementDistance, currRenderer.InitialLayoutInfo.MarginTop);
+            area = area.Lower(elementDistance);
 
-        if (area.Height <= 0)
-          return true;
+            if (area.Height <= 0)
+                return true;
 
-        currRenderer.Format(area, null);
-        FormatInfo currFormatInfo = currRenderer.RenderInfo.FormatInfo;
-        LayoutInfo currLayoutInfo = currRenderer.RenderInfo.LayoutInfo;
+            currRenderer.Format(area, null);
+            var currFormatInfo = currRenderer.RenderInfo.FormatInfo;
+            var currLayoutInfo = currRenderer.RenderInfo.LayoutInfo;
 
-        if (!(currLayoutInfo.VerticalReference == VerticalReference.PreviousElement))
-          return false;
+            if (!(currLayoutInfo.VerticalReference == VerticalReference.PreviousElement))
+                return false;
 
-        if (!currFormatInfo.StartingIsComplete)
-          return true;
+            if (!currFormatInfo.StartingIsComplete)
+                return true;
 
-        if (currLayoutInfo.KeepTogether && !currFormatInfo.IsComplete)
-          return true;
+            if (currLayoutInfo.KeepTogether && !currFormatInfo.IsComplete)
+                return true;
 
-        if (!(currLayoutInfo.KeepTogether && currLayoutInfo.KeepWithNext))
-          return false;
+            if (!(currLayoutInfo.KeepTogether && currLayoutInfo.KeepWithNext))
+                return false;
 
-        area = area.Lower(currLayoutInfo.ContentArea.Height);
-        if (area.Height <= 0)
-          return true;
+            area = area.Lower(currLayoutInfo.ContentArea.Height);
+            if (area.Height <= 0)
+                return true;
 
-        elementDistance = currLayoutInfo.MarginBottom;
-      }
-      return false;
+            elementDistance = currLayoutInfo.MarginBottom;
+        }
+        return false;
     }
 
     bool NeedsEndingOnNextArea(int idx, Renderer renderer, Area remainingArea, bool isFirstOnPage)
     {
-      LayoutInfo layoutInfo = renderer.RenderInfo.LayoutInfo;
-      if (isFirstOnPage && layoutInfo.KeepTogether)
+        var layoutInfo = renderer.RenderInfo.LayoutInfo;
+        if (isFirstOnPage && layoutInfo.KeepTogether)
+            return false;
+        var formatInfo = renderer.RenderInfo.FormatInfo;
+
+        if (!formatInfo.EndingIsComplete)
+            return false;
+
+        if (layoutInfo.KeepWithNext)
+        {
+            remainingArea = remainingArea.Lower(layoutInfo.ContentArea.Height);
+            return NextElementsDontFit(idx, remainingArea, layoutInfo.MarginBottom);
+        }
+
         return false;
-      FormatInfo formatInfo = renderer.RenderInfo.FormatInfo;
-
-      if (!formatInfo.EndingIsComplete)
-        return false;
-
-      if (layoutInfo.KeepWithNext)
-      {
-        remainingArea = remainingArea.Lower(layoutInfo.ContentArea.Height);
-        return NextElementsDontFit(idx, remainingArea, layoutInfo.MarginBottom);
-      }
-
-      return false;
     }
 
     DocumentRenderer documentRenderer;
     XGraphics gfx;
-  }
 }

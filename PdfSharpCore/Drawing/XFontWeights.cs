@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,25 +24,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 // Not used in PDFsharp 1.x.
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+enum FontWeightValues
 {
-    enum FontWeightValues
-    {
-        Thin = 100,
-        ExtraLight = 200,
-        Light = 300,
-        Normal = 400,
-        Medium = 500,
-        SemiBold = 600,
-        Bold = 700,
-        ExtraBold = 800,
-        Black = 900,
-        ExtraBlack = 950,
-    }
+    Thin = 100,
+    ExtraLight = 200,
+    Light = 300,
+    Normal = 400,
+    Medium = 500,
+    SemiBold = 600,
+    Bold = 700,
+    ExtraBold = 800,
+    Black = 900,
+    ExtraBlack = 950
+}
 
 #if true_  // PDFSHARP20
     /// <summary>
@@ -306,4 +304,3 @@ namespace PdfSharpCore.Drawing
         }
     }
 #endif
-}

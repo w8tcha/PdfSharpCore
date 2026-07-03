@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,39 +25,30 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel;
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Represents rendering information for a paragraph.
+/// </summary>
+internal class ParagraphRenderInfo : RenderInfo
 {
-  /// <summary>
-  /// Represents rendering information for a paragraph.
-  /// </summary>
-  internal class ParagraphRenderInfo : RenderInfo
-  {
     internal ParagraphRenderInfo()
     {
     }
 
-    internal override FormatInfo FormatInfo
-    {
-      get { return this.formatInfo; }
-    }
-    ParagraphFormatInfo formatInfo = new ParagraphFormatInfo();
+    internal override FormatInfo FormatInfo => this.formatInfo;
+    ParagraphFormatInfo formatInfo = new();
 
-    public override DocumentObject DocumentObject
-    {
-      get { return this.paragraph; }
-    }
+    public override DocumentObject DocumentObject => this.paragraph;
     internal Paragraph paragraph;
 
     internal override void RemoveEnding()
     {
-      ParagraphFormatInfo pfInfo = (ParagraphFormatInfo)this.FormatInfo;
-      pfInfo.RemoveEnding();
-      Area contentArea = this.LayoutInfo.ContentArea;
-      contentArea.Height -= this.LayoutInfo.TrailingHeight;
+        var pfInfo = (ParagraphFormatInfo)this.FormatInfo;
+        pfInfo.RemoveEnding();
+        var contentArea = this.LayoutInfo.ContentArea;
+        contentArea.Height -= this.LayoutInfo.TrailingHeight;
     }
-  }
 }

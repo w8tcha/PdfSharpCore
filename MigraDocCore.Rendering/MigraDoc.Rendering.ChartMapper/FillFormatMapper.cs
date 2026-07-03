@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   David Stephensen (mailto:David.Stephensen@PdfSharpCore.com)
@@ -26,39 +25,36 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using PdfSharpCore.Charting;
 using PdfSharpCore.Drawing;
 
-namespace MigraDocCore.Rendering.ChartMapper
+namespace MigraDocCore.Rendering.ChartMapper;
+
+internal class FillFormatMapper
 {
-  internal class FillFormatMapper
-  {
     private FillFormatMapper()
     {
     }
 
     void MapObject(FillFormat fillFormat, DocumentObjectModel.Shapes.FillFormat domFillFormat)
     {
-      if (domFillFormat.Color.IsEmpty)
-        fillFormat.Color = XColor.Empty;
-      else
-      {
+        if (domFillFormat.Color.IsEmpty)
+            fillFormat.Color = XColor.Empty;
+        else
+        {
 #if noCMYK
         fillFormat.Color = XColor.FromArgb((int)domFillFormat.Color.Argb);
 #else
-        fillFormat.Color = ColorHelper.ToXColor(domFillFormat.Color, domFillFormat.Document.UseCmykColor);
+            fillFormat.Color = ColorHelper.ToXColor(domFillFormat.Color, domFillFormat.Document.UseCmykColor);
 #endif
-      }
-      fillFormat.Visible = domFillFormat.Visible;
+        }
+        fillFormat.Visible = domFillFormat.Visible;
     }
 
     internal static void Map(FillFormat fillFormat, DocumentObjectModel.Shapes.FillFormat domFillFormat)
     {
-      FillFormatMapper mapper = new FillFormatMapper();
-      mapper.MapObject(fillFormat, domFillFormat);
+        var mapper = new FillFormatMapper();
+        mapper.MapObject(fillFormat, domFillFormat);
     }
-  }
 }

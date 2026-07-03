@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,28 +24,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// This class is undocumented and may change or drop in future releases.
+/// </summary>
+public enum PdfCustomValueCompressionMode
 {
     /// <summary>
-    /// This class is undocumented and may change or drop in future releases.
+    /// Use document default to determine compression.
     /// </summary>
-    public enum PdfCustomValueCompressionMode
-    {
-        /// <summary>
-        /// Use document default to determine compression.
-        /// </summary>
-        Default,
+    Default,
 
-        /// <summary>
-        /// Leave custom values uncompressed.
-        /// </summary>
-        Uncompressed,
+    /// <summary>
+    /// Leave custom values uncompressed.
+    /// </summary>
+    Uncompressed,
 
-        /// <summary>
-        /// Compress custom values using FlateDecode.
-        /// </summary>
-        Compressed,
-    }
+    /// <summary>
+    /// Compress custom values using FlateDecode.
+    /// </summary>
+    Compressed
 }

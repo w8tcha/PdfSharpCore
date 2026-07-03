@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,70 +24,65 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System.Diagnostics;
 using PdfSharpCore.Pdf.IO;
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// Represents an indirect boolean value. This type is not used by PdfSharpCore. If it is imported from
+/// an external PDF file, the value is converted into a direct object.
+/// </summary>
+[DebuggerDisplay("({Value})")]
+public sealed class PdfBooleanObject : PdfObject
 {
     /// <summary>
-    /// Represents an indirect boolean value. This type is not used by PdfSharpCore. If it is imported from
-    /// an external PDF file, the value is converted into a direct object.
+    /// Initializes a new instance of the <see cref="PdfBooleanObject"/> class.
     /// </summary>
-    [DebuggerDisplay("({Value})")]
-    public sealed class PdfBooleanObject : PdfObject
+    public PdfBooleanObject()
+    { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PdfBooleanObject"/> class.
+    /// </summary>
+    public PdfBooleanObject(bool value)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfBooleanObject"/> class.
-        /// </summary>
-        public PdfBooleanObject()
-        { }
+        _value = value;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfBooleanObject"/> class.
-        /// </summary>
-        public PdfBooleanObject(bool value)
-        {
-            _value = value;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PdfBooleanObject"/> class.
+    /// </summary>
+    public PdfBooleanObject(PdfDocument document, bool value)
+        : base(document)
+    {
+        _value = value;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfBooleanObject"/> class.
-        /// </summary>
-        public PdfBooleanObject(PdfDocument document, bool value)
-            : base(document)
-        {
-            _value = value;
-        }
+    /// <summary>
+    /// Gets the value of this instance as boolean value.
+    /// </summary>
+    public bool Value => _value;
 
-        /// <summary>
-        /// Gets the value of this instance as boolean value.
-        /// </summary>
-        public bool Value
-        {
-            get { return _value; }
-            //set { _value = value; }
-        }
+    //set { _value = value; }
+    readonly bool _value;
 
-        readonly bool _value;
+    /// <summary>
+    /// Returns "false" or "true".
+    /// </summary>
+    public override string ToString()
+    {
+        return _value ? bool.TrueString : bool.FalseString;
+    }
 
-        /// <summary>
-        /// Returns "false" or "true".
-        /// </summary>
-        public override string ToString()
-        {
-            return _value ? bool.TrueString : bool.FalseString;
-        }
-
-        /// <summary>
-        /// Writes the keyword «false» or «true».
-        /// </summary>
-        internal override void WriteObject(PdfWriter writer)
-        {
-            writer.WriteBeginObject(this);
-            writer.Write(_value);
-            writer.WriteEndObject();
-        }
+    /// <summary>
+    /// Writes the keyword «false» or «true».
+    /// </summary>
+    internal override void WriteObject(PdfWriter writer)
+    {
+        writer.WriteBeginObject(this);
+        writer.Write(_value);
+        writer.WriteEndObject();
     }
 }

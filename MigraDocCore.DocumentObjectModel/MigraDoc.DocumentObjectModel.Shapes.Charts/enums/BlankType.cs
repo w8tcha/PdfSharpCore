@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+/// <summary>
+/// Determines how null values will be handled in a chart.
+/// </summary>
+public enum BlankType
 {
-  /// <summary>
-  /// Determines how null values will be handled in a chart.
-  /// </summary>
-  public enum BlankType
-  {
     /// <summary>
     /// Null value is not plotted.
     /// </summary>
@@ -53,5 +49,4 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// Null value will be handled as zero.
     /// </summary>
     Zero
-  }
 }

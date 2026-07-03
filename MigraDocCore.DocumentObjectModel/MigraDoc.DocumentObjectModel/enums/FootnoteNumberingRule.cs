@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Determines the behavior of the footnote numbering.
+/// </summary>
+public enum FootnoteNumberingRule
 {
-  /// <summary>
-  /// Determines the behavior of the footnote numbering.
-  /// </summary>
-  public enum FootnoteNumberingRule
-  {
     /// <summary>
     /// Numbering of the footnote restarts on each page.
     /// </summary>
@@ -53,5 +49,4 @@ namespace MigraDocCore.DocumentObjectModel
     /// Numbering of the footnote restarts on each section.
     /// </summary>
     RestartSection
-  }
 }

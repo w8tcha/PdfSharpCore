@@ -27,15 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
-{
-  /// <summary>
-  /// Determines how null values will be handled in a chart.
-  /// </summary>
-  public enum BlankType
-  { 
+/// <summary>
+/// Determines how null values will be handled in a chart.
+/// </summary>
+public enum BlankType
+{ 
     /// <summary>
     /// Null value is not plotted.
     /// </summary>
@@ -50,5 +48,4 @@ namespace PdfSharpCore.Charting
     /// Null value will be handled as zero.
     /// </summary>
     Zero
-  }
 }

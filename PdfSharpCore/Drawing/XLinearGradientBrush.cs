@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,58 +24,56 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using System.ComponentModel;
-using PdfSharpCore.Internal;
+
 // ReSharper disable RedundantNameQualifier because it is required for hybrid build
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Defines a Brush with a linear gradient.
+/// </summary>
+public sealed class XLinearGradientBrush : XBaseGradientBrush
 {
+    //internal XLinearGradientBrush();
+
     /// <summary>
-    /// Defines a Brush with a linear gradient.
+    /// Initializes a new instance of the <see cref="XLinearGradientBrush"/> class.
     /// </summary>
-    public sealed class XLinearGradientBrush : XBaseGradientBrush
+    public XLinearGradientBrush(XPoint point1, XPoint point2, XColor color1, XColor color2) : base(color1, color2)
     {
-        //internal XLinearGradientBrush();
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XLinearGradientBrush"/> class.
-        /// </summary>
-        public XLinearGradientBrush(XPoint point1, XPoint point2, XColor color1, XColor color2) : base(color1, color2)
-        {
-            _point1 = point1;
-            _point2 = point2;
-        }
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="XLinearGradientBrush"/> class.
-        /// </summary>
-        public XLinearGradientBrush(XRect rect, XColor color1, XColor color2, XLinearGradientMode linearGradientMode) : base(color1, color2)
-        {
-            if (!Enum.IsDefined(typeof(XLinearGradientMode), linearGradientMode))
-                throw new InvalidEnumArgumentException("linearGradientMode", (int)linearGradientMode, typeof(XLinearGradientMode));
-
-            if (rect.Width == 0 || rect.Height == 0)
-                throw new ArgumentException("Invalid rectangle.", "rect");
-
-            _useRect = true;
-            _rect = rect;
-            _linearGradientMode = linearGradientMode;
-        }
-
-        // TODO: 
-        //public XLinearGradientBrush(Rectangle rect, XColor color1, XColor color2, double angle);
-        //public XLinearGradientBrush(RectangleF rect, XColor color1, XColor color2, double angle);
-        //public XLinearGradientBrush(Rectangle rect, XColor color1, XColor color2, double angle, bool isAngleScaleable);
-        //public XLinearGradientBrush(RectangleF rect, XColor color1, XColor color2, double angle, bool isAngleScaleable);
-        //public XLinearGradientBrush(RectangleF rect, XColor color1, XColor color2, double angle, bool isAngleScaleable);
-
-        internal bool _useRect;
-        internal XPoint _point1, _point2;
-        internal XRect _rect;
-        internal XLinearGradientMode _linearGradientMode;
+        _point1 = point1;
+        _point2 = point2;
     }
+
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="XLinearGradientBrush"/> class.
+    /// </summary>
+    public XLinearGradientBrush(XRect rect, XColor color1, XColor color2, XLinearGradientMode linearGradientMode) : base(color1, color2)
+    {
+        if (!Enum.IsDefined(typeof(XLinearGradientMode), linearGradientMode))
+            throw new InvalidEnumArgumentException("linearGradientMode", (int)linearGradientMode, typeof(XLinearGradientMode));
+
+        if (rect.Width == 0 || rect.Height == 0)
+            throw new ArgumentException("Invalid rectangle.", "rect");
+
+        _useRect = true;
+        _rect = rect;
+        _linearGradientMode = linearGradientMode;
+    }
+
+    // TODO: 
+    //public XLinearGradientBrush(Rectangle rect, XColor color1, XColor color2, double angle);
+    //public XLinearGradientBrush(RectangleF rect, XColor color1, XColor color2, double angle);
+    //public XLinearGradientBrush(Rectangle rect, XColor color1, XColor color2, double angle, bool isAngleScaleable);
+    //public XLinearGradientBrush(RectangleF rect, XColor color1, XColor color2, double angle, bool isAngleScaleable);
+    //public XLinearGradientBrush(RectangleF rect, XColor color1, XColor color2, double angle, bool isAngleScaleable);
+
+    internal bool _useRect;
+    internal XPoint _point1, _point2;
+    internal XRect _rect;
+    internal XLinearGradientMode _linearGradientMode;
 }

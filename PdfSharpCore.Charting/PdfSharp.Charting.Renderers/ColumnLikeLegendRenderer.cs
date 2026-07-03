@@ -27,22 +27,21 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents the legend renderer specific to charts like column, line, or bar.
+/// </summary>
+internal class ColumnLikeLegendRenderer : LegendRenderer
 {
-  /// <summary>
-  /// Represents the legend renderer specific to charts like column, line, or bar.
-  /// </summary>
-  internal class ColumnLikeLegendRenderer : LegendRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the ColumnLikeLegendRenderer class with the
     /// specified renderer parameters.
     /// </summary>
     internal ColumnLikeLegendRenderer(RendererParameters parms)
-      : base(parms)
+        : base(parms)
     {
     }
 
@@ -52,47 +51,46 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override RendererInfo Init()
     {
-      LegendRendererInfo lri = null;
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      if (cri.chart.legend != null)
-      {
-        lri = new LegendRendererInfo();
-        lri.legend = cri.chart.legend;
-
-        lri.Font = Converter.ToXFont(lri.legend.font, cri.DefaultFont);
-        lri.FontColor = new XSolidBrush(XColors.Black);
-
-        if (lri.legend.lineFormat != null)
-          lri.BorderPen = Converter.ToXPen(lri.legend.lineFormat, XColors.Black, DefaultLineWidth, XDashStyle.Solid);
-
-        lri.Entries = new LegendEntryRendererInfo[cri.seriesRendererInfos.Length];
-        int index = 0;
-        foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
+        LegendRendererInfo lri = null;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        if (cri.chart.legend != null)
         {
-          LegendEntryRendererInfo leri = new LegendEntryRendererInfo();
-          leri.seriesRendererInfo = sri;
-          leri.legendRendererInfo = lri;
-          leri.EntryText = sri.series.name;
-          if (sri.markerRendererInfo != null)
-          {
-            leri.MarkerSize.Width = leri.MarkerSize.Height = sri.markerRendererInfo.MarkerSize.Point;
-            leri.MarkerPen = new XPen(sri.markerRendererInfo.MarkerForegroundColor);
-            leri.MarkerBrush = new XSolidBrush(sri.markerRendererInfo.MarkerBackgroundColor);
-          }
-          else
-          {
-            leri.MarkerPen = sri.LineFormat;
-            leri.MarkerBrush = sri.FillFormat;
-          }
+            lri = new LegendRendererInfo();
+            lri.legend = cri.chart.legend;
 
-          if (cri.chart.type == ChartType.ColumnStacked2D)
-            // stacked columns are revers ordered
-            lri.Entries[cri.seriesRendererInfos.Length - index++ - 1] = leri;
-          else
-            lri.Entries[index++] = leri;
+            lri.Font = Converter.ToXFont(lri.legend.font, cri.DefaultFont);
+            lri.FontColor = new XSolidBrush(XColors.Black);
+
+            if (lri.legend.lineFormat != null)
+                lri.BorderPen = Converter.ToXPen(lri.legend.lineFormat, XColors.Black, DefaultLineWidth, XDashStyle.Solid);
+
+            lri.Entries = new LegendEntryRendererInfo[cri.seriesRendererInfos.Length];
+            var index = 0;
+            foreach (var sri in cri.seriesRendererInfos)
+            {
+                var leri = new LegendEntryRendererInfo();
+                leri.seriesRendererInfo = sri;
+                leri.legendRendererInfo = lri;
+                leri.EntryText = sri.series.name;
+                if (sri.markerRendererInfo != null)
+                {
+                    leri.MarkerSize.Width = leri.MarkerSize.Height = sri.markerRendererInfo.MarkerSize.Point;
+                    leri.MarkerPen = new XPen(sri.markerRendererInfo.MarkerForegroundColor);
+                    leri.MarkerBrush = new XSolidBrush(sri.markerRendererInfo.MarkerBackgroundColor);
+                }
+                else
+                {
+                    leri.MarkerPen = sri.LineFormat;
+                    leri.MarkerBrush = sri.FillFormat;
+                }
+
+                if (cri.chart.type == ChartType.ColumnStacked2D)
+                    // stacked columns are revers ordered
+                    lri.Entries[cri.seriesRendererInfos.Length - index++ - 1] = leri;
+                else
+                    lri.Entries[index++] = leri;
+            }
         }
-      }
-      return lri;
+        return lri;
     }
-  }
 }

@@ -27,32 +27,27 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using System.Collections;
-using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Represents a series of data on the X-Axis.
+/// </summary>
+public class XSeries : ChartObject
 {
-  /// <summary>
-  /// Represents a series of data on the X-Axis.
-  /// </summary>
-  public class XSeries : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the XSeries class.
     /// </summary>
     public XSeries()
     {
-      xSeriesElements = new XSeriesElements();
+        xSeriesElements = new XSeriesElements();
     }
 
     /// <summary>
     /// Gets the xvalue at the specified index.
     /// </summary>
-    public XValue this[int index]
-    {
-      get {return (XValue)this.xSeriesElements[index];}
-    }
+    public XValue this[int index] => (XValue)this.xSeriesElements[index];
 
     /// <summary>
     /// The actual value container of the XSeries.
@@ -65,7 +60,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new XSeries Clone()
     {
-      return (XSeries)DeepCopy();
+        return (XSeries)DeepCopy();
     }
 
     /// <summary>
@@ -73,13 +68,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      XSeries xSeries = (XSeries)base.DeepCopy();
-      if (xSeries.xSeriesElements != null)
-      {
-        xSeries.xSeriesElements = xSeries.xSeriesElements.Clone();
-        xSeries.xSeriesElements.parent = xSeries;
-      }
-      return xSeries;
+        var xSeries = (XSeries)base.DeepCopy();
+        if (xSeries.xSeriesElements != null)
+        {
+            xSeries.xSeriesElements = xSeries.xSeriesElements.Clone();
+            xSeries.xSeriesElements.parent = xSeries;
+        }
+        return xSeries;
     }
 
     /// <summary>
@@ -87,7 +82,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public void AddBlank()
     {
-      this.xSeriesElements.AddBlank();
+        this.xSeriesElements.AddBlank();
     }
 
     /// <summary>
@@ -95,7 +90,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XValue Add(string value)
     {
-      return this.xSeriesElements.Add(value);
+        return this.xSeriesElements.Add(value);
     }
 
     /// <summary>
@@ -103,7 +98,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public void Add(params string[] values)
     {
-      this.xSeriesElements.Add(values);
+        this.xSeriesElements.Add(values);
     }
 
     /// <summary>
@@ -112,7 +107,7 @@ namespace PdfSharpCore.Charting
     /// <returns></returns>
     public IEnumerator GetEnumerator()
     {
-      return this.xSeriesElements.GetEnumerator();
+        return this.xSeriesElements.GetEnumerator();
     }
     #endregion
 
@@ -120,10 +115,7 @@ namespace PdfSharpCore.Charting
     /// <summary>
     /// Gets the number of xvalues actually contained in the xseries.
     /// </summary>
-    public int Count
-    {
-      get {return this.xSeriesElements.Count;}
-    }
+    public int Count => this.xSeriesElements.Count;
+
     #endregion
-  }
 }

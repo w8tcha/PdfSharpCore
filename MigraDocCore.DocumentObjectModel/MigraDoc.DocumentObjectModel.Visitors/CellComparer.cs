@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,34 +27,31 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using System.Collections.Generic;
 using MigraDocCore.DocumentObjectModel.Tables;
-using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Resources;
 
-namespace MigraDocCore.DocumentObjectModel.Visitors
+namespace MigraDocCore.DocumentObjectModel.Visitors;
+
+/// <summary>
+/// Comparer for the cell positions within a table.
+/// It compares the cell positions from top to bottom and left to right.
+/// </summary>
+public class CellComparer : IComparer<Cell>
 {
-  /// <summary>
-  /// Comparer for the cell positions within a table.
-  /// It compares the cell positions from top to bottom and left to right.
-  /// </summary>
-  public class CellComparer : IComparer<Cell>
-  {
     public int Compare(Cell lhs, Cell rhs)
     {
-      if (ReferenceEquals(lhs, null))
-        throw new ArgumentNullException(nameof(lhs));
+        if (ReferenceEquals(lhs, null))
+            throw new ArgumentNullException(nameof(lhs));
 
-      if (ReferenceEquals(rhs, null))
-        throw new ArgumentNullException(nameof(rhs));
+        if (ReferenceEquals(rhs, null))
+            throw new ArgumentNullException(nameof(rhs));
 
-      int rowCmpr = lhs.Row.Index - rhs.Row.Index;
-      if (rowCmpr != 0)
-        return rowCmpr;
+        var rowCmpr = lhs.Row.Index - rhs.Row.Index;
+        if (rowCmpr != 0)
+            return rowCmpr;
 
-      return lhs.Column.Index - rhs.Column.Index;
+        return lhs.Column.Index - rhs.Column.Index;
     }
-  }
 }

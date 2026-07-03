@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,27 +24,25 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace PdfSharpCore.Pdf.Content.Objects
+namespace PdfSharpCore.Pdf.Content.Objects;
+
+/// <summary>
+/// Specifies the group of operations the op-code belongs to.
+/// </summary>
+[Flags]
+public enum OpCodeFlags
 {
     /// <summary>
-    /// Specifies the group of operations the op-code belongs to.
+    /// 
     /// </summary>
-    [Flags]
-    public enum OpCodeFlags
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        None,
+    None,
 
-        /// <summary>
-        /// 
-        /// </summary>
-        TextOut = 0x0001,
-        //Color, Pattern, Images,...
-    }
+    /// <summary>
+    /// 
+    /// </summary>
+    TextOut = 0x0001
+    //Color, Pattern, Images,...
 }

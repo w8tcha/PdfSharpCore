@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Index to the three HeaderFooter objects of a HeadersFooters collection.
+/// </summary>
+public enum HeaderFooterIndex
 {
-  /// <summary>
-  /// Index to the three HeaderFooter objects of a HeadersFooters collection.
-  /// </summary>
-  public enum HeaderFooterIndex
-  {
     /// <summary>
     /// Header or footer which is primarily used.
     /// </summary>
@@ -53,5 +49,4 @@ namespace MigraDocCore.DocumentObjectModel
     /// Header or footer for the even pages of the section.
     /// </summary>
     EvenPage = 2
-  }
 }

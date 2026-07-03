@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,28 +24,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// Specifies what color model is used in a PDF document.
+/// </summary>
+public enum PdfColorMode
 {
     /// <summary>
-    /// Specifies what color model is used in a PDF document.
+    /// All color values are written as specified in the XColor objects they come from.
     /// </summary>
-    public enum PdfColorMode
-    {
-        /// <summary>
-        /// All color values are written as specified in the XColor objects they come from.
-        /// </summary>
-        Undefined,
+    Undefined,
 
-        /// <summary>
-        /// All colors are converted to RGB.
-        /// </summary>
-        Rgb,
+    /// <summary>
+    /// All colors are converted to RGB.
+    /// </summary>
+    Rgb,
 
-        /// <summary>
-        /// All colors are converted to CMYK.
-        /// </summary>
-        Cmyk,
-    }
+    /// <summary>
+    /// All colors are converted to CMYK.
+    /// </summary>
+    Cmyk
 }

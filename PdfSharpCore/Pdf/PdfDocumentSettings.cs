@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,44 +24,42 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// Holds PDF specific information of the document.
+/// </summary>
+public sealed class PdfDocumentSettings
 {
-    /// <summary>
-    /// Holds PDF specific information of the document.
-    /// </summary>
-    public sealed class PdfDocumentSettings
-    {
-        internal PdfDocumentSettings(PdfDocument document)
-        { }
+    internal PdfDocumentSettings(PdfDocument document)
+    { }
 
-        /// <summary>
-        /// Gets or sets the default trim margins.
-        /// </summary>
-        public TrimMargins TrimMargins
+    /// <summary>
+    /// Gets or sets the default trim margins.
+    /// </summary>
+    public TrimMargins TrimMargins
+    {
+        get
         {
-            get
-            {
-                if (_trimMargins == null)
-                    _trimMargins = new TrimMargins();
-                return _trimMargins;
-            }
-            set
-            {
-                if (_trimMargins == null)
-                    _trimMargins = new TrimMargins();
-                if (value != null)
-                {
-                    _trimMargins.Left = value.Left;
-                    _trimMargins.Right = value.Right;
-                    _trimMargins.Top = value.Top;
-                    _trimMargins.Bottom = value.Bottom;
-                }
-                else
-                    _trimMargins.All = 0;
-            }
+            if (_trimMargins == null)
+                _trimMargins = new TrimMargins();
+            return _trimMargins;
         }
-        TrimMargins _trimMargins = new TrimMargins();
+        set
+        {
+            if (_trimMargins == null)
+                _trimMargins = new TrimMargins();
+            if (value != null)
+            {
+                _trimMargins.Left = value.Left;
+                _trimMargins.Right = value.Right;
+                _trimMargins.Top = value.Top;
+                _trimMargins.Bottom = value.Bottom;
+            }
+            else
+                _trimMargins.All = 0;
+        }
     }
+    TrimMargins _trimMargins = new();
 }

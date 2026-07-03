@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,19 +25,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel;
 using PdfSharpCore.Drawing;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Renders a page break to an XGraphics object.
+/// </summary>
+internal class PageBreakRenderer : Renderer
 {
-  /// <summary>
-  /// Renders a page break to an XGraphics object.
-  /// </summary>
-  internal class PageBreakRenderer : Renderer
-  {
     /// <summary>
     /// Initializes a ParagraphRenderer object for formatting.
     /// </summary>
@@ -46,9 +43,9 @@ namespace MigraDocCore.Rendering
     /// <param name="pageBreak">The page break.</param>
     /// <param name="fieldInfos">The field infos.</param>
     internal PageBreakRenderer(XGraphics gfx, PageBreak pageBreak, FieldInfos fieldInfos)
-      : base(gfx, pageBreak, fieldInfos)
+        : base(gfx, pageBreak, fieldInfos)
     {
-      this.pageBreak = pageBreak;
+        this.pageBreak = pageBreak;
     }
 
     /// <summary>
@@ -58,36 +55,35 @@ namespace MigraDocCore.Rendering
     /// <param name="renderInfo">The render info object containing information necessary for rendering.</param>
     /// <param name="fieldInfos">The field infos.</param>
     internal PageBreakRenderer(XGraphics gfx, RenderInfo renderInfo, FieldInfos fieldInfos)
-      : base(gfx, renderInfo, fieldInfos)
+        : base(gfx, renderInfo, fieldInfos)
     {
-      this.renderInfo = renderInfo;
+        this.renderInfo = renderInfo;
     }
 
     internal override void Format(Area area, FormatInfo previousFormatInfo)
     {
-      PageBreakRenderInfo pbRenderInfo = new PageBreakRenderInfo();
-      pbRenderInfo.pageBreakFormatInfo = new PageBreakFormatInfo();
-      this.renderInfo = pbRenderInfo;
+        var pbRenderInfo = new PageBreakRenderInfo();
+        pbRenderInfo.pageBreakFormatInfo = new PageBreakFormatInfo();
+        this.renderInfo = pbRenderInfo;
 
-      pbRenderInfo.LayoutInfo.PageBreakBefore = true;
-      pbRenderInfo.LayoutInfo.ContentArea = new Rectangle(area.Y, area.Y, 0, 0);
-      pbRenderInfo.pageBreak = this.pageBreak;
+        pbRenderInfo.LayoutInfo.PageBreakBefore = true;
+        pbRenderInfo.LayoutInfo.ContentArea = new Rectangle(area.Y, area.Y, 0, 0);
+        pbRenderInfo.pageBreak = this.pageBreak;
     }
 
     internal override void Render()
     {
-      //Nothing to do here.
+        //Nothing to do here.
     }
 
     internal override LayoutInfo InitialLayoutInfo
     {
-      get
-      {
-        LayoutInfo layoutInfo = new LayoutInfo();
-        layoutInfo.PageBreakBefore = true;
-        return layoutInfo;
-      }
+        get
+        {
+            var layoutInfo = new LayoutInfo();
+            layoutInfo.PageBreakBefore = true;
+            return layoutInfo;
+        }
     }
     PageBreak pageBreak;
-  }
 }

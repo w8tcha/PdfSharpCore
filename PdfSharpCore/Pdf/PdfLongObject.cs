@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,69 +24,65 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System.Diagnostics;
 using System.Globalization;
 using PdfSharpCore.Pdf.IO;
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// Represents an indirect long value. This type is not used by PdfSharpCore. If it is imported from
+/// an external PDF file, the value is converted into a direct object.
+/// </summary>
+[DebuggerDisplay("({Value})")]
+public sealed class PdfLongObject : PdfNumberObject
 {
     /// <summary>
-    /// Represents an indirect long value. This type is not used by PdfSharpCore. If it is imported from
-    /// an external PDF file, the value is converted into a direct object.
+    /// Initializes a new instance of the <see cref="PdfLongObject"/> class.
     /// </summary>
-    [DebuggerDisplay("({Value})")]
-    public sealed class PdfLongObject : PdfNumberObject
+    public PdfLongObject()
+    { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PdfLongObject"/> class.
+    /// </summary>
+    public PdfLongObject(long value)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfLongObject"/> class.
-        /// </summary>
-        public PdfLongObject()
-        { }
+        _value = value;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfLongObject"/> class.
-        /// </summary>
-        public PdfLongObject(long value)
-        {
-            _value = value;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PdfLongObject"/> class.
+    /// </summary>
+    public PdfLongObject(PdfDocument document, long value)
+        : base(document)
+    {
+        _value = value;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfLongObject"/> class.
-        /// </summary>
-        public PdfLongObject(PdfDocument document, long value)
-            : base(document)
-        {
-            _value = value;
-        }
+    /// <summary>
+    /// Gets the value as long.
+    /// </summary>
+    public long Value => _value;
 
-        /// <summary>
-        /// Gets the value as long.
-        /// </summary>
-        public long Value
-        {
-            get { return _value; }
-        }
-        readonly long _value;
+    readonly long _value;
 
-        /// <summary>
-        /// Returns the long as string.
-        /// </summary>
-        public override string ToString()
-        {
-            return _value.ToString(CultureInfo.InvariantCulture);
-        }
+    /// <summary>
+    /// Returns the long as string.
+    /// </summary>
+    public override string ToString()
+    {
+        return _value.ToString(CultureInfo.InvariantCulture);
+    }
 
-        /// <summary>
-        /// Writes the long literal.
-        /// </summary>
-        internal override void WriteObject(PdfWriter writer)
-        {
-            writer.WriteBeginObject(this);
-            writer.Write(_value);
-            writer.WriteEndObject();
-        }
+    /// <summary>
+    /// Writes the long literal.
+    /// </summary>
+    internal override void WriteObject(PdfWriter writer)
+    {
+        writer.WriteBeginObject(this);
+        writer.Write(_value);
+        writer.WriteEndObject();
     }
 }

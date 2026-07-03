@@ -27,18 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Specifies the line style of the LineFormat object.
+/// </summary>
+public enum LineStyle
 {
-  /// <summary>
-  /// Specifies the line style of the LineFormat object.
-  /// </summary>
-  public enum LineStyle
-  {
     /// <summary>
     /// 
     /// </summary>
     Single
-  }
 }

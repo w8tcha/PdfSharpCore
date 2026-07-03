@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Specifies the level of a paragraph.
+/// </summary>
+public enum OutlineLevel
 {
-  /// <summary>
-  /// Specifies the level of a paragraph.
-  /// </summary>
-  public enum OutlineLevel
-  {
     BodyText,
     Level1,
     Level2,
@@ -48,6 +44,5 @@ namespace MigraDocCore.DocumentObjectModel
     Level6,
     Level7,
     Level8,
-    Level9,
-  }
+    Level9
 }

@@ -1,5 +1,4 @@
-﻿#region MigraDoc - Creating Documents on the Fly
-//
+﻿//
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -28,39 +27,33 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Specify the strike out type for font
+/// </summary>
+public enum Strikethrough
 {
-    /// <summary>
-    /// Specify the strike out type for font
-    /// </summary>
-    public enum Strikethrough
-    {
-        None,
-        Single,
-        Words,
-        Dotted,
-        Dash,
-        DotDash,
-        DotDotDash,
+    None,
+    Single,
+    Words,
+    Dotted,
+    Dash,
+    DotDash,
+    DotDotDash
 
-        /* --- unsupported ---
-        Double          = 3,
-        Thick           = 6,
-        Wavy            = 11,
-        WavyHeavy       = 27,
-        DottedHeavy     = 20,
-        DashHeavy       = 23,
-        DotDashHeavy    = 25,
-        DotDotDashHeavy = 26,
-        DashLong        = 39,
-        DashLongHeavy   = 55,
-        WavyDouble      = 43
-        */
-    }
+    /* --- unsupported ---
+    Double          = 3,
+    Thick           = 6,
+    Wavy            = 11,
+    WavyHeavy       = 27,
+    DottedHeavy     = 20,
+    DashHeavy       = 23,
+    DotDashHeavy    = 25,
+    DotDotDashHeavy = 26,
+    DashLong        = 39,
+    DashLongHeavy   = 55,
+    WavyDouble      = 43
+    */
 }

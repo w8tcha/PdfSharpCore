@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,23 +24,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// Specifies how the document should be displayed by a viewer when opened.
+/// </summary>
+public enum PdfReadingDirection
 {
     /// <summary>
-    /// Specifies how the document should be displayed by a viewer when opened.
+    /// Left to right.
     /// </summary>
-    public enum PdfReadingDirection
-    {
-        /// <summary>
-        /// Left to right.
-        /// </summary>
-        LeftToRight,
+    LeftToRight,
 
-        /// <summary>
-        /// Right to left (including vertical writing systems, such as Chinese, Japanese, and Korean)
-        /// </summary>
-        RightToLeft,
-    }
+    /// <summary>
+    /// Right to left (including vertical writing systems, such as Chinese, Japanese, and Korean)
+    /// </summary>
+    RightToLeft
 }

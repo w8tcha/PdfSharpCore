@@ -27,16 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Base class for all chart classes.
+/// </summary>
+public class ChartObject : DocumentObject
 {
-  /// <summary>
-  /// Base class for all chart classes.
-  /// </summary>
-  public class ChartObject : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the ChartObject class.
     /// </summary>
@@ -48,5 +45,4 @@ namespace PdfSharpCore.Charting
     /// Initializes a new instance of the ChartObject class with the specified parent.
     /// </summary>
     internal ChartObject(DocumentObject parent) : base(parent) {}
-  }
 }

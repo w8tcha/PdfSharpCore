@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,28 +24,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Fonts.OpenType
+namespace PdfSharpCore.Fonts.OpenType;
+
+/// <summary>
+/// Identifies the technology of an OpenType font file.
+/// </summary>
+enum FontTechnology
 {
     /// <summary>
-    /// Identifies the technology of an OpenType font file.
+    /// Font is Adobe Postscript font in CFF.
     /// </summary>
-    enum FontTechnology
-    {
-        /// <summary>
-        /// Font is Adobe Postscript font in CFF.
-        /// </summary>
-        PostscriptOutlines,
+    PostscriptOutlines,
 
-        /// <summary>
-        /// Font is a TrueType font.
-        /// </summary>
-        TrueTypeOutlines,
+    /// <summary>
+    /// Font is a TrueType font.
+    /// </summary>
+    TrueTypeOutlines,
 
-        /// <summary>
-        /// Font is a TrueType font collection.
-        /// </summary>
-        TrueTypeCollection
-    }
+    /// <summary>
+    /// Font is a TrueType font collection.
+    /// </summary>
+    TrueTypeCollection
 }

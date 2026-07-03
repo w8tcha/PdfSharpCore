@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,28 +24,26 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf.IO
+namespace PdfSharpCore.Pdf.IO;
+
+/// <summary>
+/// Determines the type of the password.
+/// </summary>
+public enum PasswordValidity
 {
     /// <summary>
-    /// Determines the type of the password.
+    /// Password is neither user nor owner password.
     /// </summary>
-    public enum PasswordValidity
-    {
-        /// <summary>
-        /// Password is neither user nor owner password.
-        /// </summary>
-        Invalid,
+    Invalid,
 
-        /// <summary>
-        /// Password is user password.
-        /// </summary>
-        UserPassword,
+    /// <summary>
+    /// Password is user password.
+    /// </summary>
+    UserPassword,
 
-        /// <summary>
-        /// Password is owner password.
-        /// </summary>
-        OwnerPassword,
-    }
+    /// <summary>
+    /// Password is owner password.
+    /// </summary>
+    OwnerPassword
 }

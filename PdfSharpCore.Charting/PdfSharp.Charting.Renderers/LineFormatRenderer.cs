@@ -27,40 +27,38 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a renderer specialized to draw lines in various styles, colors and widths.
+/// </summary>
+class LineFormatRenderer
 {
-  /// <summary>
-  /// Represents a renderer specialized to draw lines in various styles, colors and widths.
-  /// </summary>
-  class LineFormatRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the LineFormatRenderer class with the specified graphics, line format
     /// and default width.
     /// </summary>
     public LineFormatRenderer(XGraphics gfx, LineFormat lineFormat, double defaultWidth)
     {
-      this.gfx = gfx;
-      bool visible = false;
-      double width = 0;
+        this.gfx = gfx;
+        var visible = false;
+        double width = 0;
 
-      if (lineFormat != null)
-      {
-        width = lineFormat.width;
-        if (width == 0 && !lineFormat.Color.IsEmpty)
-          width = defaultWidth;
-        visible = lineFormat.Visible || width > 0 || !lineFormat.Color.IsEmpty;
-      }
+        if (lineFormat != null)
+        {
+            width = lineFormat.width;
+            if (width == 0 && !lineFormat.Color.IsEmpty)
+                width = defaultWidth;
+            visible = lineFormat.Visible || width > 0 || !lineFormat.Color.IsEmpty;
+        }
 
-      if (visible)
-      {
-        this.pen = new XPen(lineFormat.Color, width);
-        this.pen.DashStyle = lineFormat.DashStyle;
-      }
+        if (visible)
+        {
+            this.pen = new XPen(lineFormat.Color, width);
+            this.pen.DashStyle = lineFormat.DashStyle;
+        }
     }
 
     /// <summary>
@@ -68,7 +66,7 @@ namespace PdfSharpCore.Charting.Renderers
     /// line format.
     /// </summary>
     public LineFormatRenderer(XGraphics gfx, LineFormat lineFormat) :
-      this(gfx, lineFormat, 0)
+        this(gfx, lineFormat, 0)
     {
     }
 
@@ -77,8 +75,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public LineFormatRenderer(XGraphics gfx, XPen pen)
     {
-      this.gfx = gfx;
-      this.pen = pen;
+        this.gfx = gfx;
+        this.pen = pen;
     }
 
     /// <summary>
@@ -86,8 +84,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public void DrawLine(XPoint pt0, XPoint pt1)
     {
-      if (this.pen != null)
-        this.gfx.DrawLine(this.pen, pt0, pt1);
+        if (this.pen != null)
+            this.gfx.DrawLine(this.pen, pt0, pt1);
     }
 
     /// <summary>
@@ -95,8 +93,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public void DrawRectangle(XRect rect)
     {
-      if (this.pen != null)
-        this.gfx.DrawRectangle(this.pen, rect);
+        if (this.pen != null)
+            this.gfx.DrawRectangle(this.pen, rect);
     }
 
     /// <summary>
@@ -104,8 +102,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     public void DrawPath(XGraphicsPath path)
     {
-      if (this.pen != null)
-        this.gfx.DrawPath(this.pen, path);
+        if (this.pen != null)
+            this.gfx.DrawPath(this.pen, path);
     }
 
     /// <summary>
@@ -117,5 +115,4 @@ namespace PdfSharpCore.Charting.Renderers
     /// Pen used to draw the line.
     /// </summary>
     XPen pen;
-  }
 }

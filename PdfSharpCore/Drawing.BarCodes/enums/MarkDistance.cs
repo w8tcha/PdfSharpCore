@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Klaus Potzesny
@@ -25,26 +24,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing.BarCodes
-{
-    ///// <summary>
-    ///// Valid mark distances for OMR Codes.
-    ///// </summary>
-    //public enum MarkDistance
-    //{
-    //  /// <summary>
-    //  /// 2/6 inch, valid for printing with 6 lpi. (line height = 12 pt).
-    //  /// </summary>
-    //  Inch1_6,
-    //  /// <summary>
-    //  /// 2/6 inch, valid for printing with 6 lpi (line height = 12 pt).
-    //  /// </summary>
-    //  Inch2_6,
-    //  /// <summary>
-    //  /// 2/8 inch, valid for printing with 8 lpi (line height = 9 pt).
-    //  /// </summary>
-    //  Inch2_8
-    //}
-}
+namespace PdfSharpCore.Drawing.BarCodes;
+
+///// <summary>
+///// Valid mark distances for OMR Codes.
+///// </summary>
+//public enum MarkDistance
+//{
+//  /// <summary>
+//  /// 2/6 inch, valid for printing with 6 lpi. (line height = 12 pt).
+//  /// </summary>
+//  Inch1_6,
+//  /// <summary>
+//  /// 2/6 inch, valid for printing with 6 lpi (line height = 12 pt).
+//  /// </summary>
+//  Inch2_6,
+//  /// <summary>
+//  /// 2/8 inch, valid for printing with 8 lpi (line height = 9 pt).
+//  /// </summary>
+//  Inch2_8
+//}

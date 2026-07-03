@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,13 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Visitors;
 
-namespace MigraDocCore.DocumentObjectModel.Visitors
+internal interface IVisitable
 {
-  internal interface IVisitable
-  {
     /// <summary>
     /// Allows the visitor object to visit the document object and it's child objects.
     /// </summary>
     void AcceptVisitor(DocumentObjectVisitor visitor, bool visitChildren);
-  }
 }

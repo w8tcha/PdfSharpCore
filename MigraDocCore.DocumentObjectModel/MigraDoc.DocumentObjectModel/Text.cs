@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Represents text in a paragraph.
+/// </summary>
+public class Text : DocumentObject
 {
-  /// <summary>
-  /// Represents text in a paragraph.
-  /// </summary>
-  public class Text : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the Text class.
     /// </summary>
@@ -58,45 +53,40 @@ namespace MigraDocCore.DocumentObjectModel
     /// Initializes a new instance of the Text class with a string as paragraph content.
     /// </summary>
     public Text(string content)
-      : this()
+        : this()
     {
-      //is this constructor needed? or just the default constructor?
-      this.Content = content;
+        //is this constructor needed? or just the default constructor?
+        this.Content = content;
     }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new Text Clone()
     {
-      return (Text)DeepCopy();
+        return (Text)DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the text content.
     /// </summary>
     public string Content
     {
-      get { return this.content.Value; }
-      set { this.content.Value = value; }
+        get => this.content.Value;
+        set => this.content.Value = value;
     }
     [DV]
     internal NString content = NString.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts Text into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      string text = DdlEncoder.StringToText(content.Value);
-      // To make DDL more readable write soft hypens as keywords.
-      text = text.Replace(new string((char)173, 1), "\\-");
-      serializer.Write(text);
+        var text = DdlEncoder.StringToText(content.Value);
+        // To make DDL more readable write soft hypens as keywords.
+        text = text.Replace(new string((char)173, 1), "\\-");
+        serializer.Write(text);
     }
 
     /// <summary>
@@ -104,14 +94,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(Text));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(Text));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

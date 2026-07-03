@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,37 +24,35 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf.IO
+namespace PdfSharpCore.Pdf.IO;
+
+/// <summary>
+/// Determines how the PDF output stream is formatted. Even all formats create valid PDF files,
+/// only Compact or Standard should be used for production purposes.
+/// </summary>
+public enum PdfWriterLayout
 {
     /// <summary>
-    /// Determines how the PDF output stream is formatted. Even all formats create valid PDF files,
-    /// only Compact or Standard should be used for production purposes.
+    /// The PDF stream contains no unnecessary characters. This is default in release build.
     /// </summary>
-    public enum PdfWriterLayout
-    {
-        /// <summary>
-        /// The PDF stream contains no unnecessary characters. This is default in release build.
-        /// </summary>
-        Compact,
+    Compact,
 
-        /// <summary>
-        /// The PDF stream contains some superfluous line feeds, but is more readable.
-        /// </summary>
-        Standard,
+    /// <summary>
+    /// The PDF stream contains some superfluous line feeds, but is more readable.
+    /// </summary>
+    Standard,
 
-        /// <summary>
-        /// The PDF stream is indented to reflect the nesting levels of the objects. This is useful
-        /// for analyzing PDF files, but increases the size of the file significantly.
-        /// </summary>
-        Indented,
+    /// <summary>
+    /// The PDF stream is indented to reflect the nesting levels of the objects. This is useful
+    /// for analyzing PDF files, but increases the size of the file significantly.
+    /// </summary>
+    Indented,
 
-        /// <summary>
-        /// The PDF stream is indented to reflect the nesting levels of the objects and contains additional
-        /// information about the PDFsharp objects. Furthermore content streams are not deflated. This 
-        /// is useful for debugging purposes only and increases the size of the file significantly.
-        /// </summary>
-        Verbose,
-    }
+    /// <summary>
+    /// The PDF stream is indented to reflect the nesting levels of the objects and contains additional
+    /// information about the PDFsharp objects. Furthermore content streams are not deflated. This 
+    /// is useful for debugging purposes only and increases the size of the file significantly.
+    /// </summary>
+    Verbose
 }

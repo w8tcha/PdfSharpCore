@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.Shapes;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes
+/// <summary>
+/// Specifies the dash style of the LineFormat object.
+/// </summary>
+public enum DashStyle
 {
-  /// <summary>
-  /// Specifies the dash style of the LineFormat object.
-  /// </summary>
-  public enum DashStyle
-  {
     /// <summary>
     /// A solid line.
     /// </summary>
@@ -59,5 +55,4 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// Square dots.
     /// </summary>
     SquareDot
-  }
 }

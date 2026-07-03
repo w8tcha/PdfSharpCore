@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Klaus Potzesny
@@ -25,35 +24,33 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing.BarCodes
+namespace PdfSharpCore.Drawing.BarCodes;
+
+/// <summary>
+/// Specifies the type of the bar code.
+/// </summary>
+public enum CodeType
 {
     /// <summary>
-    /// Specifies the type of the bar code.
+    /// The standard 2 of 5 interleaved bar code.
     /// </summary>
-    public enum CodeType
-    {
-        /// <summary>
-        /// The standard 2 of 5 interleaved bar code.
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        Code2of5Interleaved,
+    // ReSharper disable once InconsistentNaming
+    Code2of5Interleaved,
 
-        /// <summary>
-        /// The standard 3 of 9 bar code.
-        /// </summary>
-        // ReSharper disable once InconsistentNaming
-        Code3of9Standard,
+    /// <summary>
+    /// The standard 3 of 9 bar code.
+    /// </summary>
+    // ReSharper disable once InconsistentNaming
+    Code3of9Standard,
 
-        /// <summary>
-        /// The OMR code.
-        /// </summary>
-        Omr,
+    /// <summary>
+    /// The OMR code.
+    /// </summary>
+    Omr,
 
-        /// <summary>
-        /// The data matrix code.
-        /// </summary>
-        DataMatrix,
-    }
+    /// <summary>
+    /// The data matrix code.
+    /// </summary>
+    DataMatrix
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,21 +27,19 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
+
 using MigraDocCore.DocumentObjectModel.Internals;
 using MigraDocCore.DocumentObjectModel.Visitors;
 
-namespace MigraDocCore.DocumentObjectModel.Tables
+namespace MigraDocCore.DocumentObjectModel.Tables;
+
+/// <summary>
+/// Represents the columns of a table.
+/// </summary>
+public class Columns : DocumentObjectCollection, IVisitable
 {
-  /// <summary>
-  /// Represents the columns of a table.
-  /// </summary>
-  public class Columns : DocumentObjectCollection, IVisitable
-  {
     /// <summary>
     /// Initializes a new instance of the Columns class.
     /// </summary>
@@ -55,12 +52,12 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public Columns(params Unit[] widths)
     {
-      foreach (Unit width in widths)
-      {
-        Column clm = new Column();
-        clm.Width = width;
-        this.Add(clm);
-      }
+        foreach (var width in widths)
+        {
+            var clm = new Column();
+            clm.Width = width;
+            this.Add(clm);
+        }
     }
 
     /// <summary>
@@ -68,13 +65,12 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     internal Columns(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new Columns Clone()
     {
-      return (Columns)base.DeepCopy();
+        return (Columns)base.DeepCopy();
     }
 
     /// <summary>
@@ -82,39 +78,31 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public Column AddColumn()
     {
-      if (Table.Rows.Count > 0)
-        throw new InvalidOperationException("Cannot add column because rows collection is not empty.");
+        if (Table.Rows.Count > 0)
+            throw new InvalidOperationException("Cannot add column because rows collection is not empty.");
 
-      Column column = new Column();
-      Add(column);
-      return column;
+        var column = new Column();
+        Add(column);
+        return column;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets the table the columns collection belongs to.
     /// </summary>
-    public Table Table
-    {
-      get { return this.parent as Table; }
-    }
+    public Table Table => this.parent as Table;
 
     /// <summary>
     /// Gets a column by its index.
     /// </summary>
-    public new Column this[int index]
-    {
-      get { return base[index] as Column; }
-    }
+    public new Column this[int index] => base[index] as Column;
 
     /// <summary>
     /// Gets or sets the default width of all columns.
     /// </summary>
     public Unit Width
     {
-      get { return this.width; }
-      set { this.width = value; }
+        get => this.width;
+        set => this.width = value;
     }
     [DV]
     internal Unit width = Unit.NullValue;
@@ -124,39 +112,37 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     public string Comment
     {
-      get { return this.comment.Value; }
-      set { this.comment.Value = value; }
+        get => this.comment.Value;
+        set => this.comment.Value = value;
     }
     [DV]
     internal NString comment = NString.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts Columns into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      serializer.WriteComment(this.comment.Value);
-      serializer.WriteLine("\\columns");
+        serializer.WriteComment(this.comment.Value);
+        serializer.WriteLine("\\columns");
 
-      int pos = serializer.BeginAttributes();
+        var pos = serializer.BeginAttributes();
 
-      if (!this.width.IsNull)
-        serializer.WriteSimpleAttribute("Width", this.Width);
+        if (!this.width.IsNull)
+            serializer.WriteSimpleAttribute("Width", this.Width);
 
-      serializer.EndAttributes(pos);
+        serializer.EndAttributes(pos);
 
-      serializer.BeginContent();
-      int clms = Count;
-      if (clms > 0)
-      {
-        for (int clm = 0; clm < clms; clm++)
-          this[clm].Serialize(serializer);
-      }
-      else
-        serializer.WriteComment("Invalid - no columns defined. Table will not render.");
-      serializer.EndContent();
+        serializer.BeginContent();
+        var clms = Count;
+        if (clms > 0)
+        {
+            for (var clm = 0; clm < clms; clm++)
+                this[clm].Serialize(serializer);
+        }
+        else
+            serializer.WriteComment("Invalid - no columns defined. Table will not render.");
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -164,7 +150,7 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     void IVisitable.AcceptVisitor(DocumentObjectVisitor visitor, bool visitChildren)
     {
-      visitor.VisitColumns(this);
+        visitor.VisitColumns(this);
     }
 
     /// <summary>
@@ -172,14 +158,12 @@ namespace MigraDocCore.DocumentObjectModel.Tables
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(Columns));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(Columns));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

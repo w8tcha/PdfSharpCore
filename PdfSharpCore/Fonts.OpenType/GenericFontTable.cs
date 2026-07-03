@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,14 +24,12 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 //using Fixed = System.Int32;
 //using FWord = System.Int16;
 //using UFWord = System.UInt16;
 
-namespace PdfSharpCore.Fonts.OpenType
-{
+namespace PdfSharpCore.Fonts.OpenType;
 #if true_
     /// <summary>
     /// Generic font table. Not yet used
@@ -67,4 +64,3 @@ namespace PdfSharpCore.Fonts.OpenType
         byte[] _table;
     }
 #endif
-}

@@ -30,13 +30,13 @@
 using System;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a data label renderer for column charts.
+/// </summary>
+internal class ColumnDataLabelRenderer : DataLabelRenderer
 {
-  /// <summary>
-  /// Represents a data label renderer for column charts.
-  /// </summary>
-  internal class ColumnDataLabelRenderer : DataLabelRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the ColumnDataLabelRenderer class with the
     /// specified renderer parameters.
@@ -50,35 +50,35 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Format()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-      {
-        if (sri.dataLabelRendererInfo == null)
-          continue;
-
-        XGraphics gfx = this.rendererParms.Graphics;
-
-        sri.dataLabelRendererInfo.Entries = new DataLabelEntryRendererInfo[sri.pointRendererInfos.Length];
-        int index = 0;
-        foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        foreach (var sri in cri.seriesRendererInfos)
         {
-          DataLabelEntryRendererInfo dleri = new DataLabelEntryRendererInfo();
-          if (sri.dataLabelRendererInfo.Type != DataLabelType.None)
-          {
-            if (sri.dataLabelRendererInfo.Type == DataLabelType.Value)
-              dleri.Text = column.point.value.ToString(sri.dataLabelRendererInfo.Format);
-            else if (sri.dataLabelRendererInfo.Type == DataLabelType.Percent)
-              throw new InvalidOperationException(PSCSR.PercentNotSupportedByColumnDataLabel);
+            if (sri.dataLabelRendererInfo == null)
+                continue;
 
-            if (dleri.Text.Length > 0)
-              dleri.Size = gfx.MeasureString(dleri.Text, sri.dataLabelRendererInfo.Font);
-          }
+            var gfx = this.rendererParms.Graphics;
 
-          sri.dataLabelRendererInfo.Entries[index++] = dleri;
+            sri.dataLabelRendererInfo.Entries = new DataLabelEntryRendererInfo[sri.pointRendererInfos.Length];
+            var index = 0;
+            foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+            {
+                var dleri = new DataLabelEntryRendererInfo();
+                if (sri.dataLabelRendererInfo.Type != DataLabelType.None)
+                {
+                    if (sri.dataLabelRendererInfo.Type == DataLabelType.Value)
+                        dleri.Text = column.point.value.ToString(sri.dataLabelRendererInfo.Format);
+                    else if (sri.dataLabelRendererInfo.Type == DataLabelType.Percent)
+                        throw new InvalidOperationException(PSCSR.PercentNotSupportedByColumnDataLabel);
+
+                    if (dleri.Text.Length > 0)
+                        dleri.Size = gfx.MeasureString(dleri.Text, sri.dataLabelRendererInfo.Font);
+                }
+
+                sri.dataLabelRendererInfo.Entries[index++] = dleri;
+            }
         }
-      }
 
-      CalcPositions();
+        CalcPositions();
     }
 
     /// <summary>
@@ -86,24 +86,24 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-      {
-        if (sri.dataLabelRendererInfo == null)
-          continue;
-
-        XGraphics gfx = this.rendererParms.Graphics;
-        XFont font = sri.dataLabelRendererInfo.Font;
-        XBrush fontColor = sri.dataLabelRendererInfo.FontColor;
-        XStringFormat format = XStringFormats.Center;
-        format.LineAlignment = XLineAlignment.Center;
-        foreach (DataLabelEntryRendererInfo dataLabel in sri.dataLabelRendererInfo.Entries)
+        foreach (var sri in cri.seriesRendererInfos)
         {
-          if (dataLabel.Text != null)
-            gfx.DrawString(dataLabel.Text, font, fontColor, dataLabel.Rect, format);
+            if (sri.dataLabelRendererInfo == null)
+                continue;
+
+            var gfx = this.rendererParms.Graphics;
+            var font = sri.dataLabelRendererInfo.Font;
+            var fontColor = sri.dataLabelRendererInfo.FontColor;
+            var format = XStringFormats.Center;
+            format.LineAlignment = XLineAlignment.Center;
+            foreach (var dataLabel in sri.dataLabelRendererInfo.Entries)
+            {
+                if (dataLabel.Text != null)
+                    gfx.DrawString(dataLabel.Text, font, fontColor, dataLabel.Rect, format);
+            }
         }
-      }
     }
 
     /// <summary>
@@ -111,50 +111,49 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void CalcPositions()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      XGraphics gfx = this.rendererParms.Graphics;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var gfx = this.rendererParms.Graphics;
 
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-      {
-        if (sri.dataLabelRendererInfo == null)
-          continue;
-
-        int columnIndex = 0;
-        foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+        foreach (var sri in cri.seriesRendererInfos)
         {
-          DataLabelEntryRendererInfo dleri = sri.dataLabelRendererInfo.Entries[columnIndex++];
+            if (sri.dataLabelRendererInfo == null)
+                continue;
 
-          dleri.X = column.Rect.X + column.Rect.Width / 2 - dleri.Width / 2; // Always the same...
-          switch (sri.dataLabelRendererInfo.Position)
-          {
-            case DataLabelPosition.InsideEnd:
-              // Inner border of the column.
-              dleri.Y = column.Rect.Y;
-              if (column.point.value < 0)
-                dleri.Y = column.Rect.Y + column.Rect.Height - dleri.Height;
-              break;
+            var columnIndex = 0;
+            foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+            {
+                var dleri = sri.dataLabelRendererInfo.Entries[columnIndex++];
 
-            case DataLabelPosition.Center:
-              // Centered inside the column.
-              dleri.Y = column.Rect.Y + column.Rect.Height / 2 - dleri.Height / 2;
-              break;
+                dleri.X = column.Rect.X + column.Rect.Width / 2 - dleri.Width / 2; // Always the same...
+                switch (sri.dataLabelRendererInfo.Position)
+                {
+                    case DataLabelPosition.InsideEnd:
+                        // Inner border of the column.
+                        dleri.Y = column.Rect.Y;
+                        if (column.point.value < 0)
+                            dleri.Y = column.Rect.Y + column.Rect.Height - dleri.Height;
+                        break;
 
-            case DataLabelPosition.InsideBase:
-              // Aligned at the base of the column.
-              dleri.Y = column.Rect.Y + column.Rect.Height - dleri.Height;
-              if (column.point.value < 0)
-                dleri.Y = column.Rect.Y;
-              break;
+                    case DataLabelPosition.Center:
+                        // Centered inside the column.
+                        dleri.Y = column.Rect.Y + column.Rect.Height / 2 - dleri.Height / 2;
+                        break;
 
-            case DataLabelPosition.OutsideEnd:
-              // Outer border of the column.
-              dleri.Y = column.Rect.Y - dleri.Height;
-              if (column.point.value < 0)
-                dleri.Y = column.Rect.Y  + column.Rect.Height;
-              break;
-          }
+                    case DataLabelPosition.InsideBase:
+                        // Aligned at the base of the column.
+                        dleri.Y = column.Rect.Y + column.Rect.Height - dleri.Height;
+                        if (column.point.value < 0)
+                            dleri.Y = column.Rect.Y;
+                        break;
+
+                    case DataLabelPosition.OutsideEnd:
+                        // Outer border of the column.
+                        dleri.Y = column.Rect.Y - dleri.Height;
+                        if (column.point.value < 0)
+                            dleri.Y = column.Rect.Y  + column.Rect.Height;
+                        break;
+                }
+            }
         }
-      }
     }
-  }
 }

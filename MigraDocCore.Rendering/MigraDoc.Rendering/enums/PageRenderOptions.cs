@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,18 +25,17 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Determines the parts of a page to be rendered.
+/// </summary>
+[Flags]
+public enum PageRenderOptions
 {
-  /// <summary>
-  /// Determines the parts of a page to be rendered.
-  /// </summary>
-  [Flags]
-  public enum PageRenderOptions
-  {
     /// <summary>
     /// renders nothing (creates an empty page)
     /// </summary>
@@ -70,5 +68,4 @@ namespace MigraDocCore.Rendering
     /// creates not even an empty page
     /// </summary>
     RemovePage = 32
-  }
 }

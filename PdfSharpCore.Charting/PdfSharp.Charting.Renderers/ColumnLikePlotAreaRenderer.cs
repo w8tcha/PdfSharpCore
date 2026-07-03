@@ -27,23 +27,21 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Base class for all plot area renderers.
+/// </summary>
+internal abstract class ColumnLikePlotAreaRenderer : PlotAreaRenderer
 {
-  /// <summary>
-  /// Base class for all plot area renderers.
-  /// </summary>
-  internal abstract class ColumnLikePlotAreaRenderer : PlotAreaRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the ColumnLikePlotAreaRenderer class with the
     /// specified renderer parameters.
     /// </summary>
     internal ColumnLikePlotAreaRenderer(RendererParameters parms)
-      : base(parms)
+        : base(parms)
     {
     }
 
@@ -52,20 +50,19 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Format()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      double xMin = cri.xAxisRendererInfo.MinimumScale;
-      double xMax = cri.xAxisRendererInfo.MaximumScale;
-      double yMin = cri.yAxisRendererInfo.MinimumScale;
-      double yMax = cri.yAxisRendererInfo.MaximumScale;
+        var xMin = cri.xAxisRendererInfo.MinimumScale;
+        var xMax = cri.xAxisRendererInfo.MaximumScale;
+        var yMin = cri.yAxisRendererInfo.MinimumScale;
+        var yMax = cri.yAxisRendererInfo.MaximumScale;
 
-      XRect plotAreaBox = cri.plotAreaRendererInfo.Rect;
+        var plotAreaBox = cri.plotAreaRendererInfo.Rect;
 
-      cri.plotAreaRendererInfo.matrix = new XMatrix();  //XMatrix.Identity;
-      cri.plotAreaRendererInfo.matrix.TranslatePrepend(-xMin, yMax);
-      cri.plotAreaRendererInfo.matrix.Scale(plotAreaBox.Width / xMax, plotAreaBox.Height / (yMax - yMin), XMatrixOrder.Append);
-      cri.plotAreaRendererInfo.matrix.ScalePrepend(1, -1);
-      cri.plotAreaRendererInfo.matrix.Translate(plotAreaBox.X, plotAreaBox.Y, XMatrixOrder.Append);
+        cri.plotAreaRendererInfo.matrix = new XMatrix();  //XMatrix.Identity;
+        cri.plotAreaRendererInfo.matrix.TranslatePrepend(-xMin, yMax);
+        cri.plotAreaRendererInfo.matrix.Scale(plotAreaBox.Width / xMax, plotAreaBox.Height / (yMax - yMin), XMatrixOrder.Append);
+        cri.plotAreaRendererInfo.matrix.ScalePrepend(1, -1);
+        cri.plotAreaRendererInfo.matrix.Translate(plotAreaBox.X, plotAreaBox.Y, XMatrixOrder.Append);
     }
-  }
 }

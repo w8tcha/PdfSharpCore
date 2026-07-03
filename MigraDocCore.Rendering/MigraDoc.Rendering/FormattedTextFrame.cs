@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,155 +25,142 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using System.Collections;
 
-using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.Internals;
 using MigraDocCore.DocumentObjectModel.Shapes;
 using PdfSharpCore.Drawing;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Represents a formatted text frame.
+/// </summary>
+internal class FormattedTextFrame : IAreaProvider
 {
-  /// <summary>
-  /// Represents a formatted text frame.
-  /// </summary>
-  internal class FormattedTextFrame : IAreaProvider
-  {
     internal FormattedTextFrame(TextFrame textframe, DocumentRenderer documentRenderer, FieldInfos fieldInfos)
     {
-      this.textframe = textframe;
-      this.fieldInfos = fieldInfos;
-      this.documentRenderer = documentRenderer;
+        this.textframe = textframe;
+        this.fieldInfos = fieldInfos;
+        this.documentRenderer = documentRenderer;
     }
 
     internal void Format(XGraphics gfx)
     {
-      this.gfx = gfx;
-      this.isFirstArea = true;
-      this.formatter = new TopDownFormatter(this, this.documentRenderer, this.textframe.Elements);
-      this.formatter.FormatOnAreas(gfx, false);
-      this.contentHeight = RenderInfo.GetTotalHeight(GetRenderInfos());
+        this.gfx = gfx;
+        this.isFirstArea = true;
+        this.formatter = new TopDownFormatter(this, this.documentRenderer, this.textframe.Elements);
+        this.formatter.FormatOnAreas(gfx, false);
+        this.contentHeight = RenderInfo.GetTotalHeight(GetRenderInfos());
     }
 
     Area IAreaProvider.GetNextArea()
     {
-      if (this.isFirstArea)
-        return CalcContentRect();
+        if (this.isFirstArea)
+            return CalcContentRect();
 
-      return null;
+        return null;
     }
 
     Area IAreaProvider.ProbeNextArea()
     {
-      return null;
+        return null;
     }
 
-    FieldInfos IAreaProvider.AreaFieldInfos
-    {
-      get
-      {
-        return this.fieldInfos;
-      }
-    }
+    FieldInfos IAreaProvider.AreaFieldInfos => this.fieldInfos;
 
     void IAreaProvider.StoreRenderInfos(ArrayList renderInfos)
     {
-      this.renderInfos = renderInfos;
+        this.renderInfos = renderInfos;
     }
 
     bool IAreaProvider.IsAreaBreakBefore(LayoutInfo layoutInfo)
     {
-      return false;
+        return false;
     }
 
     internal RenderInfo[] GetRenderInfos()
     {
-      if (this.renderInfos != null)
-        return (RenderInfo[])this.renderInfos.ToArray(typeof(RenderInfo));
+        if (this.renderInfos != null)
+            return (RenderInfo[])this.renderInfos.ToArray(typeof(RenderInfo));
 
-      return null;
+        return null;
     }
 
     Rectangle CalcContentRect()
     {
-      LineFormatRenderer lfr = new LineFormatRenderer(this.textframe.LineFormat, this.gfx);
-      XUnit lineWidth = lfr.GetWidth();
-      XUnit width;
-      XUnit xOffset = lineWidth / 2;
-      XUnit yOffset = lineWidth / 2;
+        var lfr = new LineFormatRenderer(this.textframe.LineFormat, this.gfx);
+        var lineWidth = lfr.GetWidth();
+        XUnit width;
+        XUnit xOffset = lineWidth / 2;
+        XUnit yOffset = lineWidth / 2;
 
-      if (this.textframe.Orientation == TextOrientation.Horizontal ||
-        this.textframe.Orientation == TextOrientation.HorizontalRotatedFarEast)
-      {
-        width = this.textframe.Width.Point;
-        xOffset += this.textframe.MarginLeft;
-        yOffset += this.textframe.MarginTop;
-        width -= xOffset;
-        width -= this.textframe.MarginRight + lineWidth / 2;
-      }
-      else
-      {
-        width = this.textframe.Height.Point;
-        if (this.textframe.Orientation == TextOrientation.Upward)
+        if (this.textframe.Orientation == TextOrientation.Horizontal ||
+            this.textframe.Orientation == TextOrientation.HorizontalRotatedFarEast)
         {
-          xOffset += this.textframe.MarginBottom;
-          yOffset += this.textframe.MarginLeft;
-          width -= xOffset;
-          width -= this.textframe.MarginTop + lineWidth / 2;
+            width = this.textframe.Width.Point;
+            xOffset += this.textframe.MarginLeft;
+            yOffset += this.textframe.MarginTop;
+            width -= xOffset;
+            width -= this.textframe.MarginRight + lineWidth / 2;
         }
         else
         {
-          xOffset += this.textframe.MarginTop;
-          yOffset += this.textframe.MarginRight;
-          width -= xOffset;
-          width -= this.textframe.MarginBottom + lineWidth / 2;
+            width = this.textframe.Height.Point;
+            if (this.textframe.Orientation == TextOrientation.Upward)
+            {
+                xOffset += this.textframe.MarginBottom;
+                yOffset += this.textframe.MarginLeft;
+                width -= xOffset;
+                width -= this.textframe.MarginTop + lineWidth / 2;
+            }
+            else
+            {
+                xOffset += this.textframe.MarginTop;
+                yOffset += this.textframe.MarginRight;
+                width -= xOffset;
+                width -= this.textframe.MarginBottom + lineWidth / 2;
+            }
         }
-      }
-      XUnit height = double.MaxValue;
-      return new Rectangle(xOffset, yOffset, width, height);
+        XUnit height = double.MaxValue;
+        return new Rectangle(xOffset, yOffset, width, height);
     }
 
-    XUnit ContentHeight
-    {
-      get { return this.contentHeight; }
-    }
+    XUnit ContentHeight => this.contentHeight;
 
     bool IAreaProvider.PositionVertically(LayoutInfo layoutInfo)
     {
-      return false;
+        return false;
     }
 
     bool IAreaProvider.PositionHorizontally(LayoutInfo layoutInfo)
     {
-      Rectangle rect = CalcContentRect();
-      switch (layoutInfo.HorizontalAlignment)
-      {
-        case ElementAlignment.Near:
-          if (layoutInfo.Left != 0)
-          {
-            layoutInfo.ContentArea.X += layoutInfo.Left;
-            return true;
-          }
-          return false;
+        var rect = CalcContentRect();
+        switch (layoutInfo.HorizontalAlignment)
+        {
+            case ElementAlignment.Near:
+                if (layoutInfo.Left != 0)
+                {
+                    layoutInfo.ContentArea.X += layoutInfo.Left;
+                    return true;
+                }
+                return false;
 
-        case ElementAlignment.Far:
-          XUnit xPos = rect.X + rect.Width;
-          xPos -= layoutInfo.ContentArea.Width;
-          xPos -= layoutInfo.MarginRight;
-          layoutInfo.ContentArea.X = xPos;
-          return true;
+            case ElementAlignment.Far:
+                XUnit xPos = rect.X + rect.Width;
+                xPos -= layoutInfo.ContentArea.Width;
+                xPos -= layoutInfo.MarginRight;
+                layoutInfo.ContentArea.X = xPos;
+                return true;
 
-        case ElementAlignment.Center:
-          xPos = rect.Width;
-          xPos -= layoutInfo.ContentArea.Width;
-          xPos = rect.X + xPos / 2;
-          layoutInfo.ContentArea.X = xPos;
-          return true;
-      }
-      return false;
+            case ElementAlignment.Center:
+                xPos = rect.Width;
+                xPos -= layoutInfo.ContentArea.Width;
+                xPos = rect.X + xPos / 2;
+                layoutInfo.ContentArea.X = xPos;
+                return true;
+        }
+        return false;
     }
 
     private TextFrame textframe;
@@ -185,5 +171,4 @@ namespace MigraDocCore.Rendering
     private bool isFirstArea;
     private XUnit contentHeight;
     private DocumentRenderer documentRenderer;
-  }
 }

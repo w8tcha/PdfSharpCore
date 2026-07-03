@@ -1,5 +1,4 @@
-﻿#region PDFsharp - A .NET library for processing PDF
-//
+﻿//
 // Authors:
 //   Stefan Lange
 //
@@ -25,52 +24,48 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Backward compatibility.
+/// </summary>
+[Flags]
+internal enum XGdiFontStyle  // Same values as System.Drawing.FontStyle.
 {
+    // Must be identical to both:
+    // System.Drawing.FontStyle and
+    // PdfSharpCore.Drawing.FontStyle
+
     /// <summary>
-    /// Backward compatibility.
+    /// Normal text.
     /// </summary>
-    [Flags]
-    internal enum XGdiFontStyle  // Same values as System.Drawing.FontStyle.
-    {
-        // Must be identical to both:
-        // System.Drawing.FontStyle and
-        // PdfSharpCore.Drawing.FontStyle
+    Regular = 0,
 
-        /// <summary>
-        /// Normal text.
-        /// </summary>
-        Regular = 0,
+    /// <summary>
+    /// Bold text.
+    /// </summary>
+    Bold = 1,
 
-        /// <summary>
-        /// Bold text.
-        /// </summary>
-        Bold = 1,
+    /// <summary>
+    /// Italic text.
+    /// </summary>
+    Italic = 2,
 
-        /// <summary>
-        /// Italic text.
-        /// </summary>
-        Italic = 2,
+    /// <summary>
+    /// Bold and italic text. 
+    /// </summary>
+    BoldItalic = 3,
 
-        /// <summary>
-        /// Bold and italic text. 
-        /// </summary>
-        BoldItalic = 3,
+    /// <summary>
+    /// Underlined text.
+    /// </summary>
+    Underline = 4,
 
-        /// <summary>
-        /// Underlined text.
-        /// </summary>
-        Underline = 4,
-
-        /// <summary>
-        /// Text with a line through the middle.
-        /// </summary>
-        Strikeout = 8,
-    }
+    /// <summary>
+    /// Text with a line through the middle.
+    /// </summary>
+    Strikeout = 8
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,19 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
-using MigraDocCore.DocumentObjectModel.IO;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes
+namespace MigraDocCore.DocumentObjectModel.Shapes;
+
+/// <summary>
+/// Defines the format of a line in a shape object.
+/// </summary>
+public class LineFormat : DocumentObject
 {
-  /// <summary>
-  /// Defines the format of a line in a shape object.
-  /// </summary>
-  public class LineFormat : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the LineFormat class.
     /// </summary>
@@ -53,24 +49,21 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     internal LineFormat(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new LineFormat Clone()
     {
-      return (LineFormat)DeepCopy();
+        return (LineFormat)DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets a value indicating whether the line should be visible.
     /// </summary>
     public bool Visible
     {
-      get { return this.visible.Value; }
-      set { this.visible.Value = value; }
+        get => this.visible.Value;
+        set => this.visible.Value = value;
     }
     [DV]
     internal NBool visible = NBool.NullValue;
@@ -80,8 +73,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public Unit Width
     {
-      get { return this.width; }
-      set { this.width = value; }
+        get => this.width;
+        set => this.width = value;
     }
     [DV]
     internal Unit width = Unit.NullValue;
@@ -91,8 +84,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public Color Color
     {
-      get { return this.color; }
-      set { this.color = value; }
+        get => this.color;
+        set => this.color = value;
     }
     [DV]
     internal Color color = Color.Empty;
@@ -102,8 +95,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public DashStyle DashStyle
     {
-      get { return (DashStyle)this.dashStyle.Value; }
-      set { this.dashStyle.Value = (int)value; }
+        get => (DashStyle)this.dashStyle.Value;
+        set => this.dashStyle.Value = (int)value;
     }
     [DV(Type = typeof(DashStyle))]
     internal NEnum dashStyle = NEnum.NullValue(typeof(DashStyle));
@@ -113,31 +106,29 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     public LineStyle Style
     {
-      get { return (LineStyle)this.style.Value; }
-      set { this.style.Value = (int)value; }
+        get => (LineStyle)this.style.Value;
+        set => this.style.Value = (int)value;
     }
     [DV(Type = typeof(LineStyle))]
     internal NEnum style = NEnum.NullValue(typeof(LineStyle));
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts LineFormat into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int pos = serializer.BeginContent("LineFormat");
-      if (!this.visible.IsNull)
-        serializer.WriteSimpleAttribute("Visible", this.Visible);
-      if (!this.style.IsNull)
-        serializer.WriteSimpleAttribute("Style", this.Style);
-      if (!this.dashStyle.IsNull)
-        serializer.WriteSimpleAttribute("DashStyle", this.DashStyle);
-      if (!this.width.IsNull)
-        serializer.WriteSimpleAttribute("Width", this.Width);
-      if (!this.color.IsNull)
-        serializer.WriteSimpleAttribute("Color", this.Color);
-      serializer.EndContent();
+        var pos = serializer.BeginContent("LineFormat");
+        if (!this.visible.IsNull)
+            serializer.WriteSimpleAttribute("Visible", this.Visible);
+        if (!this.style.IsNull)
+            serializer.WriteSimpleAttribute("Style", this.Style);
+        if (!this.dashStyle.IsNull)
+            serializer.WriteSimpleAttribute("DashStyle", this.DashStyle);
+        if (!this.width.IsNull)
+            serializer.WriteSimpleAttribute("Width", this.Width);
+        if (!this.color.IsNull)
+            serializer.WriteSimpleAttribute("Color", this.Color);
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -145,14 +136,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(LineFormat));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(LineFormat));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

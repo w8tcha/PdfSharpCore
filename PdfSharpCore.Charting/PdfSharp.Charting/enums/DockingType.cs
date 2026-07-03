@@ -27,15 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Specifies the legend's position inside the chart.
+/// </summary>
+public enum DockingType
 {
-  /// <summary>
-  /// Specifies the legend's position inside the chart.
-  /// </summary>
-  public enum DockingType
-  {
     /// <summary>
     /// Above the chart.
     /// </summary>
@@ -52,5 +50,4 @@ namespace PdfSharpCore.Charting
     /// Right from the chart.
     /// </summary>
     Right
-  }
 }

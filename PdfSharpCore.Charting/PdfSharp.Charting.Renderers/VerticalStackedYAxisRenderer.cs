@@ -28,16 +28,14 @@
 #endregion
 
 using System;
-using System.Diagnostics;
-using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a Y axis renderer used for charts of type Column2D or Line.
+/// </summary>
+internal class VerticalStackedYAxisRenderer : VerticalYAxisRenderer
 {
-  /// <summary>
-  /// Represents a Y axis renderer used for charts of type Column2D or Line.
-  /// </summary>
-  internal class VerticalStackedYAxisRenderer : VerticalYAxisRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the VerticalYAxisRenderer class with the
     /// specified renderer parameters.
@@ -52,35 +50,34 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected override void CalcYAxis(out double yMin, out double yMax)
     {
-      yMin = double.MaxValue;
-      yMax = double.MinValue;
+        yMin = double.MaxValue;
+        yMax = double.MinValue;
 
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      int maxPoints = 0;
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-        maxPoints = Math.Max(maxPoints, sri.series.seriesElements.Count);
+        var maxPoints = 0;
+        foreach (var sri in cri.seriesRendererInfos)
+            maxPoints = Math.Max(maxPoints, sri.series.seriesElements.Count);
 
-      for (int pointIdx = 0; pointIdx < maxPoints; ++pointIdx)
-      {
-        double valueSumPos = 0, valueSumNeg = 0;
-        foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
+        for (var pointIdx = 0; pointIdx < maxPoints; ++pointIdx)
         {
-          if (sri.pointRendererInfos.Length <= pointIdx)
-            break;
+            double valueSumPos = 0, valueSumNeg = 0;
+            foreach (var sri in cri.seriesRendererInfos)
+            {
+                if (sri.pointRendererInfos.Length <= pointIdx)
+                    break;
 
-          ColumnRendererInfo column = (ColumnRendererInfo)sri.pointRendererInfos[pointIdx];
-          if (column.point != null && !double.IsNaN(column.point.value))
-          {
-            if (column.point.value < 0)
-              valueSumNeg += column.point.value;
-            else
-              valueSumPos += column.point.value;
-          }
+                var column = (ColumnRendererInfo)sri.pointRendererInfos[pointIdx];
+                if (column.point != null && !double.IsNaN(column.point.value))
+                {
+                    if (column.point.value < 0)
+                        valueSumNeg += column.point.value;
+                    else
+                        valueSumPos += column.point.value;
+                }
+            }
+            yMin = Math.Min(valueSumNeg, yMin);
+            yMax = Math.Max(valueSumPos, yMax);
         }
-        yMin = Math.Min(valueSumNeg, yMin);
-        yMax = Math.Max(valueSumPos, yMax);
-      }
     }
-  }
 }

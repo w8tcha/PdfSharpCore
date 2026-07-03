@@ -27,16 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Defines the background filling of the shape.
+/// </summary>
+public class FillFormat : DocumentObject
 {
-  /// <summary>
-  /// Defines the background filling of the shape.
-  /// </summary>
-  public class FillFormat : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the FillFormat class.
     /// </summary>
@@ -55,7 +54,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new FillFormat Clone()
     {
-      return (FillFormat)DeepCopy();
+        return (FillFormat)DeepCopy();
     }
     #endregion
 
@@ -65,8 +64,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XColor Color
     {
-      get  {return this.color;}
-      set  {this.color = value;}
+        get => this.color;
+        set => this.color = value;
     }
     internal XColor color = XColor.Empty;
 
@@ -75,10 +74,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool Visible
     {
-      get  {return this.visible;}
-      set  {this.visible = value;}
+        get => this.visible;
+        set => this.visible = value;
     }
     internal bool visible;
     #endregion
-  }
 }

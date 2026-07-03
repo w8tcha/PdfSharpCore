@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel.IO;
 
-namespace MigraDocCore.DocumentObjectModel.IO
+/// <summary>
+/// The tokens used by DdlScanner/DdlParser.
+/// </summary>
+enum TokenType
 {
-  /// <summary>
-  /// The tokens used by DdlScanner/DdlParser.
-  /// </summary>
-  enum TokenType
-  {
     /// <summary>
     /// White space or comment.
     /// </summary>
@@ -82,6 +78,5 @@ namespace MigraDocCore.DocumentObjectModel.IO
     /// <summary>
     /// Plain text. Possible after ReadText.
     /// </summary>
-    Text,
-  }
+    Text
 }

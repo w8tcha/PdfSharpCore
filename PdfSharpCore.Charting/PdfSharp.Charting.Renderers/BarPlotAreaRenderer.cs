@@ -27,17 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a plot area renderer for bars.
+/// </summary>
+internal abstract class BarPlotAreaRenderer : PlotAreaRenderer
 {
-  /// <summary>
-  /// Represents a plot area renderer for bars.
-  /// </summary>
-  internal abstract class BarPlotAreaRenderer : PlotAreaRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the BarPlotAreaRenderer class with the
     /// specified renderer parameters.
@@ -51,22 +49,22 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Format()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      double xMin = cri.xAxisRendererInfo.MinimumScale;
-      double xMax = cri.xAxisRendererInfo.MaximumScale;
-      double yMin = cri.yAxisRendererInfo.MinimumScale;
-      double yMax = cri.yAxisRendererInfo.MaximumScale;
-      double xMajorTick = cri.xAxisRendererInfo.MajorTick;
+        var xMin = cri.xAxisRendererInfo.MinimumScale;
+        var xMax = cri.xAxisRendererInfo.MaximumScale;
+        var yMin = cri.yAxisRendererInfo.MinimumScale;
+        var yMax = cri.yAxisRendererInfo.MaximumScale;
+        var xMajorTick = cri.xAxisRendererInfo.MajorTick;
 
-      XRect plotAreaBox = cri.plotAreaRendererInfo.Rect;
+        var plotAreaBox = cri.plotAreaRendererInfo.Rect;
 
-      cri.plotAreaRendererInfo.matrix = new XMatrix();  //XMatrix.Identity;
-      cri.plotAreaRendererInfo.matrix.TranslatePrepend(-yMin, xMin);
-      cri.plotAreaRendererInfo.matrix.Scale(plotAreaBox.Width / (yMax - yMin), plotAreaBox.Height / (xMax - xMin), XMatrixOrder.Append);
-      cri.plotAreaRendererInfo.matrix.Translate(plotAreaBox.X, plotAreaBox.Y, XMatrixOrder.Append);
+        cri.plotAreaRendererInfo.matrix = new XMatrix();  //XMatrix.Identity;
+        cri.plotAreaRendererInfo.matrix.TranslatePrepend(-yMin, xMin);
+        cri.plotAreaRendererInfo.matrix.Scale(plotAreaBox.Width / (yMax - yMin), plotAreaBox.Height / (xMax - xMin), XMatrixOrder.Append);
+        cri.plotAreaRendererInfo.matrix.Translate(plotAreaBox.X, plotAreaBox.Y, XMatrixOrder.Append);
 
-      CalcBars();
+        CalcBars();
     }
 
     /// <summary>
@@ -74,73 +72,73 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      XRect plotAreaBox = cri.plotAreaRendererInfo.Rect;
-      if (plotAreaBox.IsEmpty)
-        return;
+        var plotAreaBox = cri.plotAreaRendererInfo.Rect;
+        if (plotAreaBox.IsEmpty)
+            return;
 
-      XGraphics gfx = this.rendererParms.Graphics;
+        var gfx = this.rendererParms.Graphics;
 
-      double xMin = cri.xAxisRendererInfo.MinimumScale;
-      double xMax = cri.xAxisRendererInfo.MaximumScale;
-      double yMin = cri.yAxisRendererInfo.MinimumScale;
-      double yMax = cri.yAxisRendererInfo.MaximumScale;
-      double xMajorTick = cri.xAxisRendererInfo.MajorTick;
+        var xMin = cri.xAxisRendererInfo.MinimumScale;
+        var xMax = cri.xAxisRendererInfo.MaximumScale;
+        var yMin = cri.yAxisRendererInfo.MinimumScale;
+        var yMax = cri.yAxisRendererInfo.MaximumScale;
+        var xMajorTick = cri.xAxisRendererInfo.MajorTick;
 
-      LineFormatRenderer lineFormatRenderer;
+        LineFormatRenderer lineFormatRenderer;
 
-      // Under some circumstances it is possible that no zero base line will be drawn,
-      // e. g. because of unfavourable minimum/maximum scale and/or major tick, so force to draw
-      // a zero base line if necessary.
-      if (cri.yAxisRendererInfo.MajorGridlinesLineFormat != null ||
-          cri.yAxisRendererInfo.MinorGridlinesLineFormat != null)
-      {
-        if (yMin < 0 && yMax > 0)
+        // Under some circumstances it is possible that no zero base line will be drawn,
+        // e. g. because of unfavourable minimum/maximum scale and/or major tick, so force to draw
+        // a zero base line if necessary.
+        if (cri.yAxisRendererInfo.MajorGridlinesLineFormat != null ||
+            cri.yAxisRendererInfo.MinorGridlinesLineFormat != null)
         {
-          XPoint[] points = new XPoint[2];
-          points[0].X = 0;
-          points[0].Y = xMin;
-          points[1].X = 0;
-          points[1].Y = xMax;
-          cri.plotAreaRendererInfo.matrix.TransformPoints(points);
+            if (yMin < 0 && yMax > 0)
+            {
+                var points = new XPoint[2];
+                points[0].X = 0;
+                points[0].Y = xMin;
+                points[1].X = 0;
+                points[1].Y = xMax;
+                cri.plotAreaRendererInfo.matrix.TransformPoints(points);
 
-          if (cri.yAxisRendererInfo.MinorGridlinesLineFormat != null)
-            lineFormatRenderer = new LineFormatRenderer(gfx, cri.yAxisRendererInfo.MinorGridlinesLineFormat);
-          else
-            lineFormatRenderer = new LineFormatRenderer(gfx, cri.yAxisRendererInfo.MajorGridlinesLineFormat);
+                if (cri.yAxisRendererInfo.MinorGridlinesLineFormat != null)
+                    lineFormatRenderer = new LineFormatRenderer(gfx, cri.yAxisRendererInfo.MinorGridlinesLineFormat);
+                else
+                    lineFormatRenderer = new LineFormatRenderer(gfx, cri.yAxisRendererInfo.MajorGridlinesLineFormat);
 
-          lineFormatRenderer.DrawLine(points[0], points[1]);
+                lineFormatRenderer.DrawLine(points[0], points[1]);
+            }
         }
-      }
 
-      // Draw bars
-      XGraphicsState state = gfx.Save();
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-      {
-        foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+        // Draw bars
+        var state = gfx.Save();
+        foreach (var sri in cri.seriesRendererInfos)
         {
-          // Do not draw bar if value is outside yMin/yMax range. Clipping does not make sense.
-          if (IsDataInside(yMin, yMax, column.point.value))
-            gfx.DrawRectangle(column.FillFormat, column.Rect);
+            foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+            {
+                // Do not draw bar if value is outside yMin/yMax range. Clipping does not make sense.
+                if (IsDataInside(yMin, yMax, column.point.value))
+                    gfx.DrawRectangle(column.FillFormat, column.Rect);
+            }
         }
-      }
 
-      // Draw borders around bar.
-      // A border can overlap neighbor bars, so it is important to draw borders at the end.
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-      {
-        foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+        // Draw borders around bar.
+        // A border can overlap neighbor bars, so it is important to draw borders at the end.
+        foreach (var sri in cri.seriesRendererInfos)
         {
-          // Do not draw bar if value is outside yMin/yMax range. Clipping does not make sense.
-          if (IsDataInside(yMin, yMax, column.point.value))
-          {
-            lineFormatRenderer = new LineFormatRenderer(gfx, column.LineFormat);
-            lineFormatRenderer.DrawRectangle(column.Rect);
-          }
+            foreach (ColumnRendererInfo column in sri.pointRendererInfos)
+            {
+                // Do not draw bar if value is outside yMin/yMax range. Clipping does not make sense.
+                if (IsDataInside(yMin, yMax, column.point.value))
+                {
+                    lineFormatRenderer = new LineFormatRenderer(gfx, column.LineFormat);
+                    lineFormatRenderer.DrawRectangle(column.Rect);
+                }
+            }
         }
-      }
-      gfx.Restore(state);
+        gfx.Restore(state);
     }
 
     /// <summary>
@@ -152,5 +150,4 @@ namespace PdfSharpCore.Charting.Renderers
     /// If yValue is within the range from yMin to yMax returns true, otherwise false.
     /// </summary>
     protected abstract bool IsDataInside(double yMin, double yMax, double yValue);
-  }
 }

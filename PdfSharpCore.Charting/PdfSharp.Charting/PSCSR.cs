@@ -27,24 +27,17 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using PdfSharpCore.Charting;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// The Pdf-Sharp-Charting-String-Resources.
+/// </summary>
+internal class PSCSR
 {
-  /// <summary>
-  /// The Pdf-Sharp-Charting-String-Resources.
-  /// </summary>
-  internal class PSCSR
-  {
     internal static string InvalidChartTypeForCombination(ChartType chartType)
     {
-      return string.Format("ChartType '{0}' not valid for combination of charts.", chartType.ToString());
+        return string.Format("ChartType '{0}' not valid for combination of charts.", chartType.ToString());
     }
 
-    internal static string PercentNotSupportedByColumnDataLabel
-    {
-      get { return "Column data label cannot be set to 'Percent'"; }
-    }
-  }
+    internal static string PercentNotSupportedByColumnDataLabel => "Column data label cannot be set to 'Percent'";
 }

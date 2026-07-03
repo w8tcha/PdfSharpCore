@@ -1,9 +1,8 @@
 ﻿using PdfSharpCore.Pdf;
 
-namespace PdfSharpCore.Exceptions
+namespace PdfSharpCore.Exceptions;
+
+public class PositionNotFoundException : System.Exception
 {
-    public class PositionNotFoundException : System.Exception
-    {
-        public PositionNotFoundException(PdfObjectID id) : base($"Object with ID {id} resolved with negative position ") { }
-    }
+    public PositionNotFoundException(PdfObjectID id) : base($"Object with ID {id} resolved with negative position ") { }
 }

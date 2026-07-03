@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,58 +24,51 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf.Advanced
+namespace PdfSharpCore.Pdf.Advanced;
+
+/// <summary>
+/// Represents a PDF group XObject.
+/// </summary>
+public abstract class PdfGroupAttributes : PdfDictionary
 {
-    /// <summary>
-    /// Represents a PDF group XObject.
-    /// </summary>
-    public abstract class PdfGroupAttributes : PdfDictionary
+    internal PdfGroupAttributes(PdfDocument thisDocument)
+        : base(thisDocument)
     {
-        internal PdfGroupAttributes(PdfDocument thisDocument)
-            : base(thisDocument)
-        {
-            Elements.SetName(Keys.Type, "/Group");
-        }
-
-        /// <summary>
-        /// Predefined keys of this dictionary.
-        /// </summary>
-        public class Keys : KeysBase
-        {
-            /// <summary>
-            ///(Optional) The type of PDF object that this dictionary describes;
-            ///if present, must be Group for a group attributes dictionary.
-            /// </summary>
-            [KeyInfo(KeyType.Name | KeyType.Optional)]
-            public const string Type = "/Type";
-
-            /// <summary>
-            /// (Required) The group subtype, which identifies the type of group whose
-            /// attributes this dictionary describes and determines the format and meaning
-            /// of the dictionary’s remaining entries. The only group subtype defined in
-            /// PDF 1.4 is Transparency. Other group subtypes may be added in the future.
-            /// </summary>
-            [KeyInfo(KeyType.Name | KeyType.Required)]
-            public const string S = "/S";
-
-            /// <summary>
-            /// Gets the KeysMeta for these keys.
-            /// </summary>
-            internal static DictionaryMeta Meta
-            {
-                get { return _meta ?? (_meta = CreateMeta(typeof(Keys))); }
-            }
-            static DictionaryMeta _meta;
-        }
-
-        /// <summary>
-        /// Gets the KeysMeta of this dictionary type.
-        /// </summary>
-        internal override DictionaryMeta Meta
-        {
-            get { return Keys.Meta; }
-        }
+        Elements.SetName(Keys.Type, "/Group");
     }
+
+    /// <summary>
+    /// Predefined keys of this dictionary.
+    /// </summary>
+    public class Keys : KeysBase
+    {
+        /// <summary>
+        ///(Optional) The type of PDF object that this dictionary describes;
+        ///if present, must be Group for a group attributes dictionary.
+        /// </summary>
+        [KeyInfo(KeyType.Name | KeyType.Optional)]
+        public const string Type = "/Type";
+
+        /// <summary>
+        /// (Required) The group subtype, which identifies the type of group whose
+        /// attributes this dictionary describes and determines the format and meaning
+        /// of the dictionary’s remaining entries. The only group subtype defined in
+        /// PDF 1.4 is Transparency. Other group subtypes may be added in the future.
+        /// </summary>
+        [KeyInfo(KeyType.Name | KeyType.Required)]
+        public const string S = "/S";
+
+        /// <summary>
+        /// Gets the KeysMeta for these keys.
+        /// </summary>
+        internal static DictionaryMeta Meta => _meta ?? (_meta = CreateMeta(typeof(Keys)));
+
+        static DictionaryMeta _meta;
+    }
+
+    /// <summary>
+    /// Gets the KeysMeta of this dictionary type.
+    /// </summary>
+    internal override DictionaryMeta Meta => Keys.Meta;
 }

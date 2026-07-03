@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,19 +27,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Specifies the properties for the font.
+/// FOR INTERNAL USE ONLY.
+/// </summary>
+[Flags]
+enum FontProperties
 {
-  /// <summary>
-  /// Specifies the properties for the font.
-  /// FOR INTERNAL USE ONLY.
-  /// </summary>
-  [Flags]
-  enum FontProperties
-  {
     None = 0x0000,
     Name = 0x0001,
     Size = 0x0002,
@@ -50,6 +48,5 @@ namespace MigraDocCore.DocumentObjectModel
     Color = 0x0020,
     Border = 0x0040,
     Superscript = 0x0080,
-    Subscript = 0x0100,
-  }
+    Subscript = 0x0100
 }

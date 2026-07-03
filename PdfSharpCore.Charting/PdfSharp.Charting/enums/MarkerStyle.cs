@@ -27,15 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Symbols of a data point in a line chart.
+/// </summary>
+public enum MarkerStyle
 {
-  /// <summary>
-  /// Symbols of a data point in a line chart.
-  /// </summary>
-  public enum MarkerStyle
-  {
     /// <summary>
     /// 
     /// </summary>
@@ -76,5 +74,4 @@ namespace PdfSharpCore.Charting
     /// 
     /// </summary>
     X
-  }
 }

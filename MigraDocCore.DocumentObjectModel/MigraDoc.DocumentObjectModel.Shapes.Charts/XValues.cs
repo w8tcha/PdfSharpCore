@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents the collection of values on the X-Axis.
+/// </summary>
+public class XValues : DocumentObjectCollection
 {
-  /// <summary>
-  /// Represents the collection of values on the X-Axis.
-  /// </summary>
-  public class XValues : DocumentObjectCollection
-  {
     /// <summary>
     /// Initializes a new instance of the XValues class.
     /// </summary>
@@ -52,46 +49,40 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal XValues(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new XValues Clone()
     {
-      return (XValues)DeepCopy();
+        return (XValues)DeepCopy();
     }
 
     /// <summary>
     /// Gets an XSeries by its index.
     /// </summary>
-    public new XSeries this[int index]
-    {
-      get { return base[index] as XSeries; }
-    }
+    public new XSeries this[int index] => base[index] as XSeries;
 
     /// <summary>
     /// Adds a new XSeries to the collection.
     /// </summary>
     public XSeries AddXSeries()
     {
-      XSeries xSeries = new XSeries();
-      Add(xSeries);
-      return xSeries;
+        var xSeries = new XSeries();
+        Add(xSeries);
+        return xSeries;
     }
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts XValues into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int count = Count;
-      for (int index = 0; index < count; ++index)
-      {
-        XSeries xSeries = this[index] as XSeries;
-        xSeries.Serialize(serializer);
-      }
+        var count = Count;
+        for (var index = 0; index < count; ++index)
+        {
+            var xSeries = this[index] as XSeries;
+            xSeries.Serialize(serializer);
+        }
     }
 
     /// <summary>
@@ -99,14 +90,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(XValues));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(XValues));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

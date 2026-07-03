@@ -27,17 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Base class for all plot area renderers.
+/// </summary>
+internal abstract class PlotAreaRenderer : Renderer
 {
-  /// <summary>
-  /// Base class for all plot area renderers.
-  /// </summary>
-  internal abstract class PlotAreaRenderer : Renderer
-  {
     /// <summary>
     /// Initializes a new instance of the PlotAreaRenderer class with the specified renderer parameters.
     /// </summary>
@@ -50,11 +48,11 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override RendererInfo Init()
     {
-      PlotAreaRendererInfo pari = new PlotAreaRendererInfo();
-      pari.plotArea = ((ChartRendererInfo)this.rendererParms.RendererInfo).chart.plotArea;
-      InitLineFormat(pari);
-      InitFillFormat(pari);
-      return pari;
+        var pari = new PlotAreaRendererInfo();
+        pari.plotArea = ((ChartRendererInfo)this.rendererParms.RendererInfo).chart.plotArea;
+        InitLineFormat(pari);
+        InitFillFormat(pari);
+        return pari;
     }
 
     /// <summary>
@@ -63,8 +61,8 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected void InitLineFormat(PlotAreaRendererInfo rendererInfo)
     {
-      if (rendererInfo.plotArea.lineFormat != null)
-        rendererInfo.LineFormat = Converter.ToXPen(rendererInfo.plotArea.lineFormat, XColors.Black, DefaultLineWidth);
+        if (rendererInfo.plotArea.lineFormat != null)
+            rendererInfo.LineFormat = Converter.ToXPen(rendererInfo.plotArea.lineFormat, XColors.Black, DefaultLineWidth);
     }
 
     /// <summary>
@@ -73,13 +71,12 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected void InitFillFormat(PlotAreaRendererInfo rendererInfo)
     {
-      if (rendererInfo.plotArea.fillFormat != null)
-        rendererInfo.FillFormat = Converter.ToXBrush(rendererInfo.plotArea.fillFormat, XColors.White);
+        if (rendererInfo.plotArea.fillFormat != null)
+            rendererInfo.FillFormat = Converter.ToXBrush(rendererInfo.plotArea.fillFormat, XColors.White);
     }
 
     /// <summary>
     /// Represents the default line width for the plot area's border.
     /// </summary>
     protected const double DefaultLineWidth = 0.15;
-  }
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,37 +27,34 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
-using System.Reflection;
+
 using MigraDocCore.DocumentObjectModel.Visitors;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Base class of all collections of the MigraDoc Document Object Model.
+/// </summary>
+public abstract class DocumentObjectCollection : DocumentObject, IList, IVisitable
 {
-  /// <summary>
-  /// Base class of all collections of the MigraDoc Document Object Model.
-  /// </summary>
-  public abstract class DocumentObjectCollection : DocumentObject, IList, IVisitable
-  {
     /// <summary>
     /// Initializes a new instance of the DocumentObjectCollection class.
     /// </summary>
     internal DocumentObjectCollection()
     {
-      this.elements = new ArrayList();
+        this.elements = new ArrayList();
     }
 
     /// <summary>
     /// Initializes a new instance of the DocumentObjectCollection class with the specified parent.
     /// </summary>
     internal DocumentObjectCollection(DocumentObject parent)
-      : base(parent)
+        : base(parent)
     {
-      this.elements = new ArrayList();
+        this.elements = new ArrayList();
     }
 
     /// <summary>
@@ -66,13 +62,13 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public DocumentObject First
     {
-      get
-      {
-        if (Count > 0)
-          return this[0];
-        else
-          return null;
-      }
+        get
+        {
+            if (Count > 0)
+                return this[0];
+            else
+                return null;
+        }
     }
 
     /// <summary>
@@ -80,7 +76,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public new DocumentObjectCollection Clone()
     {
-      return (DocumentObjectCollection)DeepCopy();
+        return (DocumentObjectCollection)DeepCopy();
     }
 
     /// <summary>
@@ -88,21 +84,21 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     protected override object DeepCopy()
     {
-      DocumentObjectCollection coll = (DocumentObjectCollection)base.DeepCopy();
+        var coll = (DocumentObjectCollection)base.DeepCopy();
 
-      int count = Count;
-      coll.elements = new ArrayList(count);
-      for (int index = 0; index < count; ++index)
-      {
-        DocumentObject doc = this[index];
-        if (doc != null)
+        var count = Count;
+        coll.elements = new ArrayList(count);
+        for (var index = 0; index < count; ++index)
         {
-          doc = doc.Clone() as DocumentObject;
-          doc.parent = coll;
+            var doc = this[index];
+            if (doc != null)
+            {
+                doc = doc.Clone() as DocumentObject;
+                doc.parent = coll;
+            }
+            coll.elements.Add(doc);
         }
-        coll.elements.Add(doc);
-      }
-      return coll;
+        return coll;
     }
 
     /// <summary>
@@ -111,55 +107,40 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public void CopyTo(Array array, int index)
     {
-      this.elements.CopyTo(array, index);
+        this.elements.CopyTo(array, index);
     }
 
     /// <summary>
     /// Gets a value indicating whether the Collection is read-only.
     /// </summary>
-    bool IList.IsReadOnly
-    {
-      get { return false; }
-    }
+    bool IList.IsReadOnly => false;
 
     /// <summary>
     /// Gets a value indicating whether the Collection has a fixed size.
     /// </summary>
-    bool IList.IsFixedSize
-    {
-      get { return false; }
-    }
+    bool IList.IsFixedSize => false;
 
     /// <summary>
     /// Gets a value indicating whether access to the Collection is synchronized.
     /// </summary>
-    bool ICollection.IsSynchronized
-    {
-      get { return false; }
-    }
+    bool ICollection.IsSynchronized => false;
 
     /// <summary>
     /// Gets an object that can be used to synchronize access to the collection.
     /// </summary>
-    object ICollection.SyncRoot
-    {
-      get { return null; }
-    }
+    object ICollection.SyncRoot => null;
 
     /// <summary>
     /// Gets the number of elements actually contained in the collection.
     /// </summary>
-    public int Count
-    {
-      get { return this.elements.Count; }
-    }
+    public int Count => this.elements.Count;
 
     /// <summary>
     /// Removes all elements from the collection.
     /// </summary>
     public void Clear()
     {
-      ((IList)this).Clear();
+        ((IList)this).Clear();
     }
 
     /// <summary>
@@ -167,15 +148,15 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual void InsertObject(int index, DocumentObject val)
     {
-      SetParent(val);
-      ((IList)this).Insert(index, val);
-      // Call ResetCachedValues for all objects moved by the Insert operation.
-      int count = ((IList)this).Count;
-      for (int idx = index + 1; idx < count; ++idx)
-      {
-        DocumentObject obj = (DocumentObject)((IList)this)[idx];
-        obj.ResetCachedValues();
-      }
+        SetParent(val);
+        ((IList)this).Insert(index, val);
+        // Call ResetCachedValues for all objects moved by the Insert operation.
+        var count = ((IList)this).Count;
+        for (var idx = index + 1; idx < count; ++idx)
+        {
+            var obj = (DocumentObject)((IList)this)[idx];
+            obj.ResetCachedValues();
+        }
     }
 
     /// <summary>
@@ -183,7 +164,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public int IndexOf(DocumentObject val)
     {
-      return ((IList)this).IndexOf(val);
+        return ((IList)this).IndexOf(val);
     }
 
     /// <summary>
@@ -191,12 +172,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual DocumentObject this[int index]
     {
-      get { return this.elements[index] as DocumentObject; }
-      set
-      {
-        SetParent(value);
-        this.elements[index] = value;
-      }
+        get => this.elements[index] as DocumentObject;
+        set
+        {
+            SetParent(value);
+            this.elements[index] = value;
+        }
     }
 
     /// <summary>
@@ -204,13 +185,13 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public DocumentObject LastObject
     {
-      get
-      {
-        int count = this.elements.Count;
-        if (count > 0)
-          return (DocumentObject)this.elements[count - 1];
-        return null;
-      }
+        get
+        {
+            var count = this.elements.Count;
+            if (count > 0)
+                return (DocumentObject)this.elements[count - 1];
+            return null;
+        }
     }
 
     /// <summary>
@@ -218,14 +199,14 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public void RemoveObjectAt(int index)
     {
-      ((IList)this).RemoveAt(index);
-      // Call ResetCachedValues for all objects moved by the RemoveAt operation.
-      int count = ((IList)this).Count;
-      for (int idx = index; idx < count; ++idx)
-      {
-        DocumentObject obj = (DocumentObject)((IList)this)[idx];
-        obj.ResetCachedValues();
-      }
+        ((IList)this).RemoveAt(index);
+        // Call ResetCachedValues for all objects moved by the RemoveAt operation.
+        var count = ((IList)this).Count;
+        for (var idx = index; idx < count; ++idx)
+        {
+            var obj = (DocumentObject)((IList)this)[idx];
+            obj.ResetCachedValues();
+        }
     }
 
     /// <summary>
@@ -233,8 +214,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public virtual void Add(DocumentObject value)
     {
-      SetParent(value);
-      this.elements.Add(value);
+        SetParent(value);
+        this.elements.Add(value);
     }
 
     /// <summary>
@@ -242,16 +223,16 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public override bool IsNull()
     {
-      if (!Meta.IsNull(this))
-        return false;
-      if (this.elements == null)
+        if (!Meta.IsNull(this))
+            return false;
+        if (this.elements == null)
+            return true;
+        foreach (DocumentObject docObject in elements)
+        {
+            if (docObject != null && !docObject.IsNull())
+                return false;
+        }
         return true;
-      foreach (DocumentObject docObject in elements)
-      {
-        if (docObject != null && !docObject.IsNull())
-          return false;
-      }
-      return true;
     }
 
     /// <summary>
@@ -259,14 +240,14 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void IVisitable.AcceptVisitor(DocumentObjectVisitor visitor, bool visitChildren)
     {
-      visitor.VisitDocumentObjectCollection(this);
+        visitor.VisitDocumentObjectCollection(this);
 
-      foreach (DocumentObject docobj in this)
-      {
-        IVisitable visitable = docobj as IVisitable;
-        if (visitable != null)
-          visitable.AcceptVisitor(visitor, visitChildren);
-      }
+        foreach (DocumentObject docobj in this)
+        {
+            var visitable = docobj as IVisitable;
+            if (visitable != null)
+                visitable.AcceptVisitor(visitor, visitChildren);
+        }
     }
 
     /// <summary>
@@ -274,19 +255,18 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public IEnumerator GetEnumerator()
     {
-      return this.elements.GetEnumerator();
+        return this.elements.GetEnumerator();
     }
 
     ArrayList elements;
 
-    #region IList Members
     /// <summary>
     /// Gets or sets the element at the specified index. 
     /// </summary>
     object IList.this[int index]
     {
-      get { return this.elements[index]; }
-      set { this.elements[index] = value; }
+        get => this.elements[index];
+        set => this.elements[index] = value;
     }
 
     /// <summary>
@@ -294,7 +274,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void IList.RemoveAt(int index)
     {
-      this.elements.RemoveAt(index);
+        this.elements.RemoveAt(index);
     }
 
     /// <summary>
@@ -302,7 +282,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void IList.Insert(int index, object value)
     {
-      this.elements.Insert(index, value);
+        this.elements.Insert(index, value);
     }
 
     /// <summary>
@@ -310,7 +290,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void IList.Remove(object value)
     {
-      this.elements.Remove(value);
+        this.elements.Remove(value);
     }
 
     /// <summary>
@@ -318,7 +298,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     bool IList.Contains(object value)
     {
-      return this.elements.Contains(value);
+        return this.elements.Contains(value);
     }
 
     /// <summary>
@@ -326,7 +306,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     int IList.IndexOf(object value)
     {
-      return this.elements.IndexOf(value);
+        return this.elements.IndexOf(value);
     }
 
     /// <summary>
@@ -334,7 +314,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     int IList.Add(object value)
     {
-      return this.elements.Add(value);
+        return this.elements.Add(value);
     }
 
     /// <summary>
@@ -342,8 +322,6 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     void IList.Clear()
     {
-      this.elements.Clear();
+        this.elements.Clear();
     }
-    #endregion
-  }
 }

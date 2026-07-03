@@ -27,15 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Used to determine the horizontal alignment of the axis title.
+/// </summary>
+public enum HorizontalAlignment
 {
-  /// <summary>
-  /// Used to determine the horizontal alignment of the axis title.
-  /// </summary>
-  public enum HorizontalAlignment
-  {
     /// <summary>
     /// Axis title will be left aligned.
     /// </summary>
@@ -50,5 +48,4 @@ namespace PdfSharpCore.Charting
     /// Axis title will be centered.
     /// </summary>
     Center
-  }
 }

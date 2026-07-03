@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,24 +27,23 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+namespace MigraDocCore.DocumentObjectModel.Internals;
+
+/// <summary>
+/// Represents a nullable string value.
+/// </summary>
+internal struct NString : INullableValue
 {
-  /// <summary>
-  /// Represents a nullable string value.
-  /// </summary>
-  internal struct NString : INullableValue
-  {
     /// <summary>
     /// Gets or sets the value of the instance.
     /// </summary>
     public string Value
     {
-      get { return this.val != null ? this.val : ""; }
-      set { this.val = value; }
+        get => this.val != null ? this.val : "";
+        set => this.val = value;
     }
 
     /// <summary>
@@ -53,7 +51,7 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     object INullableValue.GetValue()
     {
-      return this.Value;
+        return this.Value;
     }
 
     /// <summary>
@@ -61,7 +59,7 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     void INullableValue.SetValue(object value)
     {
-      this.val = (String)value;
+        this.val = (String)value;
     }
 
     /// <summary>
@@ -70,49 +68,45 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// </summary>
     public void SetNull()
     {
-      this.val = null;
+        this.val = null;
     }
 
     /// <summary>
     /// Determines whether this instance is null (not set).
     /// </summary>
-    public bool IsNull
-    {
-      get { return this.val == null; }
-    }
+    public bool IsNull => this.val == null;
 
     /// <summary>
     /// Returns a value indicating whether this instance is equal to the specified object.
     /// </summary>
     public override bool Equals(object value)
     {
-      if (value is NString)
-        return this == (NString)value;
-      return false;
+        if (value is NString)
+            return this == (NString)value;
+        return false;
     }
 
     public override int GetHashCode()
     {
-      return this.val == null ? 0 : this.val.GetHashCode();
+        return this.val == null ? 0 : this.val.GetHashCode();
     }
 
     public static bool operator ==(NString l, NString r)
     {
-      if (l.IsNull)
-        return r.IsNull;
-      else if (r.IsNull)
-        return false;
-      else
-        return l.Value == r.Value;
+        if (l.IsNull)
+            return r.IsNull;
+        else if (r.IsNull)
+            return false;
+        else
+            return l.Value == r.Value;
     }
 
     public static bool operator !=(NString l, NString r)
     {
-      return !(l == r);
+        return !(l == r);
     }
 
-    public static readonly NString NullValue = new NString();
+    public static readonly NString NullValue = new();
 
     string val;
-  }
 }

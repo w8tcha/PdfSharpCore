@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,23 +24,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Defines the direction an elliptical arc is drawn.
+/// </summary>
+public enum XSweepDirection // Same values as System.Windows.Media.SweepDirection.
 {
     /// <summary>
-    /// Defines the direction an elliptical arc is drawn.
+    /// Specifies that arcs are drawn in a counter clockwise (negative-angle) direction.
     /// </summary>
-    public enum XSweepDirection // Same values as System.Windows.Media.SweepDirection.
-    {
-        /// <summary>
-        /// Specifies that arcs are drawn in a counter clockwise (negative-angle) direction.
-        /// </summary>
-        Counterclockwise = 0,
+    Counterclockwise = 0,
 
-        /// <summary>
-        /// Specifies that arcs are drawn in a clockwise (positive-angle) direction.
-        /// </summary>
-        Clockwise = 1,
-    }
+    /// <summary>
+    /// Specifies that arcs are drawn in a clockwise (positive-angle) direction.
+    /// </summary>
+    Clockwise = 1
 }

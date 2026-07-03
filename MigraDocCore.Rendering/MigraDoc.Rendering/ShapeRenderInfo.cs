@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,28 +25,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel;
-using PdfSharpCore.Drawing;
 using MigraDocCore.DocumentObjectModel.Shapes;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Rendering information for shapes.
+/// </summary>
+internal abstract class ShapeRenderInfo : RenderInfo
 {
-  /// <summary>
-  /// Rendering information for shapes.
-  /// </summary>
-  internal abstract class ShapeRenderInfo : RenderInfo
-  {
     internal ShapeRenderInfo()
     {
     }
 
-    public override DocumentObject DocumentObject
-    {
-      get { return this.shape; }
-    }
+    public override DocumentObject DocumentObject => this.shape;
     internal Shape shape;
-  }
 }

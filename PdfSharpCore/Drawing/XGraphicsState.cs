@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,17 +24,15 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Represents the internal state of an XGraphics object.
+/// This class is used as a handle for restoring the context.
+/// </summary>
+public sealed class XGraphicsState
 {
-    /// <summary>
-    /// Represents the internal state of an XGraphics object.
-    /// This class is used as a handle for restoring the context.
-    /// </summary>
-    public sealed class XGraphicsState
-    {
-        // This class is simply a wrapper of InternalGraphicsState.
-        internal InternalGraphicsState InternalState;
-    }
+    // This class is simply a wrapper of InternalGraphicsState.
+    internal InternalGraphicsState InternalState;
 }

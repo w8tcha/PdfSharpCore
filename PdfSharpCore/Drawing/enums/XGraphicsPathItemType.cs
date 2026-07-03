@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,24 +24,22 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Drawing
+namespace PdfSharpCore.Drawing;
+
+/// <summary>
+/// Type of the path data.
+/// </summary>
+internal enum XGraphicsPathItemType
 {
-    /// <summary>
-    /// Type of the path data.
-    /// </summary>
-    internal enum XGraphicsPathItemType
-    {
-        Lines,
-        Beziers,
-        Curve,
-        Arc,
-        Rectangle,
-        RoundedRectangle,
-        Ellipse,
-        Polygon,
-        CloseFigure,
-        StartFigure,
-    }
+    Lines,
+    Beziers,
+    Curve,
+    Arc,
+    Rectangle,
+    RoundedRectangle,
+    Ellipse,
+    Polygon,
+    CloseFigure,
+    StartFigure
 }

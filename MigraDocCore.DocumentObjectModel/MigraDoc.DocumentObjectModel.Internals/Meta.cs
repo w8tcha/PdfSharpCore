@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,252 +27,242 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Collections;
-using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
-using MigraDocCore.DocumentObjectModel.Internals;
+
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Resources;
 using System.Linq;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+namespace MigraDocCore.DocumentObjectModel.Internals;
+
+/// <summary>
+/// Meta class for document objects.
+/// </summary>
+public class Meta
 {
     /// <summary>
-    /// Meta class for document objects.
+    /// Initializes a new instance of the DomMeta class.
     /// </summary>
-    public class Meta
+    public Meta(Type documentObjectType)
     {
-        /// <summary>
-        /// Initializes a new instance of the DomMeta class.
-        /// </summary>
-        public Meta(Type documentObjectType)
-        {
-            Meta.AddValueDescriptors(this, documentObjectType);
-        }
+        Meta.AddValueDescriptors(this, documentObjectType);
+    }
 
-        /// <summary>
-        /// Gets the meta object of the specified document object.
-        /// </summary>
-        /// <param name="documentObject">The document object the meta is returned for.</param>
-        public static Meta GetMeta(DocumentObject documentObject)
-        {
-            return documentObject.Meta;
-        }
+    /// <summary>
+    /// Gets the meta object of the specified document object.
+    /// </summary>
+    /// <param name="documentObject">The document object the meta is returned for.</param>
+    public static Meta GetMeta(DocumentObject documentObject)
+    {
+        return documentObject.Meta;
+    }
 
-        /// <summary>
-        /// Gets the object specified by name from dom.
-        /// </summary>
-        public object GetValue(DocumentObject dom, string name, GV flags)
+    /// <summary>
+    /// Gets the object specified by name from dom.
+    /// </summary>
+    public object GetValue(DocumentObject dom, string name, GV flags)
+    {
+        var dot = name.IndexOf('.');
+        if (dot == 0)
+            throw new ArgumentException(string.Format(AppResources.InvalidValueName, name));
+        string trail = null;
+        if (dot > 0)
         {
-            int dot = name.IndexOf('.');
-            if (dot == 0)
+            trail = name.Substring(dot + 1);
+            name = name.Substring(0, dot);
+        }
+        var vd = this.vds[name];
+        if (vd == null)
+            throw new ArgumentException(string.Format(AppResources.InvalidValueName, name));
+
+        var value = vd.GetValue(dom, flags);
+        if (value == null && flags == GV.GetNull)  //??? oder auch GV.ReadOnly?
+            return null;
+
+        //REVIEW DaSt: Sollte beim GV.ReadWrite das Objekt angelegt werden?
+        if (trail != null)
+        {
+            if (value == null || trail == "")
                 throw new ArgumentException(string.Format(AppResources.InvalidValueName, name));
-            string trail = null;
-            if (dot > 0)
-            {
-                trail = name.Substring(dot + 1);
-                name = name.Substring(0, dot);
-            }
-            ValueDescriptor vd = this.vds[name];
-            if (vd == null)
+            var doc = value as DocumentObject;
+            if (doc == null)
                 throw new ArgumentException(string.Format(AppResources.InvalidValueName, name));
+            value = doc.GetValue(trail, flags);
+        }
+        return value;
+    }
 
-            object value = vd.GetValue(dom, flags);
-            if (value == null && flags == GV.GetNull)  //??? oder auch GV.ReadOnly?
-                return null;
+    /// <summary>
+    /// Sets the member of dom specified by name to val.
+    /// If a member with the specified name does not exist an ArgumentException will be thrown.
+    /// </summary>
+    public void SetValue(DocumentObject dom, string name, object val)
+    {
+        var dot = name.IndexOf('.');
+        if (dot == 0)
+            throw new ArgumentException(DomSR.InvalidValueName(name));
+        string trail = null;
+        if (dot > 0)
+        {
+            trail = name.Substring(dot + 1);
+            name = name.Substring(0, dot);
+        }
+        var vd = this.vds[name];
+        if (vd == null)
+            throw new ArgumentException(DomSR.InvalidValueName(name));
 
-            //REVIEW DaSt: Sollte beim GV.ReadWrite das Objekt angelegt werden?
+        if (trail != null)
+        {
+            //REVIEW DaSt: dom.GetValue(name) und rekursiv SetValue aufrufen,
+            //             oder dom.GetValue(name.BisVorletzteElement) und erst SetValue aufrufen.
+            var doc = dom.GetValue(name) as DocumentObject;
+            doc.SetValue(trail, val);
+        }
+        else
+            vd.SetValue(dom, val);
+    }
+
+    /// <summary>
+    /// Determines whether this meta contains a value with the specified name.
+    /// </summary>
+    public bool HasValue(string name)
+    {
+        var vd = this.vds[name];
+        return vd != null;
+    }
+
+    /// <summary>
+    /// Sets the member of dom specified by name to null.
+    /// If a member with the specified name does not exist an ArgumentException will be thrown.
+    /// </summary>
+    public void SetNull(DocumentObject dom, string name)
+    {
+        var vd = vds[name];
+        if (vd == null)
+            throw new ArgumentException(DomSR.InvalidValueName(name));
+
+        vd.SetNull(dom);
+    }
+
+    /// <summary>
+    /// Determines whether the member of dom specified by name is null.
+    /// If a member with the specified name does not exist an ArgumentException will be thrown.
+    /// </summary>
+    public virtual bool IsNull(DocumentObject dom, string name)
+    {
+        //bool isNull = false;
+        var dot = name.IndexOf('.');
+        if (dot == 0)
+            throw new ArgumentException(DomSR.InvalidValueName(name));
+        string trail = null;
+        if (dot > 0)
+        {
+            trail = name.Substring(dot + 1);
+            name = name.Substring(0, dot);
+        }
+        var vd = this.vds[name];
+        if (vd == null)
+            throw new ArgumentException(DomSR.InvalidValueName(name));
+
+        if (vd is NullableDescriptor || vd is ValueTypeDescriptor)
+        {
             if (trail != null)
-            {
-                if (value == null || trail == "")
-                    throw new ArgumentException(string.Format(AppResources.InvalidValueName, name));
-                DocumentObject doc = value as DocumentObject;
-                if (doc == null)
-                    throw new ArgumentException(string.Format(AppResources.InvalidValueName, name));
-                value = doc.GetValue(trail, flags);
-            }
-            return value;
-        }
-
-        /// <summary>
-        /// Sets the member of dom specified by name to val.
-        /// If a member with the specified name does not exist an ArgumentException will be thrown.
-        /// </summary>
-        public void SetValue(DocumentObject dom, string name, object val)
-        {
-            int dot = name.IndexOf('.');
-            if (dot == 0)
                 throw new ArgumentException(DomSR.InvalidValueName(name));
-            string trail = null;
-            if (dot > 0)
-            {
-                trail = name.Substring(dot + 1);
-                name = name.Substring(0, dot);
-            }
-            ValueDescriptor vd = this.vds[name];
-            if (vd == null)
-                throw new ArgumentException(DomSR.InvalidValueName(name));
-
-            if (trail != null)
-            {
-                //REVIEW DaSt: dom.GetValue(name) und rekursiv SetValue aufrufen,
-                //             oder dom.GetValue(name.BisVorletzteElement) und erst SetValue aufrufen.
-                DocumentObject doc = dom.GetValue(name) as DocumentObject;
-                doc.SetValue(trail, val);
-            }
-            else
-                vd.SetValue(dom, val);
+            return vd.IsNull(dom);
         }
-
-        /// <summary>
-        /// Determines whether this meta contains a value with the specified name.
-        /// </summary>
-        public bool HasValue(string name)
-        {
-            ValueDescriptor vd = this.vds[name];
-            return vd != null;
-        }
-
-        /// <summary>
-        /// Sets the member of dom specified by name to null.
-        /// If a member with the specified name does not exist an ArgumentException will be thrown.
-        /// </summary>
-        public void SetNull(DocumentObject dom, string name)
-        {
-            ValueDescriptor vd = vds[name];
-            if (vd == null)
-                throw new ArgumentException(DomSR.InvalidValueName(name));
-
-            vd.SetNull(dom);
-        }
-
-        /// <summary>
-        /// Determines whether the member of dom specified by name is null.
-        /// If a member with the specified name does not exist an ArgumentException will be thrown.
-        /// </summary>
-        public virtual bool IsNull(DocumentObject dom, string name)
-        {
-            //bool isNull = false;
-            int dot = name.IndexOf('.');
-            if (dot == 0)
-                throw new ArgumentException(DomSR.InvalidValueName(name));
-            string trail = null;
-            if (dot > 0)
-            {
-                trail = name.Substring(dot + 1);
-                name = name.Substring(0, dot);
-            }
-            ValueDescriptor vd = this.vds[name];
-            if (vd == null)
-                throw new ArgumentException(DomSR.InvalidValueName(name));
-
-            if (vd is NullableDescriptor || vd is ValueTypeDescriptor)
-            {
-                if (trail != null)
-                    throw new ArgumentException(DomSR.InvalidValueName(name));
-                return vd.IsNull(dom);
-            }
-            DocumentObject docObj = (DocumentObject)vd.GetValue(dom, GV.ReadOnly);
-            if (docObj == null)
-                return true;
-            if (trail != null)
-                return docObj.IsNull(trail);
-            else
-                return docObj.IsNull();
-
-            //      DomValueDescriptor vd = vds[name];
-            //      if (vd == null)
-            //        throw new ArgumentException(DomSR.InvalidValueName(name));
-            //      
-            //      return vd.IsNull(dom);
-        }
-
-        /// <summary>
-        /// Sets all members of the specified dom to null.
-        /// </summary>
-        public virtual void SetNull(DocumentObject dom)
-        {
-            int count = vds.Count;
-            for (int index = 0; index < count; index++)
-            {
-                if (!vds[index].IsRefOnly)
-                    vds[index].SetNull(dom);
-            }
-        }
-
-        /// <summary>
-        /// Determines whether all members of the specified dom are null. If dom contains no members IsNull
-        /// returns true.
-        /// </summary>
-        public bool IsNull(DocumentObject dom)
-        {
-            int count = vds.Count;
-            for (int index = 0; index < count; index++)
-            {
-                ValueDescriptor vd = vds[index];
-                if (vd.IsRefOnly)
-                    continue;
-                if (!vd.IsNull(dom))
-                    return false;
-            }
+        var docObj = (DocumentObject)vd.GetValue(dom, GV.ReadOnly);
+        if (docObj == null)
             return true;
-        }
+        if (trail != null)
+            return docObj.IsNull(trail);
+        else
+            return docObj.IsNull();
 
-        /// <summary>
-        /// Gets the DomValueDescriptor of the member specified by name from the DocumentObject.
-        /// </summary>
-        public ValueDescriptor this[string name]
-        {
-            get { return this.vds[name]; }
-        }
+        //      DomValueDescriptor vd = vds[name];
+        //      if (vd == null)
+        //        throw new ArgumentException(DomSR.InvalidValueName(name));
+        //      
+        //      return vd.IsNull(dom);
+    }
 
-        /// <summary>
-        /// Gets the DomValueDescriptorCollection of the DocumentObject.
-        /// </summary>
-        public ValueDescriptorCollection ValueDescriptors
+    /// <summary>
+    /// Sets all members of the specified dom to null.
+    /// </summary>
+    public virtual void SetNull(DocumentObject dom)
+    {
+        var count = vds.Count;
+        for (var index = 0; index < count; index++)
         {
-            get { return this.vds; }
+            if (!vds[index].IsRefOnly)
+                vds[index].SetNull(dom);
         }
-        ValueDescriptorCollection vds = new ValueDescriptorCollection();
+    }
 
-        /// <summary>
-        /// Adds a value descriptor for each field and property found in type to meta.
-        /// </summary>
-        static void AddValueDescriptors(Meta meta, Type type)
+    /// <summary>
+    /// Determines whether all members of the specified dom are null. If dom contains no members IsNull
+    /// returns true.
+    /// </summary>
+    public bool IsNull(DocumentObject dom)
+    {
+        var count = vds.Count;
+        for (var index = 0; index < count; index++)
         {
-            var fieldInfos = type.GetRuntimeFields(); //(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            foreach (FieldInfo fieldInfo in fieldInfos)
-            {
+            var vd = vds[index];
+            if (vd.IsRefOnly)
+                continue;
+            if (!vd.IsNull(dom))
+                return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// Gets the DomValueDescriptor of the member specified by name from the DocumentObject.
+    /// </summary>
+    public ValueDescriptor this[string name] => this.vds[name];
+
+    /// <summary>
+    /// Gets the DomValueDescriptorCollection of the DocumentObject.
+    /// </summary>
+    public ValueDescriptorCollection ValueDescriptors => this.vds;
+
+    ValueDescriptorCollection vds = new();
+
+    /// <summary>
+    /// Adds a value descriptor for each field and property found in type to meta.
+    /// </summary>
+    static void AddValueDescriptors(Meta meta, Type type)
+    {
+        var fieldInfos = type.GetRuntimeFields(); //(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        foreach (var fieldInfo in fieldInfos)
+        {
 #if DEBUG_
         string name = fieldInfo.Name;
         if (name == "parent")
           name.GetType();
 #endif
-                var dvs = fieldInfo.GetCustomAttributes<DVAttribute>(false);
-                if (dvs.Count() == 1)
-                {
-                    ValueDescriptor vd = ValueDescriptor.CreateValueDescriptor(fieldInfo, dvs.First());
-                    meta.ValueDescriptors.Add(vd);
-                }
-            }
-
-            PropertyInfo[] propInfos = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            foreach (PropertyInfo propInfo in propInfos)
+            var dvs = fieldInfo.GetCustomAttributes<DVAttribute>(false);
+            if (dvs.Count() == 1)
             {
+                var vd = ValueDescriptor.CreateValueDescriptor(fieldInfo, dvs.First());
+                meta.ValueDescriptors.Add(vd);
+            }
+        }
+
+        var propInfos = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        foreach (var propInfo in propInfos)
+        {
 #if DEBUG_
         string name = propInfo.Name;
         if (name == "Font")
           name.GetType();
 #endif
-                var dvs = propInfo.GetCustomAttributes<DVAttribute>(false);
-                if (dvs.Count() == 1)
-                {
-                    ValueDescriptor vd = ValueDescriptor.CreateValueDescriptor(propInfo, dvs.First());
-                    meta.ValueDescriptors.Add(vd);
-                }
+            var dvs = propInfo.GetCustomAttributes<DVAttribute>(false);
+            if (dvs.Count() == 1)
+            {
+                var vd = ValueDescriptor.CreateValueDescriptor(propInfo, dvs.First());
+                meta.ValueDescriptors.Add(vd);
             }
         }
     }

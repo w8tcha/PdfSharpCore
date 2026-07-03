@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents the format of the label of each value on the axis.
+/// </summary>
+public class TickLabels : ChartObject
 {
-  /// <summary>
-  /// Represents the format of the label of each value on the axis.
-  /// </summary>
-  public class TickLabels : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the TickLabels class.
     /// </summary>
@@ -52,13 +49,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal TickLabels(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new TickLabels Clone()
     {
-      return (TickLabels)DeepCopy();
+        return (TickLabels)DeepCopy();
     }
 
     /// <summary>
@@ -66,24 +62,22 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     protected override object DeepCopy()
     {
-      TickLabels tickLabels = (TickLabels)base.DeepCopy();
-      if (tickLabels.font != null)
-      {
-        tickLabels.font = tickLabels.font.Clone();
-        tickLabels.font.parent = tickLabels;
-      }
-      return tickLabels;
+        var tickLabels = (TickLabels)base.DeepCopy();
+        if (tickLabels.font != null)
+        {
+            tickLabels.font = tickLabels.font.Clone();
+            tickLabels.font.parent = tickLabels;
+        }
+        return tickLabels;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the style name of the label.
     /// </summary>
     public string Style
     {
-      get { return this.style.Value; }
-      set { this.style.Value = value; }
+        get => this.style.Value;
+        set => this.style.Value = value;
     }
     [DV]
     internal NString style = NString.NullValue;
@@ -93,8 +87,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public string Format
     {
-      get { return this.format.Value; }
-      set { this.format.Value = value; }
+        get => this.format.Value;
+        set => this.format.Value = value;
     }
     [DV]
     internal NString format = NString.NullValue;
@@ -104,41 +98,39 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Font Font
     {
-      get
-      {
-        if (this.font == null)
-          this.font = new Font(this);
+        get
+        {
+            if (this.font == null)
+                this.font = new Font(this);
 
-        return this.font;
-      }
-      set
-      {
-        SetParent(value);
-        this.font = value;
-      }
+            return this.font;
+        }
+        set
+        {
+            SetParent(value);
+            this.font = value;
+        }
     }
     [DV]
     internal Font font;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts TickLabels into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int pos = serializer.BeginContent("TickLabels");
+        var pos = serializer.BeginContent("TickLabels");
 
-      if (!this.style.IsNull)
-        serializer.WriteSimpleAttribute("Style", this.Style);
+        if (!this.style.IsNull)
+            serializer.WriteSimpleAttribute("Style", this.Style);
 
-      if (this.font != null)
-        this.font.Serialize(serializer);
+        if (this.font != null)
+            this.font.Serialize(serializer);
 
-      if (!this.format.IsNull)
-        serializer.WriteSimpleAttribute("Format", this.Format);
+        if (!this.format.IsNull)
+            serializer.WriteSimpleAttribute("Format", this.Format);
 
-      serializer.EndContent();
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -146,14 +138,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(TickLabels));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(TickLabels));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

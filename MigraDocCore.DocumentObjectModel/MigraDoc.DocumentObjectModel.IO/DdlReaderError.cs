@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,40 +27,35 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Diagnostics;
-using System.Collections;
 
-namespace MigraDocCore.DocumentObjectModel.IO
+namespace MigraDocCore.DocumentObjectModel.IO;
+
+/// <summary>
+/// Represents an error or diagnostic message reported by the DDL reader.
+/// </summary>
+public class DdlReaderError
 {
-  /// <summary>
-  /// Represents an error or diagnostic message reported by the DDL reader.
-  /// </summary>
-  public class DdlReaderError
-  {
     /// <summary>
     /// Initializes a new instance of the DdlReaderError class.
     /// </summary>
     public DdlReaderError(DdlErrorLevel errorLevel, string errorMessage, int errorNumber,
-      string sourceFile, int sourceLine, int sourceColumn)
+        string sourceFile, int sourceLine, int sourceColumn)
     {
-      this.ErrorLevel = errorLevel;
-      this.ErrorMessage = errorMessage;
-      this.ErrorNumber = errorNumber;
-      this.SourceFile = sourceFile;
-      this.SourceLine = sourceLine;
-      this.SourceColumn = sourceColumn;
+        this.ErrorLevel = errorLevel;
+        this.ErrorMessage = errorMessage;
+        this.ErrorNumber = errorNumber;
+        this.SourceFile = sourceFile;
+        this.SourceLine = sourceLine;
+        this.SourceColumn = sourceColumn;
     }
 
     public DdlReaderError(DdlErrorLevel errorLevel, string errorMessage, int errorNumber)
     {
-      this.ErrorLevel = errorLevel;
-      this.ErrorMessage = errorMessage;
-      this.ErrorNumber = errorNumber;
+        this.ErrorLevel = errorLevel;
+        this.ErrorMessage = errorMessage;
+        this.ErrorNumber = errorNumber;
     }
 
 
@@ -92,8 +86,8 @@ namespace MigraDocCore.DocumentObjectModel.IO
     /// </summary>
     public override string ToString()
     {
-      return String.Format("[{0}({1},{2}):] {3} DDL{4}: {5}",
-        SourceFile, SourceLine, SourceColumn, "xxx", ErrorNumber, ErrorMessage);
+        return String.Format("[{0}({1},{2}):] {3} DDL{4}: {5}",
+            SourceFile, SourceLine, SourceColumn, "xxx", ErrorNumber, ErrorMessage);
     }
 
     /// <summary>
@@ -128,5 +122,4 @@ namespace MigraDocCore.DocumentObjectModel.IO
     /// or 0 if there is no column information.
     /// </summary>
     public int SourceColumn;
-  }
 }

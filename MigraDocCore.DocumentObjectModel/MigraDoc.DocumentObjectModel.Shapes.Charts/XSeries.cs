@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,24 +27,22 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents a series of data on the X-Axis.
+/// </summary>
+public class XSeries : ChartObject
 {
-  /// <summary>
-  /// Represents a series of data on the X-Axis.
-  /// </summary>
-  public class XSeries : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the XSeries class.
     /// </summary>
     public XSeries()
     {
-      xSeriesElements = new XSeriesElements();
+        xSeriesElements = new XSeriesElements();
     }
 
     /// <summary>
@@ -54,13 +51,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     [DV]
     protected XSeriesElements xSeriesElements;
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new XSeries Clone()
     {
-      return (XSeries)DeepCopy();
+        return (XSeries)DeepCopy();
     }
 
     /// <summary>
@@ -68,13 +64,13 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     protected override object DeepCopy()
     {
-      XSeries xSeries = (XSeries)base.DeepCopy();
-      if (xSeries.xSeriesElements != null)
-      {
-        xSeries.xSeriesElements = xSeries.xSeriesElements.Clone();
-        xSeries.xSeriesElements.parent = xSeries;
-      }
-      return xSeries;
+        var xSeries = (XSeries)base.DeepCopy();
+        if (xSeries.xSeriesElements != null)
+        {
+            xSeries.xSeriesElements = xSeries.xSeriesElements.Clone();
+            xSeries.xSeriesElements.parent = xSeries;
+        }
+        return xSeries;
     }
 
     /// <summary>
@@ -82,7 +78,7 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public void AddBlank()
     {
-      this.xSeriesElements.AddBlank();
+        this.xSeriesElements.AddBlank();
     }
 
     /// <summary>
@@ -90,7 +86,7 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public XValue Add(string value)
     {
-      return this.xSeriesElements.Add(value);
+        return this.xSeriesElements.Add(value);
     }
 
     /// <summary>
@@ -98,22 +94,20 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public void Add(params string[] values)
     {
-      this.xSeriesElements.Add(values);
+        this.xSeriesElements.Add(values);
     }
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts XSeries into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      serializer.WriteLine("\\xvalues");
+        serializer.WriteLine("\\xvalues");
 
-      serializer.BeginContent();
-      this.xSeriesElements.Serialize(serializer);
-      serializer.WriteLine("");
-      serializer.EndContent();
+        serializer.BeginContent();
+        this.xSeriesElements.Serialize(serializer);
+        serializer.WriteLine("");
+        serializer.EndContent();
     }
 
     /// <summary>
@@ -121,14 +115,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(XSeries));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(XSeries));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

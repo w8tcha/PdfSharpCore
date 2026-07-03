@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Represents the type of the special character.
+/// </summary>
+public enum SymbolName : uint
 {
-  /// <summary>
-  /// Represents the type of the special character.
-  /// </summary>
-  public enum SymbolName : uint
-  {
     // \space(...)
     Blank = 0xF1000001,
     En = 0xF1000002,
@@ -64,6 +60,5 @@ namespace MigraDocCore.DocumentObjectModel
     EmDash = 0xF8000007,
     EnDash = 0xF8000008,
     NonBreakableBlank = 0xF8000009,
-    HardBlank = NonBreakableBlank,
-  }
+    HardBlank = NonBreakableBlank
 }

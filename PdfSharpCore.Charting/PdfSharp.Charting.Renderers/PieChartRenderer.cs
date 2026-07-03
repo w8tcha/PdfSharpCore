@@ -30,13 +30,13 @@
 using System;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents a pie chart renderer.
+/// </summary>
+internal class PieChartRenderer : ChartRenderer
 {
-  /// <summary>
-  /// Represents a pie chart renderer.
-  /// </summary>
-  internal class PieChartRenderer : ChartRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the PieChartRenderer class with the
     /// specified renderer parameters.
@@ -50,23 +50,23 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override RendererInfo Init()
     {
-      ChartRendererInfo cri = new ChartRendererInfo();
-      cri.chart = (Chart)this.rendererParms.DrawingItem;
-      this.rendererParms.RendererInfo = cri;
+        var cri = new ChartRendererInfo();
+        cri.chart = (Chart)this.rendererParms.DrawingItem;
+        this.rendererParms.RendererInfo = cri;
 
-      InitSeries(cri);
+        InitSeries(cri);
 
-      LegendRenderer lr = new PieLegendRenderer(this.rendererParms);
-      cri.legendRendererInfo = (LegendRendererInfo)lr.Init();
+        LegendRenderer lr = new PieLegendRenderer(this.rendererParms);
+        cri.legendRendererInfo = (LegendRendererInfo)lr.Init();
 
-      PlotArea plotArea = cri.chart.PlotArea;
-      PlotAreaRenderer renderer = GetPlotAreaRenderer();
-      cri.plotAreaRendererInfo = (PlotAreaRendererInfo)renderer.Init();
+        var plotArea = cri.chart.PlotArea;
+        var renderer = GetPlotAreaRenderer();
+        cri.plotAreaRendererInfo = (PlotAreaRendererInfo)renderer.Init();
 
-      DataLabelRenderer dlr = new PieDataLabelRenderer(this.rendererParms);
-      dlr.Init();
+        DataLabelRenderer dlr = new PieDataLabelRenderer(this.rendererParms);
+        dlr.Init();
 
-      return cri;
+        return cri;
     }
     
     /// <summary>
@@ -74,28 +74,28 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Format()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      LegendRenderer lr = new PieLegendRenderer(this.rendererParms);
-      lr.Format();
+        LegendRenderer lr = new PieLegendRenderer(this.rendererParms);
+        lr.Format();
 
-      // Calculate rects and positions.
-      XRect chartRect = LayoutLegend();
-      cri.plotAreaRendererInfo.Rect = chartRect;
-      double edge = Math.Min(chartRect.Width, chartRect.Height);
-      cri.plotAreaRendererInfo.X += (chartRect.Width - edge) / 2;
-      cri.plotAreaRendererInfo.Y += (chartRect.Height - edge) / 2;
-      cri.plotAreaRendererInfo.Width = edge;
-      cri.plotAreaRendererInfo.Height = edge;
+        // Calculate rects and positions.
+        var chartRect = LayoutLegend();
+        cri.plotAreaRendererInfo.Rect = chartRect;
+        var edge = Math.Min(chartRect.Width, chartRect.Height);
+        cri.plotAreaRendererInfo.X += (chartRect.Width - edge) / 2;
+        cri.plotAreaRendererInfo.Y += (chartRect.Height - edge) / 2;
+        cri.plotAreaRendererInfo.Width = edge;
+        cri.plotAreaRendererInfo.Height = edge;
 
-      DataLabelRenderer dlr = new PieDataLabelRenderer(this.rendererParms);
-      dlr.Format();
+        DataLabelRenderer dlr = new PieDataLabelRenderer(this.rendererParms);
+        dlr.Format();
 
-      // Calculated remaining plot area, now it's safe to format.
-      PlotAreaRenderer renderer = GetPlotAreaRenderer();
-      renderer.Format();
+        // Calculated remaining plot area, now it's safe to format.
+        var renderer = GetPlotAreaRenderer();
+        renderer.Format();
 
-      dlr.CalcPositions();
+        dlr.CalcPositions();
     }
 
     /// <summary>
@@ -103,20 +103,20 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      LegendRenderer lr = new PieLegendRenderer(this.rendererParms);
-      lr.Draw();
+        LegendRenderer lr = new PieLegendRenderer(this.rendererParms);
+        lr.Draw();
 
-      WallRenderer wr = new WallRenderer(this.rendererParms);
-      wr.Draw();
+        var wr = new WallRenderer(this.rendererParms);
+        wr.Draw();
 
-      PlotAreaBorderRenderer pabr = new PlotAreaBorderRenderer(this.rendererParms);
-      pabr.Draw();
+        var pabr = new PlotAreaBorderRenderer(this.rendererParms);
+        pabr.Draw();
 
-      PlotAreaRenderer renderer = GetPlotAreaRenderer();
-      renderer.Draw();
+        var renderer = GetPlotAreaRenderer();
+        renderer.Draw();
 
-      DataLabelRenderer dlr = new PieDataLabelRenderer(this.rendererParms);
-      dlr.Draw();
+        DataLabelRenderer dlr = new PieDataLabelRenderer(this.rendererParms);
+        dlr.Draw();
     }
 
     /// <summary>
@@ -124,16 +124,16 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     private PlotAreaRenderer GetPlotAreaRenderer()
     {
-      Chart chart = (Chart)this.rendererParms.DrawingItem;
-      switch (chart.type)
-      {
-        case ChartType.Pie2D:
-          return new PieClosedPlotAreaRenderer(this.rendererParms);
+        var chart = (Chart)this.rendererParms.DrawingItem;
+        switch (chart.type)
+        {
+            case ChartType.Pie2D:
+                return new PieClosedPlotAreaRenderer(this.rendererParms);
 
-        case ChartType.PieExploded2D:
-          return new PieExplodedPlotAreaRenderer(this.rendererParms);
-      }
-      return null;
+            case ChartType.PieExploded2D:
+                return new PieExplodedPlotAreaRenderer(this.rendererParms);
+        }
+        return null;
     }
 
     /// <summary>
@@ -141,37 +141,36 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected void InitSeries(ChartRendererInfo rendererInfo)
     {
-      SeriesCollection seriesColl = rendererInfo.chart.SeriesCollection;
-      rendererInfo.seriesRendererInfos = new SeriesRendererInfo[seriesColl.Count];
-      for (int idx = 0; idx < seriesColl.Count; ++idx)
-      {
-        SeriesRendererInfo sri = new SeriesRendererInfo();
-        rendererInfo.seriesRendererInfos[idx] = sri;
-        sri.series = seriesColl[idx];
-
-        sri.LineFormat = Converter.ToXPen(sri.series.lineFormat, XColors.Black, ChartRenderer.DefaultSeriesLineWidth);
-        sri.FillFormat = Converter.ToXBrush(sri.series.fillFormat, ColumnColors.Item(idx));
-
-        sri.pointRendererInfos = new SectorRendererInfo[sri.series.seriesElements.Count];
-        for (int pointIdx = 0; pointIdx < sri.pointRendererInfos.Length; ++pointIdx)
+        var seriesColl = rendererInfo.chart.SeriesCollection;
+        rendererInfo.seriesRendererInfos = new SeriesRendererInfo[seriesColl.Count];
+        for (var idx = 0; idx < seriesColl.Count; ++idx)
         {
-          PointRendererInfo pri = new SectorRendererInfo();
-          Point point = sri.series.seriesElements[pointIdx];
-          pri.point = point;
-          if (point != null)
-          {
-            pri.LineFormat = sri.LineFormat;
-            if (point.lineFormat != null && !point.lineFormat.color.IsEmpty)
-              pri.LineFormat = new XPen(point.lineFormat.color);
-            if (point.fillFormat != null && !point.fillFormat.color.IsEmpty)
-              pri.FillFormat = new XSolidBrush(point.fillFormat.color);
-            else
-              pri.FillFormat = new XSolidBrush(PieColors.Item(pointIdx));
-            pri.LineFormat.LineJoin = XLineJoin.Round;
-          }
-          sri.pointRendererInfos[pointIdx] = pri;
+            var sri = new SeriesRendererInfo();
+            rendererInfo.seriesRendererInfos[idx] = sri;
+            sri.series = seriesColl[idx];
+
+            sri.LineFormat = Converter.ToXPen(sri.series.lineFormat, XColors.Black, ChartRenderer.DefaultSeriesLineWidth);
+            sri.FillFormat = Converter.ToXBrush(sri.series.fillFormat, ColumnColors.Item(idx));
+
+            sri.pointRendererInfos = new SectorRendererInfo[sri.series.seriesElements.Count];
+            for (var pointIdx = 0; pointIdx < sri.pointRendererInfos.Length; ++pointIdx)
+            {
+                PointRendererInfo pri = new SectorRendererInfo();
+                var point = sri.series.seriesElements[pointIdx];
+                pri.point = point;
+                if (point != null)
+                {
+                    pri.LineFormat = sri.LineFormat;
+                    if (point.lineFormat != null && !point.lineFormat.color.IsEmpty)
+                        pri.LineFormat = new XPen(point.lineFormat.color);
+                    if (point.fillFormat != null && !point.fillFormat.color.IsEmpty)
+                        pri.FillFormat = new XSolidBrush(point.fillFormat.color);
+                    else
+                        pri.FillFormat = new XSolidBrush(PieColors.Item(pointIdx));
+                    pri.LineFormat.LineJoin = XLineJoin.Round;
+                }
+                sri.pointRendererInfos[pointIdx] = pri;
+            }
         }
-      }
     }
-  }
 }

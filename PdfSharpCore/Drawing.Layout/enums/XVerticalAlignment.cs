@@ -1,9 +1,8 @@
-namespace PdfSharpCore.Drawing.Layout.enums
+namespace PdfSharpCore.Drawing.Layout.enums;
+
+public enum XVerticalAlignment
 {
-    public enum XVerticalAlignment
-    {
-        Top,
-        Middle,
-        Bottom,
-    }
+    Top,
+    Middle,
+    Bottom
 }

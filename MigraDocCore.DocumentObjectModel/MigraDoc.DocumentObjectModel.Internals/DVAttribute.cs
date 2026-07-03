@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,25 +27,24 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace MigraDocCore.DocumentObjectModel.Internals
+namespace MigraDocCore.DocumentObjectModel.Internals;
+
+/// <summary>
+/// Indicates that this field can be accessed via SetValue and GetValue.
+/// </summary>
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+internal class DVAttribute : Attribute
 {
-  /// <summary>
-  /// Indicates that this field can be accessed via SetValue and GetValue.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-  internal class DVAttribute : Attribute
-  {
     /// <summary>
     /// Initializes a new instance of the DVAttribute class.
     /// </summary>
     public DVAttribute()
     {
-      RefOnly = false;
-      ItemType = null;
+        RefOnly = false;
+        ItemType = null;
     }
 
     /// <summary>
@@ -55,8 +53,8 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
     public Type Type
     {
-      get { return this.type; }
-      set { this.type = value; }
+        get => this.type;
+        set => this.type = value;
     }
     
     [System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
@@ -72,5 +70,4 @@ namespace MigraDocCore.DocumentObjectModel.Internals
     /// Describes the type of the elements a collection contains.
     /// </summary>
     public Type ItemType;
-  }
 }

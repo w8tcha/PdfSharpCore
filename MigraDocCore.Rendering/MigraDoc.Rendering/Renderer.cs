@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,23 +25,21 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
+
 using MigraDocCore.DocumentObjectModel.Tables;
 using MigraDocCore.DocumentObjectModel.Shapes;
 using MigraDocCore.DocumentObjectModel.Shapes.Charts;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Abstract base class for all renderers.
+/// </summary>
+internal abstract class Renderer
 {
-  /// <summary>
-  /// Abstract base class for all renderers.
-  /// </summary>
-  internal abstract class Renderer
-  {
     internal readonly static XUnit Tolerance = XUnit.FromPoint(0.001);
     private XUnit maxElementHeight = -1;
 
@@ -51,23 +48,23 @@ namespace MigraDocCore.Rendering
     /// </summary>
     internal XUnit MaxElementHeight
     {
-      get { return this.maxElementHeight; }
-      set {this.maxElementHeight = value;}
+        get => this.maxElementHeight;
+        set => this.maxElementHeight = value;
     }
 
     internal Renderer(XGraphics gfx, DocumentObject documentObject, FieldInfos fieldInfos)
     {
-      this.documentObject = documentObject;
-      this.gfx = gfx;
-      this.fieldInfos = fieldInfos;
+        this.documentObject = documentObject;
+        this.gfx = gfx;
+        this.fieldInfos = fieldInfos;
     }
 
     internal Renderer(XGraphics gfx, RenderInfo renderInfo, FieldInfos fieldInfos)
     {
-      this.documentObject = renderInfo.DocumentObject;
-      this.gfx = gfx;
-      this.renderInfo = renderInfo;
-      this.fieldInfos = fieldInfos;
+        this.documentObject = renderInfo.DocumentObject;
+        this.gfx = gfx;
+        this.renderInfo = renderInfo;
+        this.fieldInfos = fieldInfos;
     }
     /// <summary>
     /// In inherited classes, gets a layout info with only margin and break information set.
@@ -81,7 +78,7 @@ namespace MigraDocCore.Rendering
     /// </remarks>
     internal abstract LayoutInfo InitialLayoutInfo
     {
-      get;
+        get;
     }
 
     /// <summary>
@@ -92,35 +89,33 @@ namespace MigraDocCore.Rendering
     /// <param name="renderInfos">The render infos.</param>
     protected void RenderByInfos(XUnit xShift, XUnit yShift, RenderInfo[] renderInfos)
     {
-      if (renderInfos == null)
-        return;
+        if (renderInfos == null)
+            return;
 
-      foreach (RenderInfo renderInfo in renderInfos)
-      {
-        XUnit savedX = renderInfo.LayoutInfo.ContentArea.X;
-        XUnit savedY = renderInfo.LayoutInfo.ContentArea.Y;
-        renderInfo.LayoutInfo.ContentArea.X += xShift;
-        renderInfo.LayoutInfo.ContentArea.Y += yShift;
-        Renderer renderer = Renderer.Create(this.gfx, this.documentRenderer, renderInfo, this.fieldInfos);
-        renderer.Render();
-        renderInfo.LayoutInfo.ContentArea.X = savedX;
-        renderInfo.LayoutInfo.ContentArea.Y = savedY;
-      }
+        foreach (var renderInfo in renderInfos)
+        {
+            var savedX = renderInfo.LayoutInfo.ContentArea.X;
+            var savedY = renderInfo.LayoutInfo.ContentArea.Y;
+            renderInfo.LayoutInfo.ContentArea.X += xShift;
+            renderInfo.LayoutInfo.ContentArea.Y += yShift;
+            var renderer = Renderer.Create(this.gfx, this.documentRenderer, renderInfo, this.fieldInfos);
+            renderer.Render();
+            renderInfo.LayoutInfo.ContentArea.X = savedX;
+            renderInfo.LayoutInfo.ContentArea.Y = savedY;
+        }
     }
 
     protected void RenderByInfos(RenderInfo[] renderInfos)
     {
-      RenderByInfos(0, 0, renderInfos);
+        RenderByInfos(0, 0, renderInfos);
     }
 
 
     /// <summary>
     /// Gets the render information necessary to render and position the object.
     /// </summary>
-    internal RenderInfo RenderInfo
-    {
-      get { return this.renderInfo; }
-    }
+    internal RenderInfo RenderInfo => this.renderInfo;
+
     protected RenderInfo renderInfo;
 
     /// <summary>
@@ -129,7 +124,7 @@ namespace MigraDocCore.Rendering
     /// <remarks>This property is set by the AreaProvider.</remarks>
     internal FieldInfos FieldInfos
     {
-      set { this.fieldInfos = value; }
+        set => this.fieldInfos = value;
     }
     protected FieldInfos fieldInfos;
 
@@ -156,24 +151,24 @@ namespace MigraDocCore.Rendering
     /// <returns>The fitting Renderer.</returns>
     internal static Renderer Create(XGraphics gfx, DocumentRenderer documentRenderer, DocumentObject documentObject, FieldInfos fieldInfos)
     {
-      Renderer renderer = null;
-      if (documentObject is Paragraph)
-        renderer = new ParagraphRenderer(gfx, (Paragraph)documentObject, fieldInfos);
-      else if (documentObject is Table)
-        renderer = new TableRenderer(gfx, (Table)documentObject, fieldInfos);
-      else if (documentObject is PageBreak)
-        renderer = new PageBreakRenderer(gfx, (PageBreak)documentObject, fieldInfos);
-      else if (documentObject is TextFrame)
-        renderer = new TextFrameRenderer(gfx, (TextFrame)documentObject, fieldInfos);
-      else if (documentObject is Chart)
-        renderer = new ChartRenderer(gfx, (Chart)documentObject, fieldInfos);
-      else if (documentObject is Image)
-        renderer = new ImageRenderer(gfx, (Image)documentObject, fieldInfos);
+        Renderer renderer = null;
+        if (documentObject is Paragraph)
+            renderer = new ParagraphRenderer(gfx, (Paragraph)documentObject, fieldInfos);
+        else if (documentObject is Table)
+            renderer = new TableRenderer(gfx, (Table)documentObject, fieldInfos);
+        else if (documentObject is PageBreak)
+            renderer = new PageBreakRenderer(gfx, (PageBreak)documentObject, fieldInfos);
+        else if (documentObject is TextFrame)
+            renderer = new TextFrameRenderer(gfx, (TextFrame)documentObject, fieldInfos);
+        else if (documentObject is Chart)
+            renderer = new ChartRenderer(gfx, (Chart)documentObject, fieldInfos);
+        else if (documentObject is Image)
+            renderer = new ImageRenderer(gfx, (Image)documentObject, fieldInfos);
 
-      if (renderer != null)
-        renderer.documentRenderer = documentRenderer;
+        if (renderer != null)
+            renderer.documentRenderer = documentRenderer;
 
-      return renderer;
+        return renderer;
     }
 
     /// <summary>
@@ -186,35 +181,30 @@ namespace MigraDocCore.Rendering
     /// <returns>The fitting Renderer.</returns>
     internal static Renderer Create(XGraphics gfx, DocumentRenderer documentRenderer, RenderInfo renderInfo, FieldInfos fieldInfos)
     {
-      Renderer renderer = null;
+        Renderer renderer = null;
 
-      if (renderInfo.DocumentObject is Paragraph)
-        renderer = new ParagraphRenderer(gfx, renderInfo, fieldInfos);
-      else if (renderInfo.DocumentObject is Table)
-        renderer = new TableRenderer(gfx, renderInfo, fieldInfos);
-      else if (renderInfo.DocumentObject is PageBreak)
-        renderer = new PageBreakRenderer(gfx, renderInfo, fieldInfos);
-      else if (renderInfo.DocumentObject is TextFrame)
-        renderer = new TextFrameRenderer(gfx, renderInfo, fieldInfos);
-      else if (renderInfo.DocumentObject is Chart)
-        renderer = new ChartRenderer(gfx, renderInfo, fieldInfos);
-      else if (renderInfo.DocumentObject is Chart)
-        renderer = new ChartRenderer(gfx, renderInfo, fieldInfos);
-      else if (renderInfo.DocumentObject is Image)
-        renderer = new ImageRenderer(gfx, renderInfo, fieldInfos);
+        if (renderInfo.DocumentObject is Paragraph)
+            renderer = new ParagraphRenderer(gfx, renderInfo, fieldInfos);
+        else if (renderInfo.DocumentObject is Table)
+            renderer = new TableRenderer(gfx, renderInfo, fieldInfos);
+        else if (renderInfo.DocumentObject is PageBreak)
+            renderer = new PageBreakRenderer(gfx, renderInfo, fieldInfos);
+        else if (renderInfo.DocumentObject is TextFrame)
+            renderer = new TextFrameRenderer(gfx, renderInfo, fieldInfos);
+        else if (renderInfo.DocumentObject is Chart)
+            renderer = new ChartRenderer(gfx, renderInfo, fieldInfos);
+        else if (renderInfo.DocumentObject is Chart)
+            renderer = new ChartRenderer(gfx, renderInfo, fieldInfos);
+        else if (renderInfo.DocumentObject is Image)
+            renderer = new ImageRenderer(gfx, renderInfo, fieldInfos);
 
-      if (renderer != null)
-        renderer.documentRenderer = documentRenderer;
+        if (renderer != null)
+            renderer.documentRenderer = documentRenderer;
 
-      return renderer;
+        return renderer;
     }
-
-    #region fields
 
     protected DocumentObject documentObject;
     protected DocumentRenderer documentRenderer;
     protected XGraphics gfx;
-
-    #endregion
-  }
 }

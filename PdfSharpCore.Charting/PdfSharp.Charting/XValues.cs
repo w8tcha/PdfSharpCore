@@ -27,16 +27,13 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using PdfSharpCore.Drawing;
+namespace PdfSharpCore.Charting;
 
-namespace PdfSharpCore.Charting
+/// <summary>
+/// Represents the collection of values on the X-Axis.
+/// </summary>
+public class XValues : DocumentObjectCollection
 {
-  /// <summary>
-  /// Represents the collection of values on the X-Axis.
-  /// </summary>
-  public class XValues : DocumentObjectCollection
-  {
     /// <summary>
     /// Initializes a new instance of the XValues class.
     /// </summary>
@@ -55,26 +52,22 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new XValues Clone()
     {
-      return (XValues)DeepCopy();
+        return (XValues)DeepCopy();
     }
 
     /// <summary>
     /// Gets an XSeries by its index.
     /// </summary>
-    public new XSeries this[int index]
-    {
-      get {return base[index] as XSeries;}
-    }
+    public new XSeries this[int index] => base[index] as XSeries;
 
     /// <summary>
     /// Adds a new XSeries to the collection.
     /// </summary>
     public XSeries AddXSeries()
     {
-      XSeries xSeries = new XSeries();
-      Add(xSeries);
-      return xSeries;
+        var xSeries = new XSeries();
+        Add(xSeries);
+        return xSeries;
     }
     #endregion
-  }
 }

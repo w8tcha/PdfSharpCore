@@ -1,0 +1,21 @@
+﻿// PDFsharp - A .NET library for processing PDF
+// See the LICENSE file in the solution root for more information.
+
+
+using PdfSharp.Pdf.Annotations;
+using PdfSharpCore.Drawing;
+
+namespace PdfSharp.Pdf.Signatures;
+
+public class PdfSignatureOptions
+{
+    public IAnnotationAppearanceHandler AppearanceHandler { get; set; }
+    public string ContactInfo { get; set; }
+    public string Location { get; set; }
+    public string Reason { get; set; }
+    public XRect Rectangle { get; set; }
+    /// <summary>
+    /// page index, zero-based
+    /// </summary>
+    public int PageIndex { get; set; }
+}

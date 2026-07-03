@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,71 +24,69 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System.Collections.Generic;
 
-namespace PdfSharpCore.Pdf.Advanced
+namespace PdfSharpCore.Pdf.Advanced;
+
+/// <summary>
+/// Contains all used ExtGState objects of a document.
+/// </summary>
+public sealed class PdfExtGStateTable : PdfResourceTable
 {
     /// <summary>
-    /// Contains all used ExtGState objects of a document.
+    /// Initializes a new instance of this class, which is a singleton for each document.
     /// </summary>
-    public sealed class PdfExtGStateTable : PdfResourceTable
+    public PdfExtGStateTable(PdfDocument document)
+        : base(document)
+    { }
+
+
+    /// <summary>
+    /// Gets a PdfExtGState with the key 'CA' set to the specified alpha value.
+    /// </summary>
+    public PdfExtGState GetExtGStateStroke(double alpha, bool overprint)
     {
-        /// <summary>
-        /// Initializes a new instance of this class, which is a singleton for each document.
-        /// </summary>
-        public PdfExtGStateTable(PdfDocument document)
-            : base(document)
-        { }
-
-
-        /// <summary>
-        /// Gets a PdfExtGState with the key 'CA' set to the specified alpha value.
-        /// </summary>
-        public PdfExtGState GetExtGStateStroke(double alpha, bool overprint)
+        var key = PdfExtGState.MakeKey(alpha, overprint);
+        PdfExtGState extGState;
+        if (!_strokeAlphaValues.TryGetValue(key, out extGState))
         {
-            string key = PdfExtGState.MakeKey(alpha, overprint);
-            PdfExtGState extGState;
-            if (!_strokeAlphaValues.TryGetValue(key, out extGState))
+            extGState = new PdfExtGState(Owner);
+            //extGState.Elements[PdfExtGState.Keys.CA] = new PdfReal(alpha);
+            extGState.StrokeAlpha = alpha;
+            if (overprint)
             {
-                extGState = new PdfExtGState(Owner);
-                //extGState.Elements[PdfExtGState.Keys.CA] = new PdfReal(alpha);
-                extGState.StrokeAlpha = alpha;
-                if (overprint)
-                {
-                    extGState.StrokeOverprint = true;
-                    extGState.Elements.SetInteger(PdfExtGState.Keys.OPM, 1);
-                }
-                _strokeAlphaValues[key] = extGState;
+                extGState.StrokeOverprint = true;
+                extGState.Elements.SetInteger(PdfExtGState.Keys.OPM, 1);
             }
-            return extGState;
+            _strokeAlphaValues[key] = extGState;
         }
-
-        /// <summary>
-        /// Gets a PdfExtGState with the key 'ca' set to the specified alpha value.
-        /// </summary>
-        public PdfExtGState GetExtGStateNonStroke(double alpha, bool overprint)
-        {
-            string key = PdfExtGState.MakeKey(alpha, overprint);
-            PdfExtGState extGState;
-            if (!_nonStrokeStates.TryGetValue(key, out extGState))
-            {
-                extGState = new PdfExtGState(Owner);
-                //extGState.Elements[PdfExtGState.Keys.ca] = new PdfReal(alpha);
-                extGState.NonStrokeAlpha = alpha;
-                if (overprint)
-                {
-                    extGState.NonStrokeOverprint = true;
-                    extGState.Elements.SetInteger(PdfExtGState.Keys.OPM, 1);
-                }
-
-                _nonStrokeStates[key] = extGState;
-            }
-            return extGState;
-        }
-
-        readonly Dictionary<string, PdfExtGState> _strokeAlphaValues = new Dictionary<string, PdfExtGState>();
-        readonly Dictionary<string, PdfExtGState> _nonStrokeStates = new Dictionary<string, PdfExtGState>();
+        return extGState;
     }
+
+    /// <summary>
+    /// Gets a PdfExtGState with the key 'ca' set to the specified alpha value.
+    /// </summary>
+    public PdfExtGState GetExtGStateNonStroke(double alpha, bool overprint)
+    {
+        var key = PdfExtGState.MakeKey(alpha, overprint);
+        PdfExtGState extGState;
+        if (!_nonStrokeStates.TryGetValue(key, out extGState))
+        {
+            extGState = new PdfExtGState(Owner);
+            //extGState.Elements[PdfExtGState.Keys.ca] = new PdfReal(alpha);
+            extGState.NonStrokeAlpha = alpha;
+            if (overprint)
+            {
+                extGState.NonStrokeOverprint = true;
+                extGState.Elements.SetInteger(PdfExtGState.Keys.OPM, 1);
+            }
+
+            _nonStrokeStates[key] = extGState;
+        }
+        return extGState;
+    }
+
+    readonly Dictionary<string, PdfExtGState> _strokeAlphaValues = new();
+    readonly Dictionary<string, PdfExtGState> _nonStrokeStates = new();
 }

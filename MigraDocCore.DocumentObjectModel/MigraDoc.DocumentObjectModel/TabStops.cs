@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
+
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// A TabStops collection represents all TabStop objects in a paragraph.
+/// </summary>
+public class TabStops : DocumentObjectCollection
 {
-  /// <summary>
-  /// A TabStops collection represents all TabStop objects in a paragraph.
-  /// </summary>
-  public class TabStops : DocumentObjectCollection
-  {
     /// <summary>
     /// Specifies the minimal spacing between two TabStop positions.
     /// </summary>
@@ -59,22 +56,18 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal TabStops(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new TabStops Clone()
     {
-      return (TabStops)DeepCopy();
+        return (TabStops)DeepCopy();
     }
 
     /// <summary>
     /// Gets a TabStop by its index.
     /// </summary>
-    public new TabStop this[int index]
-    {
-      get { return base[index] as TabStop; }
-    }
+    public new TabStop this[int index] => base[index] as TabStop;
 
     /// <summary>
     /// Gets a TabStop by its position.
@@ -82,14 +75,14 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public TabStop GetTabStopAt(Unit position)
     {
-      int count = Count;
-      for (int index = 0; index < count; index++)
-      {
-        TabStop tabStop = (TabStop)this[index];
-        if (Math.Abs(tabStop.Position.Point - position.Point) < TabStopPrecision)
-          return tabStop;
-      }
-      return null;
+        var count = Count;
+        for (var index = 0; index < count; index++)
+        {
+            var tabStop = (TabStop)this[index];
+            if (Math.Abs(tabStop.Position.Point - position.Point) < TabStopPrecision)
+                return tabStop;
+        }
+        return null;
     }
 
     /// <summary>
@@ -98,7 +91,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public bool TabStopExists(Unit position)
     {
-      return GetTabStopAt(position) != null;
+        return GetTabStopAt(position) != null;
     }
 
     /// <summary>
@@ -107,29 +100,29 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public TabStop AddTabStop(TabStop tabStop)
     {
-      if (tabStop == null)
-        throw new ArgumentNullException("tabStop");
+        if (tabStop == null)
+            throw new ArgumentNullException("tabStop");
 
-      if (TabStopExists(tabStop.Position))
-      {
-        int index = IndexOf(GetTabStopAt(tabStop.Position));
-        RemoveObjectAt(index);
-        InsertObject(index, tabStop);
-      }
-      else
-      {
-        int count = Count;
-        for (int index = 0; index < count; index++)
+        if (TabStopExists(tabStop.Position))
         {
-          if (tabStop.Position.Point < ((TabStop)this[index]).Position.Point)
-          {
+            var index = IndexOf(GetTabStopAt(tabStop.Position));
+            RemoveObjectAt(index);
             InsertObject(index, tabStop);
-            return tabStop;
-          }
         }
-        Add(tabStop);
-      }
-      return tabStop;
+        else
+        {
+            var count = Count;
+            for (var index = 0; index < count; index++)
+            {
+                if (tabStop.Position.Point < ((TabStop)this[index]).Position.Point)
+                {
+                    InsertObject(index, tabStop);
+                    return tabStop;
+                }
+            }
+            Add(tabStop);
+        }
+        return tabStop;
     }
 
     /// <summary>
@@ -138,11 +131,11 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public TabStop AddTabStop(Unit position)
     {
-      if (TabStopExists(position))
-        return GetTabStopAt(position);
+        if (TabStopExists(position))
+            return GetTabStopAt(position);
 
-      TabStop tab = new TabStop(position);
-      return AddTabStop(tab);
+        var tab = new TabStop(position);
+        return AddTabStop(tab);
     }
 
     /// <summary>
@@ -150,10 +143,10 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public TabStop AddTabStop(Unit position, TabAlignment alignment, TabLeader leader)
     {
-      TabStop tab = AddTabStop(position);
-      tab.Alignment = alignment;
-      tab.Leader = leader;
-      return tab;
+        var tab = AddTabStop(position);
+        tab.Alignment = alignment;
+        tab.Leader = leader;
+        return tab;
     }
 
     /// <summary>
@@ -161,9 +154,9 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public TabStop AddTabStop(Unit position, TabLeader leader)
     {
-      TabStop tab = AddTabStop(position);
-      tab.Leader = leader;
-      return tab;
+        var tab = AddTabStop(position);
+        tab.Leader = leader;
+        return tab;
     }
 
     /// <summary>
@@ -171,9 +164,9 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public TabStop AddTabStop(Unit position, TabAlignment alignment)
     {
-      TabStop tab = AddTabStop(position);
-      tab.Alignment = alignment;
-      return tab;
+        var tab = AddTabStop(position);
+        tab.Alignment = alignment;
+        return tab;
     }
 
     /// <summary>
@@ -182,8 +175,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public void RemoveTabStop(Unit position)
     {
-      TabStop tab = AddTabStop(position);
-      tab.AddTab = false;
+        var tab = AddTabStop(position);
+        tab.AddTab = false;
     }
 
     /// <summary>
@@ -192,38 +185,32 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public void ClearAll()
     {
-      Clear();
-      this.fClearAll = true;
+        Clear();
+        this.fClearAll = true;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets the information if the collection is marked as cleared. Additionally 'TabStops = null'
     /// is written to the DDL stream when serialized.
     /// </summary>
-    public bool TabsCleared
-    {
-      get { return this.fClearAll; }
-    }
-    internal bool fClearAll = false;
-    #endregion
+    public bool TabsCleared => this.fClearAll;
 
-    #region Internal
+    internal bool fClearAll = false;
+
     /// <summary>
     /// Converts TabStops into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      if (fClearAll)
-        serializer.WriteLine("TabStops = null");
+        if (fClearAll)
+            serializer.WriteLine("TabStops = null");
 
-      int count = Count;
-      for (int index = 0; index < count; index++)
-      {
-        TabStop tabstop = (TabStop)this[index];
-        tabstop.Serialize(serializer);
-      }
+        var count = Count;
+        for (var index = 0; index < count; index++)
+        {
+            var tabstop = (TabStop)this[index];
+            tabstop.Serialize(serializer);
+        }
     }
 
     /// <summary>
@@ -231,10 +218,10 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public override bool IsNull()
     {
-      // Only non empty and not cleared tabstops (TabStops = null) are null.
-      if (base.IsNull())
-        return !this.fClearAll;
-      return false;
+        // Only non empty and not cleared tabstops (TabStops = null) are null.
+        if (base.IsNull())
+            return !this.fClearAll;
+        return false;
     }
 
     /// <summary>
@@ -242,14 +229,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(TabStops));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(TabStops));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

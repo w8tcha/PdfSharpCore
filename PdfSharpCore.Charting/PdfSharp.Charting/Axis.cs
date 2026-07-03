@@ -28,17 +28,15 @@
 #endregion
 
 using System;
-using System.Diagnostics;
 using System.ComponentModel;
-using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// This class represents an axis in a chart.
+/// </summary>
+public class Axis : ChartObject
 {
-  /// <summary>
-  /// This class represents an axis in a chart.
-  /// </summary>
-  public class Axis : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the Axis class with the specified parent.
     /// </summary>
@@ -50,7 +48,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new Axis Clone()
     {
-      return (Axis)DeepCopy();
+        return (Axis)DeepCopy();
     }
 
     /// <summary>
@@ -58,33 +56,33 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      Axis axis = (Axis)base.DeepCopy();
-      if (axis.title != null)
-      {
-        axis.title = axis.title.Clone();
-        axis.title.parent = axis;
-      }
-      if (axis.tickLabels != null)
-      {
-        axis.tickLabels = axis.tickLabels.Clone();
-        axis.tickLabels.parent = axis;
-      }
-      if (axis.lineFormat != null)
-      {
-        axis.lineFormat = axis.lineFormat.Clone();
-        axis.lineFormat.parent = axis;
-      }
-      if (axis.majorGridlines != null)
-      {
-        axis.majorGridlines = axis.majorGridlines.Clone();
-        axis.majorGridlines.parent = axis;
-      }
-      if (axis.minorGridlines != null)
-      {
-        axis.minorGridlines = axis.minorGridlines.Clone();
-        axis.minorGridlines.parent = axis;
-      }
-      return axis;
+        var axis = (Axis)base.DeepCopy();
+        if (axis.title != null)
+        {
+            axis.title = axis.title.Clone();
+            axis.title.parent = axis;
+        }
+        if (axis.tickLabels != null)
+        {
+            axis.tickLabels = axis.tickLabels.Clone();
+            axis.tickLabels.parent = axis;
+        }
+        if (axis.lineFormat != null)
+        {
+            axis.lineFormat = axis.lineFormat.Clone();
+            axis.lineFormat.parent = axis;
+        }
+        if (axis.majorGridlines != null)
+        {
+            axis.majorGridlines = axis.majorGridlines.Clone();
+            axis.majorGridlines.parent = axis;
+        }
+        if (axis.minorGridlines != null)
+        {
+            axis.minorGridlines = axis.minorGridlines.Clone();
+            axis.minorGridlines.parent = axis;
+        }
+        return axis;
     }
     #endregion
 
@@ -94,13 +92,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public AxisTitle Title
     {
-      get
-      {
-        if (this.title == null)
-          this.title = new AxisTitle(this);
+        get
+        {
+            if (this.title == null)
+                this.title = new AxisTitle(this);
 
-        return this.title;
-      }
+            return this.title;
+        }
     }
     internal AxisTitle title;
 
@@ -109,8 +107,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public double MinimumScale
     {
-      get {return this.minimumScale;}
-      set {this.minimumScale = value;}
+        get => this.minimumScale;
+        set => this.minimumScale = value;
     }
     internal double minimumScale = double.NaN;
 
@@ -119,8 +117,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public double MaximumScale
     {
-      get {return this.maximumScale;}
-      set {this.maximumScale = value;}
+        get => this.maximumScale;
+        set => this.maximumScale = value;
     }
     internal double maximumScale = double.NaN;
 
@@ -129,8 +127,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public double MajorTick
     {
-      get {return this.majorTick;}
-      set {this.majorTick = value;}
+        get => this.majorTick;
+        set => this.majorTick = value;
     }
     internal double majorTick = double.NaN;
 
@@ -139,8 +137,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public double MinorTick
     {
-      get {return this.minorTick;}
-      set {this.minorTick = value;}
+        get => this.minorTick;
+        set => this.minorTick = value;
     }
     internal double minorTick = double.NaN;
 
@@ -149,14 +147,14 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public TickMarkType MajorTickMark
     {
-      get {return this.majorTickMark;}
-      set
-      {
-        if (!Enum.IsDefined(typeof(TickMarkType), value))
-          throw new InvalidEnumArgumentException("value", (int)value, typeof(TickMarkType));
-        this.majorTickMark = value;
-        this.majorTickMarkInitialized = true;
-      }
+        get => this.majorTickMark;
+        set
+        {
+            if (!Enum.IsDefined(typeof(TickMarkType), value))
+                throw new InvalidEnumArgumentException("value", (int)value, typeof(TickMarkType));
+            this.majorTickMark = value;
+            this.majorTickMarkInitialized = true;
+        }
     }
     internal TickMarkType majorTickMark;
     internal bool majorTickMarkInitialized;
@@ -166,14 +164,14 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public TickMarkType MinorTickMark
     {
-      get {return this.minorTickMark;}
-      set
-      {
-        if (!Enum.IsDefined(typeof(TickMarkType), value))
-          throw new InvalidEnumArgumentException("value", (int)value, typeof(TickMarkType));
-        this.minorTickMark = value;
-        this.minorTickMarkInitialized = true;
-      }
+        get => this.minorTickMark;
+        set
+        {
+            if (!Enum.IsDefined(typeof(TickMarkType), value))
+                throw new InvalidEnumArgumentException("value", (int)value, typeof(TickMarkType));
+            this.minorTickMark = value;
+            this.minorTickMarkInitialized = true;
+        }
     }
     internal TickMarkType minorTickMark;
     internal bool minorTickMarkInitialized;
@@ -183,13 +181,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public TickLabels TickLabels
     {
-      get
-      {
-        if (this.tickLabels == null)
-          this.tickLabels = new TickLabels(this);
+        get
+        {
+            if (this.tickLabels == null)
+                this.tickLabels = new TickLabels(this);
 
-        return this.tickLabels;
-      }
+            return this.tickLabels;
+        }
     }
     internal TickLabels tickLabels;
 
@@ -198,13 +196,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
+            return this.lineFormat;
+        }
     }
     internal LineFormat lineFormat;
 
@@ -213,13 +211,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Gridlines MajorGridlines
     {
-      get
-      {
-        if (this.majorGridlines == null)
-          this.majorGridlines = new Gridlines(this);
+        get
+        {
+            if (this.majorGridlines == null)
+                this.majorGridlines = new Gridlines(this);
 
-        return this.majorGridlines;
-      }
+            return this.majorGridlines;
+        }
     }
     internal Gridlines majorGridlines;
     
@@ -228,13 +226,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Gridlines MinorGridlines
     {
-      get
-      {
-        if (this.minorGridlines == null)
-          this.minorGridlines = new Gridlines(this);
+        get
+        {
+            if (this.minorGridlines == null)
+                this.minorGridlines = new Gridlines(this);
 
-        return this.minorGridlines;
-      }
+            return this.minorGridlines;
+        }
     }
     internal Gridlines minorGridlines;
     
@@ -243,8 +241,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool HasMajorGridlines
     {
-      get {return this.hasMajorGridlines;}
-      set {this.hasMajorGridlines = value;}
+        get => this.hasMajorGridlines;
+        set => this.hasMajorGridlines = value;
     }
     internal bool hasMajorGridlines;
 
@@ -253,10 +251,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool HasMinorGridlines
     {
-      get {return this.hasMinorGridlines;}
-      set {this.hasMinorGridlines = value;}
+        get => this.hasMinorGridlines;
+        set => this.hasMinorGridlines = value;
     }
     internal bool hasMinorGridlines;
     #endregion
-  }
 }

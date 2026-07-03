@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,22 +27,18 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Specifies the symbol or kind of numbering of the list.
+/// </summary>
+public enum ListType
 {
-  /// <summary>
-  /// Specifies the symbol or kind of numbering of the list.
-  /// </summary>
-  public enum ListType
-  {
     BulletList1,
     BulletList2,
     BulletList3,
     NumberList1,
     NumberList2,
     NumberList3
-  }
 }

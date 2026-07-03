@@ -27,18 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections;
-using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents the base class for all chart renderers.
+/// </summary>
+internal abstract class ChartRenderer : Renderer
 {
-  /// <summary>
-  /// Represents the base class for all chart renderers.
-  /// </summary>
-  internal abstract class ChartRenderer : Renderer
-  {
     /// <summary>
     /// Initializes a new instance of the ChartRenderer class with the specified renderer parameters.
     /// </summary>
@@ -52,42 +49,42 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected XRect LayoutLegend()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
-      XRect remainingRect = this.rendererParms.Box;
-      if (cri.legendRendererInfo != null)
-      {
-        switch (cri.legendRendererInfo.legend.Docking)
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var remainingRect = this.rendererParms.Box;
+        if (cri.legendRendererInfo != null)
         {
-          case DockingType.Left:
-            cri.legendRendererInfo.X = remainingRect.Left;
-            cri.legendRendererInfo.Y = remainingRect.Height / 2 - cri.legendRendererInfo.Height / 2;
-            double width = cri.legendRendererInfo.Width + ChartRenderer.LegendSpacing;
-            remainingRect.X += width;
-            remainingRect.Width -= width;
-            break;
+            switch (cri.legendRendererInfo.legend.Docking)
+            {
+                case DockingType.Left:
+                    cri.legendRendererInfo.X = remainingRect.Left;
+                    cri.legendRendererInfo.Y = remainingRect.Height / 2 - cri.legendRendererInfo.Height / 2;
+                    var width = cri.legendRendererInfo.Width + ChartRenderer.LegendSpacing;
+                    remainingRect.X += width;
+                    remainingRect.Width -= width;
+                    break;
 
-          case DockingType.Right:
-            cri.legendRendererInfo.X = remainingRect.Right - cri.legendRendererInfo.Width;
-            cri.legendRendererInfo.Y = remainingRect.Height / 2 - cri.legendRendererInfo.Height / 2;
-            remainingRect.Width -= cri.legendRendererInfo.Width + ChartRenderer.LegendSpacing;
-            break;
+                case DockingType.Right:
+                    cri.legendRendererInfo.X = remainingRect.Right - cri.legendRendererInfo.Width;
+                    cri.legendRendererInfo.Y = remainingRect.Height / 2 - cri.legendRendererInfo.Height / 2;
+                    remainingRect.Width -= cri.legendRendererInfo.Width + ChartRenderer.LegendSpacing;
+                    break;
           
-          case DockingType.Top:
-            cri.legendRendererInfo.X = remainingRect.Width / 2 - cri.legendRendererInfo.Width / 2;
-            cri.legendRendererInfo.Y = remainingRect.Top;
-            double height = cri.legendRendererInfo.Height + ChartRenderer.LegendSpacing;
-            remainingRect.Y += height;
-            remainingRect.Height -= height;
-            break;
+                case DockingType.Top:
+                    cri.legendRendererInfo.X = remainingRect.Width / 2 - cri.legendRendererInfo.Width / 2;
+                    cri.legendRendererInfo.Y = remainingRect.Top;
+                    var height = cri.legendRendererInfo.Height + ChartRenderer.LegendSpacing;
+                    remainingRect.Y += height;
+                    remainingRect.Height -= height;
+                    break;
           
-          case DockingType.Bottom:
-            cri.legendRendererInfo.X = remainingRect.Width / 2 - cri.legendRendererInfo.Width / 2;
-            cri.legendRendererInfo.Y = remainingRect.Bottom - cri.legendRendererInfo.Height;
-            remainingRect.Height -= cri.legendRendererInfo.Height + ChartRenderer.LegendSpacing;
-            break;
+                case DockingType.Bottom:
+                    cri.legendRendererInfo.X = remainingRect.Width / 2 - cri.legendRendererInfo.Width / 2;
+                    cri.legendRendererInfo.Y = remainingRect.Bottom - cri.legendRendererInfo.Height;
+                    remainingRect.Height -= cri.legendRendererInfo.Height + ChartRenderer.LegendSpacing;
+                    break;
+            }
         }
-      }
-      return remainingRect;
+        return remainingRect;
     }
 
     /// <summary>
@@ -99,5 +96,4 @@ namespace PdfSharpCore.Charting.Renderers
     /// Represents the default width for all series lines, like borders in column/bar charts.
     /// </summary>
     protected static readonly double DefaultSeriesLineWidth = 0.15;
-  }
 }

@@ -27,16 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Represents the area where the actual chart is drawn.
+/// </summary>
+public class PlotArea : ChartObject
 {
-  /// <summary>
-  /// Represents the area where the actual chart is drawn.
-  /// </summary>
-  public class PlotArea : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the PlotArea class.
     /// </summary>
@@ -55,7 +54,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new PlotArea Clone()
     {
-      return (PlotArea)DeepCopy();
+        return (PlotArea)DeepCopy();
     }
 
     /// <summary>
@@ -63,18 +62,18 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      PlotArea plotArea = (PlotArea)base.DeepCopy();
-      if (plotArea.lineFormat != null)
-      {
-        plotArea.lineFormat = plotArea.lineFormat.Clone();
-        plotArea.lineFormat.parent = plotArea;
-      }
-      if (plotArea.fillFormat != null)
-      {
-        plotArea.fillFormat = plotArea.fillFormat.Clone();
-        plotArea.fillFormat.parent = plotArea;
-      }
-      return plotArea;
+        var plotArea = (PlotArea)base.DeepCopy();
+        if (plotArea.lineFormat != null)
+        {
+            plotArea.lineFormat = plotArea.lineFormat.Clone();
+            plotArea.lineFormat.parent = plotArea;
+        }
+        if (plotArea.fillFormat != null)
+        {
+            plotArea.fillFormat = plotArea.fillFormat.Clone();
+            plotArea.fillFormat.parent = plotArea;
+        }
+        return plotArea;
     }
     #endregion
 
@@ -84,13 +83,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
+            return this.lineFormat;
+        }
     }
     internal LineFormat lineFormat;
 
@@ -99,13 +98,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public FillFormat FillFormat
     {
-      get
-      {
-        if (this.fillFormat == null)
-          this.fillFormat = new FillFormat(this);
+        get
+        {
+            if (this.fillFormat == null)
+                this.fillFormat = new FillFormat(this);
 
-        return this.fillFormat;
-      }
+            return this.fillFormat;
+        }
     }
     internal FillFormat fillFormat;
 
@@ -114,8 +113,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XUnit LeftPadding
     {
-      get {return this.leftPadding;}
-      set {this.leftPadding = value;}
+        get => this.leftPadding;
+        set => this.leftPadding = value;
     }
     internal XUnit leftPadding;
 
@@ -124,8 +123,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XUnit RightPadding
     {
-      get {return this.rightPadding;}
-      set {this.rightPadding = value;}
+        get => this.rightPadding;
+        set => this.rightPadding = value;
     }
     internal XUnit rightPadding;
 
@@ -134,8 +133,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XUnit TopPadding
     {
-      get {return this.topPadding;}
-      set {this.topPadding = value;}
+        get => this.topPadding;
+        set => this.topPadding = value;
     }
     internal XUnit topPadding;
 
@@ -144,10 +143,9 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XUnit BottomPadding
     {
-      get {return this.bottomPadding;}
-      set {this.bottomPadding = value;}
+        get => this.bottomPadding;
+        set => this.bottomPadding = value;
     }
     internal XUnit bottomPadding;
     #endregion
-  }
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,20 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Fields
+namespace MigraDocCore.DocumentObjectModel.Fields;
+
+/// <summary>
+/// SectionField is used to reference the number of the current section.
+/// </summary>
+public class SectionField : NumericFieldBase
 {
-  /// <summary>
-  /// SectionField is used to reference the number of the current section.
-  /// </summary>
-  public class SectionField : NumericFieldBase
-  {
     /// <summary>
     /// Initializes a new instance of the SectionField class.
     /// </summary>
@@ -54,30 +49,27 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     internal SectionField(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new SectionField Clone()
     {
-      return (SectionField)DeepCopy();
+        return (SectionField)DeepCopy();
     }
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts SectionField into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      string str = "\\field(Section)";
+        var str = "\\field(Section)";
 
-      if (this.format.Value != "")
-        str += "[Format = \"" + this.Format + "\"]";
-      else
-        str += "[]"; //Has to be appended to avoid confusion with '[' in directly following text.
+        if (this.format.Value != "")
+            str += "[Format = \"" + this.Format + "\"]";
+        else
+            str += "[]"; //Has to be appended to avoid confusion with '[' in directly following text.
 
-      serializer.Write(str);
+        serializer.Write(str);
     }
 
     /// <summary>
@@ -85,14 +77,12 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(SectionField));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(SectionField));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

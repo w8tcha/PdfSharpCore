@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,17 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Used to determine the leader for the tab.
+/// </summary>
+public enum TabLeader
 {
-  /// <summary>
-  /// Used to determine the leader for the tab.
-  /// </summary>
-  public enum TabLeader
-  {
     /// <summary>
     /// Blanks are used as leader.
     /// </summary>
@@ -68,5 +64,4 @@ namespace MigraDocCore.DocumentObjectModel
     /// Dots in the middle (vertical) of the line.
     /// </summary>
     MiddleDot
-  }
 }

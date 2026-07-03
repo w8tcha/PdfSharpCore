@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Stefan Steiger and Contributors</Authors>
     <Description>PdfSharp for .NET Core
 
-PdfSharpCore is a partial port of PdfSharp.Xamarin for .NET Core Additionally MigraDoc has been ported as well (from version 1.32). Images have been implemented with ImageSharp from https://www.nuget.org/packages/SixLabors.ImageSharp</Description>
+PdfSharpCore is a partial port of PdfSharp.Xamarin for .NET Core. Additionally, MigraDoc has been ported as well (from version 1.32). Images are rendered via SkiaSharp.</Description>
     <Copyright>Copyright (c) 2005-2007 empira Software GmbH, Cologne (Germany)</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -24,11 +24,6 @@ PdfSharpCore is a partial port of PdfSharp.Xamarin for .NET Core Additionally Mi
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;</DefineConstants>
   </PropertyGroup>
-
-	<PropertyGroup>
-        <!--skip warning due to skiplabours.fonts being beta -->
-		<NoWarn>NU5104</NoWarn>
-	</PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE;RELEASE;</DefineConstants>
@@ -48,9 +43,15 @@ PdfSharpCore is a partial port of PdfSharp.Xamarin for .NET Core Additionally Mi
     <Folder Include="Resources\images\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-    <PackageReference Include="SixLabors.Fonts" Version="1.0.0-beta17" />
+	  <PackageReference Include="SkiaSharp" Version="4.148.0" />
+	  <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.9" />
+	  <PackageReference Include="BouncyCastle.Cryptography" Version="2.6.2" />
+	  <PackageReference Include="SharpZipLib" Version="1.4.2" />
+
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.28.0.143324">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

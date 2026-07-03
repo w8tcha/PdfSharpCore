@@ -27,18 +27,16 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Represents the base for all specialized axis renderer. Initialization common too all
+/// axis renderer should come here.
+/// </summary>
+internal abstract class AxisRenderer : Renderer
 {
-  /// <summary>
-  /// Represents the base for all specialized axis renderer. Initialization common too all
-  /// axis renderer should come here.
-  /// </summary>
-  internal abstract class AxisRenderer : Renderer
-  {
     /// <summary>
     /// Initializes a new instance of the AxisRenderer class with the specified renderer parameters.
     /// </summary>
@@ -52,22 +50,22 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected void InitAxisTitle(AxisRendererInfo rendererInfo, XFont defaultFont)
     {
-      if (rendererInfo.axis.title != null)
-      {
-        AxisTitleRendererInfo atri = new AxisTitleRendererInfo();
-        rendererInfo.axisTitleRendererInfo = atri;
+        if (rendererInfo.axis.title != null)
+        {
+            var atri = new AxisTitleRendererInfo();
+            rendererInfo.axisTitleRendererInfo = atri;
 
-        atri.axisTitle = rendererInfo.axis.title;
-        atri.AxisTitleText = rendererInfo.axis.title.caption;
-        atri.AxisTitleAlignment = rendererInfo.axis.title.alignment;
-        atri.AxisTitleVerticalAlignment = rendererInfo.axis.title.verticalAlignment;
-        atri.AxisTitleFont = Converter.ToXFont(rendererInfo.axis.title.font, defaultFont);
-        XColor fontColor = XColors.Black;
-        if (rendererInfo.axis.title.font != null && !rendererInfo.axis.title.font.color.IsEmpty)
-          fontColor = rendererInfo.axis.title.font.color;
-        atri.AxisTitleBrush = new XSolidBrush(fontColor);
-        atri.AxisTitleOrientation = rendererInfo.axis.title.orientation;
-      }
+            atri.axisTitle = rendererInfo.axis.title;
+            atri.AxisTitleText = rendererInfo.axis.title.caption;
+            atri.AxisTitleAlignment = rendererInfo.axis.title.alignment;
+            atri.AxisTitleVerticalAlignment = rendererInfo.axis.title.verticalAlignment;
+            atri.AxisTitleFont = Converter.ToXFont(rendererInfo.axis.title.font, defaultFont);
+            var fontColor = XColors.Black;
+            if (rendererInfo.axis.title.font != null && !rendererInfo.axis.title.font.color.IsEmpty)
+                fontColor = rendererInfo.axis.title.font.color;
+            atri.AxisTitleBrush = new XSolidBrush(fontColor);
+            atri.AxisTitleOrientation = rendererInfo.axis.title.orientation;
+        }
     }
 
     /// <summary>
@@ -76,24 +74,24 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected void InitTickLabels(AxisRendererInfo rendererInfo, XFont defaultFont)
     {
-      if (rendererInfo.axis.tickLabels != null)
-      {
-        rendererInfo.TickLabelsFont = Converter.ToXFont(rendererInfo.axis.tickLabels.font, defaultFont);
-        XColor fontColor = XColors.Black;
-        if (rendererInfo.axis.tickLabels.font != null && !rendererInfo.axis.tickLabels.font.color.IsEmpty)
-          fontColor = rendererInfo.axis.tickLabels.font.color;
-        rendererInfo.TickLabelsBrush = new XSolidBrush(fontColor);
+        if (rendererInfo.axis.tickLabels != null)
+        {
+            rendererInfo.TickLabelsFont = Converter.ToXFont(rendererInfo.axis.tickLabels.font, defaultFont);
+            var fontColor = XColors.Black;
+            if (rendererInfo.axis.tickLabels.font != null && !rendererInfo.axis.tickLabels.font.color.IsEmpty)
+                fontColor = rendererInfo.axis.tickLabels.font.color;
+            rendererInfo.TickLabelsBrush = new XSolidBrush(fontColor);
 
-        rendererInfo.TickLabelsFormat = rendererInfo.axis.tickLabels.format;
-        if (rendererInfo.TickLabelsFormat == null)
-          rendererInfo.TickLabelsFormat = GetDefaultTickLabelsFormat();
-      }
-      else
-      {
-        rendererInfo.TickLabelsFont = defaultFont;
-        rendererInfo.TickLabelsBrush = new XSolidBrush(XColors.Black);
-        rendererInfo.TickLabelsFormat = GetDefaultTickLabelsFormat();
-      }
+            rendererInfo.TickLabelsFormat = rendererInfo.axis.tickLabels.format;
+            if (rendererInfo.TickLabelsFormat == null)
+                rendererInfo.TickLabelsFormat = GetDefaultTickLabelsFormat();
+        }
+        else
+        {
+            rendererInfo.TickLabelsFont = defaultFont;
+            rendererInfo.TickLabelsBrush = new XSolidBrush(XColors.Black);
+            rendererInfo.TickLabelsFormat = GetDefaultTickLabelsFormat();
+        }
     }
     
     /// <summary>
@@ -101,26 +99,26 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected void InitAxisLineFormat(AxisRendererInfo rendererInfo)
     {
-      if (rendererInfo.axis.minorTickMarkInitialized)
-        rendererInfo.MinorTickMark = rendererInfo.axis.MinorTickMark;
+        if (rendererInfo.axis.minorTickMarkInitialized)
+            rendererInfo.MinorTickMark = rendererInfo.axis.MinorTickMark;
 
-      if (rendererInfo.axis.majorTickMarkInitialized)
-        rendererInfo.MajorTickMark = rendererInfo.axis.MajorTickMark;
-      else
-        rendererInfo.MajorTickMark = TickMarkType.Outside;
+        if (rendererInfo.axis.majorTickMarkInitialized)
+            rendererInfo.MajorTickMark = rendererInfo.axis.MajorTickMark;
+        else
+            rendererInfo.MajorTickMark = TickMarkType.Outside;
 
-      if (rendererInfo.MinorTickMark != TickMarkType.None)
-        rendererInfo.MinorTickMarkLineFormat = Converter.ToXPen(rendererInfo.axis.lineFormat, XColors.Black, DefaultMinorTickMarkLineWidth);
+        if (rendererInfo.MinorTickMark != TickMarkType.None)
+            rendererInfo.MinorTickMarkLineFormat = Converter.ToXPen(rendererInfo.axis.lineFormat, XColors.Black, DefaultMinorTickMarkLineWidth);
 
-      if (rendererInfo.MajorTickMark != TickMarkType.None)
-        rendererInfo.MajorTickMarkLineFormat = Converter.ToXPen(rendererInfo.axis.lineFormat, XColors.Black, DefaultMajorTickMarkLineWidth);
+        if (rendererInfo.MajorTickMark != TickMarkType.None)
+            rendererInfo.MajorTickMarkLineFormat = Converter.ToXPen(rendererInfo.axis.lineFormat, XColors.Black, DefaultMajorTickMarkLineWidth);
 
-      if (rendererInfo.axis.lineFormat != null)
-      {
-        rendererInfo.LineFormat = Converter.ToXPen(rendererInfo.axis.LineFormat, XColors.Black, DefaultLineWidth);
-        if (!rendererInfo.axis.majorTickMarkInitialized)
-          rendererInfo.MajorTickMark = TickMarkType.Outside;
-      }
+        if (rendererInfo.axis.lineFormat != null)
+        {
+            rendererInfo.LineFormat = Converter.ToXPen(rendererInfo.axis.LineFormat, XColors.Black, DefaultLineWidth);
+            if (!rendererInfo.axis.majorTickMarkInitialized)
+                rendererInfo.MajorTickMark = TickMarkType.Outside;
+        }
     }
     
     /// <summary>
@@ -128,27 +126,27 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     protected void InitGridlines(AxisRendererInfo rendererInfo)
     {
-      if (rendererInfo.axis.minorGridlines != null)
-      {
-        rendererInfo.MinorGridlinesLineFormat =
-          Converter.ToXPen(rendererInfo.axis.minorGridlines.lineFormat, XColors.Black, DefaultGridLineWidth);
-      }
-      else if (rendererInfo.axis.hasMinorGridlines)
-      {
-        // No minor gridlines object are given, but user asked for.
-        rendererInfo.MinorGridlinesLineFormat = new XPen(XColors.Black, DefaultGridLineWidth);
-      }
+        if (rendererInfo.axis.minorGridlines != null)
+        {
+            rendererInfo.MinorGridlinesLineFormat =
+                Converter.ToXPen(rendererInfo.axis.minorGridlines.lineFormat, XColors.Black, DefaultGridLineWidth);
+        }
+        else if (rendererInfo.axis.hasMinorGridlines)
+        {
+            // No minor gridlines object are given, but user asked for.
+            rendererInfo.MinorGridlinesLineFormat = new XPen(XColors.Black, DefaultGridLineWidth);
+        }
 
-      if (rendererInfo.axis.majorGridlines != null)
-      {
-        rendererInfo.MajorGridlinesLineFormat =
-          Converter.ToXPen(rendererInfo.axis.majorGridlines.lineFormat, XColors.Black, DefaultGridLineWidth);
-      }
-      else if (rendererInfo.axis.hasMajorGridlines)
-      {
-        // No major gridlines object are given, but user asked for.
-        rendererInfo.MajorGridlinesLineFormat = new XPen(XColors.Black, DefaultGridLineWidth);
-      }
+        if (rendererInfo.axis.majorGridlines != null)
+        {
+            rendererInfo.MajorGridlinesLineFormat =
+                Converter.ToXPen(rendererInfo.axis.majorGridlines.lineFormat, XColors.Black, DefaultGridLineWidth);
+        }
+        else if (rendererInfo.axis.hasMajorGridlines)
+        {
+            // No major gridlines object are given, but user asked for.
+            rendererInfo.MajorGridlinesLineFormat = new XPen(XColors.Black, DefaultGridLineWidth);
+        }
     }
 
     /// <summary>
@@ -187,5 +185,4 @@ namespace PdfSharpCore.Charting.Renderers
     protected const double SpaceBetweenLabelAndTickmark = 2.1; // 0.7 mm
 
     protected abstract string GetDefaultTickLabelsFormat();
-  }
 }

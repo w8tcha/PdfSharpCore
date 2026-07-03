@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,18 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents a DataLabel of a Series
+/// </summary>
+public class DataLabel : DocumentObject
 {
-  /// <summary>
-  /// Represents a DataLabel of a Series
-  /// </summary>
-  public class DataLabel : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the DataLabel class.
     /// </summary>
@@ -52,13 +49,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal DataLabel(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new DataLabel Clone()
     {
-      return (DataLabel)DeepCopy();
+        return (DataLabel)DeepCopy();
     }
 
     /// <summary>
@@ -66,24 +62,22 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     protected override object DeepCopy()
     {
-      DataLabel dataLabel = (DataLabel)base.DeepCopy();
-      if (dataLabel.font != null)
-      {
-        dataLabel.font = dataLabel.font.Clone();
-        dataLabel.font.parent = dataLabel;
-      }
-      return dataLabel;
+        var dataLabel = (DataLabel)base.DeepCopy();
+        if (dataLabel.font != null)
+        {
+            dataLabel.font = dataLabel.font.Clone();
+            dataLabel.font.parent = dataLabel;
+        }
+        return dataLabel;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets a numeric format string for the DataLabel.
     /// </summary>
     public string Format
     {
-      get { return this.format.Value; }
-      set { this.format.Value = value; }
+        get => this.format.Value;
+        set => this.format.Value = value;
     }
     [DV]
     internal NString format = NString.NullValue;
@@ -93,18 +87,18 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public Font Font
     {
-      get
-      {
-        if (this.font == null)
-          this.font = new Font(this);
+        get
+        {
+            if (this.font == null)
+                this.font = new Font(this);
 
-        return this.font;
-      }
-      set
-      {
-        SetParent(value);
-        this.font = value;
-      }
+            return this.font;
+        }
+        set
+        {
+            SetParent(value);
+            this.font = value;
+        }
     }
     [DV]
     internal Font font;
@@ -115,8 +109,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public string Style
     {
-      get { return this.style.Value; }
-      set { this.style.Value = value; }
+        get => this.style.Value;
+        set => this.style.Value = value;
     }
     [DV]
     internal NString style = NString.NullValue;
@@ -126,8 +120,8 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public DataLabelPosition Position
     {
-      get { return (DataLabelPosition)this.position.Value; }
-      set { this.position.Value = (int)value; }
+        get => (DataLabelPosition)this.position.Value;
+        set => this.position.Value = (int)value;
     }
     [DV(Type = typeof(DataLabelPosition))]
     internal NEnum position = NEnum.NullValue(typeof(DataLabelPosition));
@@ -137,33 +131,31 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public DataLabelType Type
     {
-      get { return (DataLabelType)this.type.Value; }
-      set { this.type.Value = (int)value; }
+        get => (DataLabelType)this.type.Value;
+        set => this.type.Value = (int)value;
     }
     [DV(Type = typeof(DataLabelType))]
     internal NEnum type = NEnum.NullValue(typeof(DataLabelType));
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts DataLabel into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int pos = serializer.BeginContent("DataLabel");
+        var pos = serializer.BeginContent("DataLabel");
 
-      if (this.Style != string.Empty)
-        serializer.WriteSimpleAttribute("Style", this.Style);
-      if (this.Format != string.Empty)
-        serializer.WriteSimpleAttribute("Format", this.Format);
-      if (!this.position.IsNull)
-        serializer.WriteSimpleAttribute("Position", this.Position);
-      if (!this.type.IsNull)
-        serializer.WriteSimpleAttribute("Type", this.Type);
-      if (!this.IsNull("Font"))
-        this.font.Serialize(serializer);
+        if (this.Style != string.Empty)
+            serializer.WriteSimpleAttribute("Style", this.Style);
+        if (this.Format != string.Empty)
+            serializer.WriteSimpleAttribute("Format", this.Format);
+        if (!this.position.IsNull)
+            serializer.WriteSimpleAttribute("Position", this.Position);
+        if (!this.type.IsNull)
+            serializer.WriteSimpleAttribute("Type", this.Type);
+        if (!this.IsNull("Font"))
+            this.font.Serialize(serializer);
 
-      serializer.EndContent(pos);
+        serializer.EndContent(pos);
     }
 
     /// <summary>
@@ -171,14 +163,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(DataLabel));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(DataLabel));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

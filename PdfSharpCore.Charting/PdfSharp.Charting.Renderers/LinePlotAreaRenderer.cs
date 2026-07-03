@@ -27,17 +27,15 @@
 // DEALINGS IN THE SOFTWARE.
 #endregion
 
-using System;
-using System.Diagnostics;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting.Renderers
+namespace PdfSharpCore.Charting.Renderers;
+
+/// <summary>
+/// Renders the plot area used by line charts. 
+/// </summary>
+internal class LinePlotAreaRenderer : ColumnLikePlotAreaRenderer
 {
-  /// <summary>
-  /// Renders the plot area used by line charts. 
-  /// </summary>
-  internal class LinePlotAreaRenderer : ColumnLikePlotAreaRenderer
-  {
     /// <summary>
     /// Initializes a new instance of the LinePlotAreaRenderer class with the
     /// specified renderer parameters.
@@ -51,43 +49,43 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     internal override void Draw()
     {
-      ChartRendererInfo cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
+        var cri = (ChartRendererInfo)this.rendererParms.RendererInfo;
 
-      XRect plotAreaRect = cri.plotAreaRendererInfo.Rect;
-      if (plotAreaRect.IsEmpty)
-        return;
+        var plotAreaRect = cri.plotAreaRendererInfo.Rect;
+        if (plotAreaRect.IsEmpty)
+            return;
 
-      XGraphics gfx = this.rendererParms.Graphics;
-      XGraphicsState state = gfx.Save();
-      //gfx.SetClip(plotAreaRect, XCombineMode.Intersect);
-      gfx.IntersectClip(plotAreaRect);
+        var gfx = this.rendererParms.Graphics;
+        var state = gfx.Save();
+        //gfx.SetClip(plotAreaRect, XCombineMode.Intersect);
+        gfx.IntersectClip(plotAreaRect);
 
-      //TODO null-Values müssen berücksichtigt werden.
-      //     Verbindungspunkte können fehlen, je nachdem wie null-Values behandelt werden sollen.
-      //     (NotPlotted, Interpolate etc.)
+        //TODO null-Values müssen berücksichtigt werden.
+        //     Verbindungspunkte können fehlen, je nachdem wie null-Values behandelt werden sollen.
+        //     (NotPlotted, Interpolate etc.)
 
-      // Draw lines and markers for each data series.
-      XMatrix matrix = cri.plotAreaRendererInfo.matrix;
+        // Draw lines and markers for each data series.
+        var matrix = cri.plotAreaRendererInfo.matrix;
 
-      double xMajorTick = cri.xAxisRendererInfo.MajorTick;
-      foreach (SeriesRendererInfo sri in cri.seriesRendererInfos)
-      {
-        int count = sri.series.Elements.Count;
-        XPoint[] points = new XPoint[count];
-        for (int idx = 0; idx < count; idx++)
+        var xMajorTick = cri.xAxisRendererInfo.MajorTick;
+        foreach (var sri in cri.seriesRendererInfos)
         {
-          double v = sri.series.Elements[idx].Value;
-          if (double.IsNaN(v))
-            v = 0;
-          points[idx] = new XPoint(idx + xMajorTick / 2, v);
+            var count = sri.series.Elements.Count;
+            var points = new XPoint[count];
+            for (var idx = 0; idx < count; idx++)
+            {
+                var v = sri.series.Elements[idx].Value;
+                if (double.IsNaN(v))
+                    v = 0;
+                points[idx] = new XPoint(idx + xMajorTick / 2, v);
+            }
+            matrix.TransformPoints(points);
+            gfx.DrawLines(sri.LineFormat, points);
+            DrawMarker(gfx, points, sri);
         }
-        matrix.TransformPoints(points);
-        gfx.DrawLines(sri.LineFormat, points);
-        DrawMarker(gfx, points, sri);
-      }
 
-      //gfx.ResetClip();
-      gfx.Restore(state);
+        //gfx.ResetClip();
+        gfx.Restore(state);
     }
 
     /// <summary>
@@ -95,8 +93,7 @@ namespace PdfSharpCore.Charting.Renderers
     /// </summary>
     private void DrawMarker(XGraphics graphics, XPoint[] points, SeriesRendererInfo rendererInfo)
     {
-      foreach (XPoint pos in points)
-        MarkerRenderer.Draw(graphics, pos, rendererInfo.markerRendererInfo);
+        foreach (var pos in points)
+            MarkerRenderer.Draw(graphics, pos, rendererInfo.markerRendererInfo);
     }
-  }
 }

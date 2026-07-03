@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,19 +27,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Collections;
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
+namespace MigraDocCore.DocumentObjectModel.Shapes.Charts;
+
+/// <summary>
+/// Represents the collection of the value in an XSeries.
+/// </summary>
+public class XSeriesElements : DocumentObjectCollection
 {
-  /// <summary>
-  /// Represents the collection of the value in an XSeries.
-  /// </summary>
-  public class XSeriesElements : DocumentObjectCollection
-  {
     /// <summary>
     /// Initializes a new instance of the XSeriesElements class.
     /// </summary>
@@ -48,13 +44,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     {
     }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new XSeriesElements Clone()
     {
-      return (XSeriesElements)base.DeepCopy();
+        return (XSeriesElements)base.DeepCopy();
     }
 
     /// <summary>
@@ -62,7 +57,7 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public void AddBlank()
     {
-      base.Add((DocumentObject)null);
+        base.Add((DocumentObject)null);
     }
 
     /// <summary>
@@ -70,9 +65,9 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public XValue Add(string value)
     {
-      XValue xValue = new XValue(value);
-      Add(xValue);
-      return xValue;
+        var xValue = new XValue(value);
+        Add(xValue);
+        return xValue;
     }
 
     /// <summary>
@@ -80,26 +75,24 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     public void Add(params string[] values)
     {
-      foreach (string val in values)
-        this.Add(val);
+        foreach (var val in values)
+            this.Add(val);
     }
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts XSeriesElements into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      int count = Count;
-      for (int index = 0; index < count; index++)
-      {
-        XValue xValue = this[index] as XValue;
-        if (xValue == null)
-          serializer.Write("null, ");
-        else
-          xValue.Serialize(serializer);
-      }
+        var count = Count;
+        for (var index = 0; index < count; index++)
+        {
+            var xValue = this[index] as XValue;
+            if (xValue == null)
+                serializer.Write("null, ");
+            else
+                xValue.Serialize(serializer);
+        }
     }
 
     /// <summary>
@@ -107,14 +100,12 @@ namespace MigraDocCore.DocumentObjectModel.Shapes.Charts
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(XSeriesElements));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(XSeriesElements));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

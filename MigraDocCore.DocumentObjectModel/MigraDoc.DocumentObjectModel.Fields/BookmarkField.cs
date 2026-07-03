@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,21 +27,19 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
+
 using MigraDocCore.DocumentObjectModel.Internals;
 using MigraDocCore.DocumentObjectModel.MigraDoc.DocumentObjectModel.Resources;
 
-namespace MigraDocCore.DocumentObjectModel.Fields
+namespace MigraDocCore.DocumentObjectModel.Fields;
+
+/// <summary>
+/// BookmarkField is used as target for Hyperlinks or PageRefs.
+/// </summary>
+public class BookmarkField : DocumentObject
 {
-  /// <summary>
-  /// BookmarkField is used as target for Hyperlinks or PageRefs.
-  /// </summary>
-  public class BookmarkField : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the BookmarkField class.
     /// </summary>
@@ -59,45 +56,40 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// Initializes a new instance of the BookmarkField class with the necessary bookmark name.
     /// </summary>
     public BookmarkField(string name)
-      : this()
+        : this()
     {
-      this.Name = name;
+        this.Name = name;
     }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new BookmarkField Clone()
     {
-      return (BookmarkField)DeepCopy();
+        return (BookmarkField)DeepCopy();
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets the name of the bookmark.
     /// Used to reference the bookmark from a Hyperlink or PageRef.
     /// </summary>
     public string Name
     {
-      get { return this.name.Value; }
-      set { this.name.Value = value; }
+        get => this.name.Value;
+        set => this.name.Value = value;
     }
     [DV]
     internal NString name = NString.NullValue;
-    #endregion
 
-    #region Internal
     /// <summary>
     /// Converts BookmarkField into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      if (this.name.Value == string.Empty)
-        throw new InvalidOperationException(DomSR.MissingObligatoryProperty("Name", "BookmarkField"));
+        if (this.name.Value == string.Empty)
+            throw new InvalidOperationException(DomSR.MissingObligatoryProperty("Name", "BookmarkField"));
 
-      serializer.Write("\\field(Bookmark)[Name = \"" + this.Name.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"]");
+        serializer.Write("\\field(Bookmark)[Name = \"" + this.Name.Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"]");
     }
 
     /// <summary>
@@ -105,7 +97,7 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     public override bool IsNull()
     {
-      return false;
+        return false;
     }
 
     /// <summary>
@@ -113,14 +105,12 @@ namespace MigraDocCore.DocumentObjectModel.Fields
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(BookmarkField));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(BookmarkField));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }

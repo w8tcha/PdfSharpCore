@@ -31,13 +31,13 @@ using System;
 using System.ComponentModel;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Charting
+namespace PdfSharpCore.Charting;
+
+/// <summary>
+/// Represents a series of data on the chart.
+/// </summary>
+public class Series : ChartObject
 {
-  /// <summary>
-  /// Represents a series of data on the chart.
-  /// </summary>
-  public class Series : ChartObject
-  {
     /// <summary>
     /// Initializes a new instance of the Series class.
     /// </summary>
@@ -51,7 +51,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public new Series Clone()
     {
-      return (Series)DeepCopy();
+        return (Series)DeepCopy();
     }
 
     /// <summary>
@@ -59,28 +59,28 @@ namespace PdfSharpCore.Charting
     /// </summary>
     protected override object DeepCopy()
     {
-      Series series = (Series)base.DeepCopy();
-      if (series.seriesElements != null)
-      {
-        series.seriesElements = series.seriesElements.Clone();
-        series.seriesElements.parent = series;
-      }
-      if (series.lineFormat != null)
-      {
-        series.lineFormat = series.lineFormat.Clone();
-        series.lineFormat.parent = series;
-      }
-      if (series.fillFormat != null)
-      {
-        series.fillFormat = series.fillFormat.Clone();
-        series.fillFormat.parent = series;
-      }
-      if (series.dataLabel != null)
-      {
-        series.dataLabel = series.dataLabel.Clone();
-        series.dataLabel.parent = series;
-      }
-      return series;
+        var series = (Series)base.DeepCopy();
+        if (series.seriesElements != null)
+        {
+            series.seriesElements = series.seriesElements.Clone();
+            series.seriesElements.parent = series;
+        }
+        if (series.lineFormat != null)
+        {
+            series.lineFormat = series.lineFormat.Clone();
+            series.lineFormat.parent = series;
+        }
+        if (series.fillFormat != null)
+        {
+            series.fillFormat = series.fillFormat.Clone();
+            series.fillFormat.parent = series;
+        }
+        if (series.dataLabel != null)
+        {
+            series.dataLabel = series.dataLabel.Clone();
+            series.dataLabel.parent = series;
+        }
+        return series;
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public void AddBlank()
     {
-      this.Elements.AddBlank();
+        this.Elements.AddBlank();
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public Point Add(double value)
     {
-      return this.Elements.Add(value);
+        return this.Elements.Add(value);
     }
 
     /// <summary>
@@ -104,7 +104,7 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public void Add(params double[] values)
     {
-      this.Elements.Add(values);
+        this.Elements.Add(values);
     }
     #endregion
 
@@ -114,13 +114,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public SeriesElements Elements
     {
-      get
-      {
-        if (this.seriesElements == null)
-          this.seriesElements = new SeriesElements(this);
+        get
+        {
+            if (this.seriesElements == null)
+                this.seriesElements = new SeriesElements(this);
 
-        return this.seriesElements;
-      }
+            return this.seriesElements;
+        }
     }
     internal SeriesElements seriesElements;
 
@@ -129,8 +129,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public string Name
     {
-      get {return this.name;}
-      set {this.name = value;}
+        get => this.name;
+        set => this.name = value;
     }
     internal string name = String.Empty;
 
@@ -139,13 +139,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public LineFormat LineFormat
     {
-      get
-      {
-        if (this.lineFormat == null)
-          this.lineFormat = new LineFormat(this);
+        get
+        {
+            if (this.lineFormat == null)
+                this.lineFormat = new LineFormat(this);
 
-        return this.lineFormat;
-      }
+            return this.lineFormat;
+        }
     }
     internal LineFormat lineFormat;
 
@@ -154,13 +154,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public FillFormat FillFormat
     {
-      get
-      {
-        if (this.fillFormat == null)
-          this.fillFormat = new FillFormat(this);
+        get
+        {
+            if (this.fillFormat == null)
+                this.fillFormat = new FillFormat(this);
 
-        return this.fillFormat;
-      }
+            return this.fillFormat;
+        }
     }
     internal FillFormat fillFormat;
 
@@ -169,8 +169,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XUnit MarkerSize
     {
-      get {return this.markerSize;}
-      set {this.markerSize = value;}
+        get => this.markerSize;
+        set => this.markerSize = value;
     }
     internal XUnit markerSize;
 
@@ -179,15 +179,15 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public MarkerStyle MarkerStyle
     {
-      get {return this.markerStyle;}
-      set
-      {
-        if (!Enum.IsDefined(typeof(MarkerStyle), value))
-          throw new InvalidEnumArgumentException("value", (int)value, typeof(MarkerStyle));
+        get => this.markerStyle;
+        set
+        {
+            if (!Enum.IsDefined(typeof(MarkerStyle), value))
+                throw new InvalidEnumArgumentException("value", (int)value, typeof(MarkerStyle));
 
-        this.markerStyle = value;
-        this.markerStyleInitialized = true;
-      }
+            this.markerStyle = value;
+            this.markerStyleInitialized = true;
+        }
     }
     internal MarkerStyle markerStyle;
     internal bool markerStyleInitialized;
@@ -197,8 +197,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XColor MarkerForegroundColor
     {
-      get {return this.markerForegroundColor;}
-      set {this.markerForegroundColor = value;}
+        get => this.markerForegroundColor;
+        set => this.markerForegroundColor = value;
     }
     internal XColor markerForegroundColor = XColor.Empty;
 
@@ -207,8 +207,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public XColor MarkerBackgroundColor
     {
-      get {return this.markerBackgroundColor;}
-      set {this.markerBackgroundColor = value;}
+        get => this.markerBackgroundColor;
+        set => this.markerBackgroundColor = value;
     }
     internal XColor markerBackgroundColor = XColor.Empty;
 
@@ -218,14 +218,14 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public ChartType ChartType
     {
-      get {return this.chartType;}
-      set
-      {
-        if (!Enum.IsDefined(typeof(ChartType), value))
-          throw new InvalidEnumArgumentException("value", (int)value, typeof(ChartType));
+        get => this.chartType;
+        set
+        {
+            if (!Enum.IsDefined(typeof(ChartType), value))
+                throw new InvalidEnumArgumentException("value", (int)value, typeof(ChartType));
 
-        this.chartType = value;
-      }
+            this.chartType = value;
+        }
     }
     internal ChartType chartType;
 
@@ -234,13 +234,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public DataLabel DataLabel
     {
-      get 
-      {
-        if (this.dataLabel == null)
-          this.dataLabel = new DataLabel(this);
+        get 
+        {
+            if (this.dataLabel == null)
+                this.dataLabel = new DataLabel(this);
 
-        return this.dataLabel;
-      }
+            return this.dataLabel;
+        }
     }
     internal DataLabel dataLabel;
 
@@ -249,8 +249,8 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public bool HasDataLabel
     {
-      get {return this.hasDataLabel;}
-      set {this.hasDataLabel = value;}
+        get => this.hasDataLabel;
+        set => this.hasDataLabel = value;
     }
     internal bool hasDataLabel;
 
@@ -259,14 +259,13 @@ namespace PdfSharpCore.Charting
     /// </summary>
     public int Count
     {
-      get 
-      {
-        if (this.seriesElements != null)
-          return this.seriesElements.Count;
+        get 
+        {
+            if (this.seriesElements != null)
+                return this.seriesElements.Count;
 
-        return 0;
-      }
+            return 0;
+        }
     }
     #endregion
-  }
 }

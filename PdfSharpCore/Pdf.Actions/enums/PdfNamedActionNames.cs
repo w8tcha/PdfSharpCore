@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,33 +24,31 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf.Actions
+namespace PdfSharpCore.Pdf.Actions;
+
+/// <summary>
+/// Specifies the predefined PDF actions.
+/// </summary>
+public enum PdfNamedActionNames
 {
     /// <summary>
-    /// Specifies the predefined PDF actions.
+    /// Go to next page.
     /// </summary>
-    public enum PdfNamedActionNames
-    {
-        /// <summary>
-        /// Go to next page.
-        /// </summary>
-        NextPage,
+    NextPage,
 
-        /// <summary>
-        /// Go to previous page.
-        /// </summary>
-        PrevPage,
+    /// <summary>
+    /// Go to previous page.
+    /// </summary>
+    PrevPage,
 
-        /// <summary>
-        /// Go to first page.
-        /// </summary>
-        FirstPage,
+    /// <summary>
+    /// Go to first page.
+    /// </summary>
+    FirstPage,
 
-        /// <summary>
-        /// Go to last page.
-        /// </summary>
-        LastPage
-    }
+    /// <summary>
+    /// Go to last page.
+    /// </summary>
+    LastPage
 }

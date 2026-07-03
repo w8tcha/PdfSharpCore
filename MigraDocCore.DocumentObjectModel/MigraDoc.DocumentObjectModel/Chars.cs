@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,19 +27,14 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
-using System.Diagnostics;
-using System.Reflection;
+namespace MigraDocCore.DocumentObjectModel;
 
-namespace MigraDocCore.DocumentObjectModel
+/// <summary>
+/// Character table by name.
+/// </summary>
+public sealed class Chars
 {
-  /// <summary>
-  /// Character table by name.
-  /// </summary>
-  public sealed class Chars
-  {
     public const char Null = '\0';   // EOF
     public const char CR = '\x0D'; // ignored by scanner
     public const char LF = '\x0A';
@@ -80,5 +74,4 @@ namespace MigraDocCore.DocumentObjectModel
     public const char SoftHyphen = '\u00ad';  // char(173)
     public const char Currency = '¤';
     public const char ZeroWidthSpace = '\u200b';
-  }
 }

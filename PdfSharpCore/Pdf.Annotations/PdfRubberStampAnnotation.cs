@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,109 +24,101 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 using PdfSharpCore.Drawing;
 
-namespace PdfSharpCore.Pdf.Annotations
+namespace PdfSharpCore.Pdf.Annotations;
+
+/// <summary>
+/// Represents a rubber stamp annotation.
+/// </summary>
+public sealed class PdfRubberStampAnnotation : PdfAnnotation
 {
     /// <summary>
-    /// Represents a rubber stamp annotation.
+    /// Initializes a new instance of the <see cref="PdfRubberStampAnnotation"/> class.
     /// </summary>
-    public sealed class PdfRubberStampAnnotation : PdfAnnotation
+    public PdfRubberStampAnnotation()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfRubberStampAnnotation"/> class.
-        /// </summary>
-        public PdfRubberStampAnnotation()
-        {
-            Initialize();
-        }
+        Initialize();
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PdfRubberStampAnnotation"/> class.
-        /// </summary>
-        /// <param name="document">The document.</param>
-        public PdfRubberStampAnnotation(PdfDocument document)
-            : base(document)
-        {
-            Initialize();
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PdfRubberStampAnnotation"/> class.
+    /// </summary>
+    /// <param name="document">The document.</param>
+    public PdfRubberStampAnnotation(PdfDocument document)
+        : base(document)
+    {
+        Initialize();
+    }
 
-        void Initialize()
-        {
-            Elements.SetName(Keys.Subtype, "/Stamp");
-            Color = XColors.Yellow;
-        }
+    void Initialize()
+    {
+        Elements.SetName(Keys.Subtype, "/Stamp");
+        Color = XColors.Yellow;
+    }
 
-        /// <summary>
-        /// Gets or sets an icon to be used in displaying the annotation.
-        /// </summary>
-        public PdfRubberStampAnnotationIcon Icon
+    /// <summary>
+    /// Gets or sets an icon to be used in displaying the annotation.
+    /// </summary>
+    public PdfRubberStampAnnotationIcon Icon
+    {
+        get
         {
-            get
+            var value = Elements.GetName(Keys.Name);
+            if (value == "")
+                return PdfRubberStampAnnotationIcon.NoIcon;
+            value = value.Substring(1);
+            if (!Enum.IsDefined(typeof(PdfRubberStampAnnotationIcon), value))
+                return PdfRubberStampAnnotationIcon.NoIcon;
+            return (PdfRubberStampAnnotationIcon)Enum.Parse(typeof(PdfRubberStampAnnotationIcon), value, false);
+        }
+        set
+        {
+            if (Enum.IsDefined(typeof(PdfRubberStampAnnotationIcon), value) &&
+                PdfRubberStampAnnotationIcon.NoIcon != value)
             {
-                string value = Elements.GetName(Keys.Name);
-                if (value == "")
-                    return PdfRubberStampAnnotationIcon.NoIcon;
-                value = value.Substring(1);
-                if (!Enum.IsDefined(typeof(PdfRubberStampAnnotationIcon), value))
-                    return PdfRubberStampAnnotationIcon.NoIcon;
-                return (PdfRubberStampAnnotationIcon)Enum.Parse(typeof(PdfRubberStampAnnotationIcon), value, false);
+                Elements.SetName(Keys.Name, "/" + value.ToString());
             }
-            set
-            {
-                if (Enum.IsDefined(typeof(PdfRubberStampAnnotationIcon), value) &&
-                  PdfRubberStampAnnotationIcon.NoIcon != value)
-                {
-                    Elements.SetName(Keys.Name, "/" + value.ToString());
-                }
-                else
-                    Elements.Remove(Keys.Name);
-            }
-        }
-
-        /// <summary>
-        /// Predefined keys of this dictionary.
-        /// </summary>
-        internal new class Keys : PdfAnnotation.Keys
-        {
-            /// <summary>
-            /// (Optional) The name of an icon to be used in displaying the annotation. Viewer
-            /// applications should provide predefined icon appearances for at least the following
-            /// standard names:
-            ///   Approved
-            ///   AsIs
-            ///   Confidential
-            ///   Departmental
-            ///   Draft
-            ///   Experimental
-            ///   Expired
-            ///   Final
-            ///   ForComment
-            ///   ForPublicRelease
-            ///   NotApproved
-            ///   NotForPublicRelease
-            ///   Sold
-            ///   TopSecret
-            /// </summary>
-            [KeyInfo(KeyType.Name | KeyType.Optional)]
-            public const string Name = "/Name";
-
-            public static DictionaryMeta Meta
-            {
-                get { return _meta ?? (_meta = CreateMeta(typeof(Keys))); }
-            }
-            static DictionaryMeta _meta;
-        }
-
-        /// <summary>
-        /// Gets the KeysMeta of this dictionary type.
-        /// </summary>
-        internal override DictionaryMeta Meta
-        {
-            get { return Keys.Meta; }
+            else
+                Elements.Remove(Keys.Name);
         }
     }
+
+    /// <summary>
+    /// Predefined keys of this dictionary.
+    /// </summary>
+    internal new class Keys : PdfAnnotation.Keys
+    {
+        /// <summary>
+        /// (Optional) The name of an icon to be used in displaying the annotation. Viewer
+        /// applications should provide predefined icon appearances for at least the following
+        /// standard names:
+        ///   Approved
+        ///   AsIs
+        ///   Confidential
+        ///   Departmental
+        ///   Draft
+        ///   Experimental
+        ///   Expired
+        ///   Final
+        ///   ForComment
+        ///   ForPublicRelease
+        ///   NotApproved
+        ///   NotForPublicRelease
+        ///   Sold
+        ///   TopSecret
+        /// </summary>
+        [KeyInfo(KeyType.Name | KeyType.Optional)]
+        public const string Name = "/Name";
+
+        public static DictionaryMeta Meta => _meta ?? (_meta = CreateMeta(typeof(Keys)));
+        static DictionaryMeta _meta;
+    }
+
+    /// <summary>
+    /// Gets the KeysMeta of this dictionary type.
+    /// </summary>
+    internal override DictionaryMeta Meta => Keys.Meta;
 }

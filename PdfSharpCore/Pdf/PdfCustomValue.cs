@@ -1,4 +1,3 @@
-#region PDFsharp - A .NET library for processing PDF
 //
 // Authors:
 //   Stefan Lange
@@ -25,55 +24,53 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-namespace PdfSharpCore.Pdf
+namespace PdfSharpCore.Pdf;
+
+/// <summary>
+/// This class is intended for empira internal use only and may change or drop in future releases.
+/// </summary>
+public class PdfCustomValue : PdfDictionary
 {
     /// <summary>
-    /// This class is intended for empira internal use only and may change or drop in future releases.
+    /// This function is intended for empira internal use only.
     /// </summary>
-    public class PdfCustomValue : PdfDictionary
+    public PdfCustomValue()
     {
-        /// <summary>
-        /// This function is intended for empira internal use only.
-        /// </summary>
-        public PdfCustomValue()
-        {
-            CreateStream(new byte[] { });
-        }
+        CreateStream(new byte[] { });
+    }
 
-        /// <summary>
-        /// This function is intended for empira internal use only.
-        /// </summary>
-        public PdfCustomValue(byte[] bytes)
-        {
-            CreateStream(bytes);
-        }
+    /// <summary>
+    /// This function is intended for empira internal use only.
+    /// </summary>
+    public PdfCustomValue(byte[] bytes)
+    {
+        CreateStream(bytes);
+    }
 
-        internal PdfCustomValue(PdfDocument document)
-            : base(document)
-        {
-            CreateStream(new byte[] { });
-        }
+    internal PdfCustomValue(PdfDocument document)
+        : base(document)
+    {
+        CreateStream(new byte[] { });
+    }
 
-        internal PdfCustomValue(PdfDictionary dict)
-            : base(dict)
-        {
-            // TODO: uncompress stream
-        }
+    internal PdfCustomValue(PdfDictionary dict)
+        : base(dict)
+    {
+        // TODO: uncompress stream
+    }
 
-        /// <summary>
-        /// This property is intended for empira internal use only.
-        /// </summary>
-        public PdfCustomValueCompressionMode CompressionMode;
+    /// <summary>
+    /// This property is intended for empira internal use only.
+    /// </summary>
+    public PdfCustomValueCompressionMode CompressionMode;
 
-        /// <summary>
-        /// This property is intended for empira internal use only.
-        /// </summary>
-        public byte[] Value
-        {
-            get { return Stream.Value; }
-            set { Stream.Value = value; }
-        }
+    /// <summary>
+    /// This property is intended for empira internal use only.
+    /// </summary>
+    public byte[] Value
+    {
+        get => Stream.Value;
+        set => Stream.Value = value;
     }
 }

@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Klaus Potzesny (mailto:Klaus.Potzesny@PdfSharpCore.com)
@@ -26,103 +25,89 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
-using System;
 using System.Collections;
 
 using MigraDocCore.DocumentObjectModel;
-using MigraDocCore.DocumentObjectModel.Internals;
 
 using PdfSharpCore.Drawing;
 
-namespace MigraDocCore.Rendering
+namespace MigraDocCore.Rendering;
+
+/// <summary>
+/// Represents a formatted header or footer.
+/// </summary>
+internal class FormattedHeaderFooter : IAreaProvider
 {
-  /// <summary>
-  /// Represents a formatted header or footer.
-  /// </summary>
-  internal class FormattedHeaderFooter : IAreaProvider
-  {
     internal FormattedHeaderFooter(HeaderFooter headerFooter, DocumentRenderer documentRenderer, FieldInfos fieldInfos)
     {
-      this.headerFooter = headerFooter;
-      this.fieldInfos = fieldInfos;
-      this.documentRenderer = documentRenderer;
+        this.headerFooter = headerFooter;
+        this.fieldInfos = fieldInfos;
+        this.documentRenderer = documentRenderer;
     }
 
     internal void Format(XGraphics gfx)
     {
-      this.gfx = gfx;
-      this.isFirstArea = true;
-      this.formatter = new TopDownFormatter(this, this.documentRenderer, this.headerFooter.Elements);
-      this.formatter.FormatOnAreas(gfx, false);
-      this.contentHeight = RenderInfo.GetTotalHeight(GetRenderInfos());
+        this.gfx = gfx;
+        this.isFirstArea = true;
+        this.formatter = new TopDownFormatter(this, this.documentRenderer, this.headerFooter.Elements);
+        this.formatter.FormatOnAreas(gfx, false);
+        this.contentHeight = RenderInfo.GetTotalHeight(GetRenderInfos());
     }
 
     Area IAreaProvider.GetNextArea()
     {
-      if (this.isFirstArea)
-        return new Rectangle(this.ContentRect.X, this.ContentRect.Y, this.ContentRect.Width, double.MaxValue);
+        if (this.isFirstArea)
+            return new Rectangle(this.ContentRect.X, this.ContentRect.Y, this.ContentRect.Width, double.MaxValue);
 
-      return null;
+        return null;
     }
 
     Area IAreaProvider.ProbeNextArea()
     {
-      return null;
+        return null;
     }
 
-    FieldInfos IAreaProvider.AreaFieldInfos
-    {
-      get { return this.fieldInfos; }
-    }
+    FieldInfos IAreaProvider.AreaFieldInfos => this.fieldInfos;
 
     void IAreaProvider.StoreRenderInfos(ArrayList renderInfos)
     {
-      this.renderInfos = renderInfos;
+        this.renderInfos = renderInfos;
     }
 
     bool IAreaProvider.IsAreaBreakBefore(LayoutInfo layoutInfo)
     {
-      return false;
+        return false;
     }
 
 
     internal RenderInfo[] GetRenderInfos()
     {
-      if (this.renderInfos != null)
-        return (RenderInfo[])this.renderInfos.ToArray(typeof(RenderInfo));
+        if (this.renderInfos != null)
+            return (RenderInfo[])this.renderInfos.ToArray(typeof(RenderInfo));
 
-      return new RenderInfo[0];
+        return new RenderInfo[0];
     }
 
     internal Rectangle ContentRect
     {
-      get
-      { return this.contentRect; }
-      set
-      { this.contentRect = value; }
+        get => this.contentRect;
+        set => this.contentRect = value;
     }
     private Rectangle contentRect;
 
-    XUnit ContentHeight
-    {
-      get
-      {
-        return this.contentHeight;
-      }
-    }
+    XUnit ContentHeight => this.contentHeight;
 
     bool IAreaProvider.PositionVertically(LayoutInfo layoutInfo)
     {
-      IAreaProvider formattedDoc = (IAreaProvider)this.documentRenderer.FormattedDocument;
-      return formattedDoc.PositionVertically(layoutInfo);
+        var formattedDoc = (IAreaProvider)this.documentRenderer.FormattedDocument;
+        return formattedDoc.PositionVertically(layoutInfo);
     }
 
     bool IAreaProvider.PositionHorizontally(LayoutInfo layoutInfo)
     {
-      IAreaProvider formattedDoc = (IAreaProvider)this.documentRenderer.FormattedDocument;
-      return formattedDoc.PositionHorizontally(layoutInfo); ;
+        var formattedDoc = (IAreaProvider)this.documentRenderer.FormattedDocument;
+        return formattedDoc.PositionHorizontally(layoutInfo); ;
     }
 
     private HeaderFooter headerFooter;
@@ -133,5 +118,4 @@ namespace MigraDocCore.Rendering
     private bool isFirstArea;
     private XUnit contentHeight;
     private DocumentRenderer documentRenderer;
-  }
 }

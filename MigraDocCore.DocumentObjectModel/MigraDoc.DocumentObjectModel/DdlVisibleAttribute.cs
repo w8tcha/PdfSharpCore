@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,24 +27,23 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Under Construction.
+/// </summary>
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+internal class DdlVisibleAttribute : Attribute
 {
-  /// <summary>
-  /// Under Construction.
-  /// </summary>
-  [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-  internal class DdlVisibleAttribute : Attribute
-  {
     /// <summary>
     /// Initializes a new instance of the DdlVisibleAttribute class.
     /// </summary>
     public DdlVisibleAttribute()
     {
-      visible = true;
+        visible = true;
     }
 
     /// <summary>
@@ -53,7 +51,7 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public DdlVisibleAttribute(bool _visible)
     {
-      visible = _visible;
+        visible = _visible;
     }
 
     /// <summary>
@@ -61,23 +59,22 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public bool Visible
     {
-      get { return visible; }
-      set { visible = value; }
+        get => visible;
+        set => visible = value;
     }
     bool visible;
 
     public bool CanAddValue
     {
-      get { return canAddValue; }
-      set { canAddValue = value; }
+        get => canAddValue;
+        set => canAddValue = value;
     }
     bool canAddValue;
 
     public bool CanRemoveValue
     {
-      get { return canRemoveValue; }
-      set { canRemoveValue = value; }
+        get => canRemoveValue;
+        set => canRemoveValue = value;
     }
     bool canRemoveValue;
-  }
 }

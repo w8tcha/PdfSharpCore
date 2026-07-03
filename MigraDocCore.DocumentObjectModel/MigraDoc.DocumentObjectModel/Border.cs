@@ -1,4 +1,3 @@
-#region MigraDoc - Creating Documents on the Fly
 //
 // Authors:
 //   Stefan Lange (mailto:Stefan.Lange@PdfSharpCore.com)
@@ -28,22 +27,19 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 // DEALINGS IN THE SOFTWARE.
-#endregion
 
 using System;
-using System.Diagnostics;
-using System.Reflection;
-using System.Globalization;
+
 using MigraDocCore.DocumentObjectModel.Internals;
 
-namespace MigraDocCore.DocumentObjectModel
+namespace MigraDocCore.DocumentObjectModel;
+
+/// <summary>
+/// Represents one border in a borders collection. The type determines its position in a cell,
+/// paragraph etc.
+/// </summary>
+public class Border : DocumentObject
 {
-  /// <summary>
-  /// Represents one border in a borders collection. The type determines its position in a cell,
-  /// paragraph etc.
-  /// </summary>
-  public class Border : DocumentObject
-  {
     /// <summary>
     /// Initializes a new instance of the Border class.
     /// </summary>
@@ -56,13 +52,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal Border(DocumentObject parent) : base(parent) { }
 
-    #region Methods
     /// <summary>
     /// Creates a deep copy of this object.
     /// </summary>
     public new Border Clone()
     {
-      return (Border)DeepCopy();
+        return (Border)DeepCopy();
     }
 
     /// <summary>
@@ -71,18 +66,16 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public void Clear()
     {
-      this.fClear.Value = true;
+        this.fClear.Value = true;
     }
-    #endregion
 
-    #region Properties
     /// <summary>
     /// Gets or sets a value indicating whether the border visible is.
     /// </summary>
     public bool Visible
     {
-      get { return this.visible.Value; }
-      set { this.visible.Value = value; }
+        get => this.visible.Value;
+        set => this.visible.Value = value;
     }
     [DV]
     internal NBool visible = NBool.NullValue;
@@ -92,8 +85,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public BorderStyle Style
     {
-      get { return (BorderStyle)this.style.Value; }
-      set { this.style.Value = (int)value; }
+        get => (BorderStyle)this.style.Value;
+        set => this.style.Value = (int)value;
     }
     [DV(Type = typeof(BorderStyle))]
     internal NEnum style = NEnum.NullValue(typeof(BorderStyle));
@@ -103,8 +96,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public Unit Width
     {
-      get { return this.width; }
-      set { this.width = value; }
+        get => this.width;
+        set => this.width = value;
     }
     [DV]
     internal Unit width = Unit.NullValue;
@@ -114,8 +107,8 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     public Color Color
     {
-      get { return this.color; }
-      set { this.color = value; }
+        get => this.color;
+        set => this.color = value;
     }
     [DV]
     internal Color color = Color.Empty;
@@ -123,29 +116,22 @@ namespace MigraDocCore.DocumentObjectModel
     /// <summary>
     /// Gets the name of this border ("top", "bottom"....).
     /// </summary>
-    public string Name
-    {
-      get { return ((Borders)parent).GetMyName(this); }
-    }
+    public string Name => ((Borders)parent).GetMyName(this);
 
     /// <summary>
     /// Gets the information if the border is marked as cleared. Additionally 'xxx = null'
     /// is written to the DDL stream when serialized.
     /// </summary>
-    public bool BorderCleared
-    {
-      get { return this.fClear.Value; }
-    }
-    internal NBool fClear = new NBool(false);
-    #endregion
+    public bool BorderCleared => this.fClear.Value;
 
-    #region Internal
+    internal NBool fClear = new(false);
+
     /// <summary>
     /// Converts Border into DDL.
     /// </summary>
     internal override void Serialize(Serializer serializer)
     {
-      throw new Exception("A Border cannot be serialized alone.");
+        throw new Exception("A Border cannot be serialized alone.");
     }
 
     /// <summary>
@@ -153,24 +139,24 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal void Serialize(Serializer serializer, string name, Border refBorder)
     {
-      if (this.fClear.Value)
-        serializer.WriteLine(name + " = null");
+        if (this.fClear.Value)
+            serializer.WriteLine(name + " = null");
 
-      int pos = serializer.BeginContent(name);
+        var pos = serializer.BeginContent(name);
 
-      if (!this.visible.IsNull && (refBorder == null || (this.Visible != refBorder.Visible)))
-        serializer.WriteSimpleAttribute("Visible", this.Visible);
+        if (!this.visible.IsNull && (refBorder == null || (this.Visible != refBorder.Visible)))
+            serializer.WriteSimpleAttribute("Visible", this.Visible);
 
-      if (!this.style.IsNull && (refBorder == null || (this.Style != refBorder.Style)))
-        serializer.WriteSimpleAttribute("Style", this.Style);
+        if (!this.style.IsNull && (refBorder == null || (this.Style != refBorder.Style)))
+            serializer.WriteSimpleAttribute("Style", this.Style);
 
-      if (!this.width.IsNull && (refBorder == null || (this.Width != refBorder.Width)))
-        serializer.WriteSimpleAttribute("Width", this.Width);
+        if (!this.width.IsNull && (refBorder == null || (this.Width != refBorder.Width)))
+            serializer.WriteSimpleAttribute("Width", this.Width);
 
-      if (!this.color.IsNull && (refBorder == null || (this.Color != refBorder.Color)))
-        serializer.WriteSimpleAttribute("Color", this.Color);
+        if (!this.color.IsNull && (refBorder == null || (this.Color != refBorder.Color)))
+            serializer.WriteSimpleAttribute("Color", this.Color);
 
-      serializer.EndContent(pos);
+        serializer.EndContent(pos);
     }
 
     /// <summary>
@@ -178,14 +164,12 @@ namespace MigraDocCore.DocumentObjectModel
     /// </summary>
     internal override Meta Meta
     {
-      get
-      {
-        if (meta == null)
-          meta = new Meta(typeof(Border));
-        return meta;
-      }
+        get
+        {
+            if (meta == null)
+                meta = new Meta(typeof(Border));
+            return meta;
+        }
     }
     static Meta meta;
-    #endregion
-  }
 }
